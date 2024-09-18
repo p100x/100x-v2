@@ -1,0 +1,11 @@
+src/
+|-- components/
+|   |-- DataCard.js           # Reusable data display component
+|   |-- VixComponent.js       # Component for VIX data
+|   |-- SummaryComponent.js   # New component for market summary
+|-- pages/
+|   |-- Home.js               # Main page displaying market overview
+|-- services/
+|   |-- marketDataService.js  # Service layer handling Supabase API calls
+|-- App.js                    # Main app entry
+|-- App.css                   # Stylesheet

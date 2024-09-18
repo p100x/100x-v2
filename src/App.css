@@ -1,38 +1,194 @@
-.App {
+/* App.css */
+
+:root {
+  --primary-green: #33ff33;
+  --primary-yellow: #ffff33;
+  --primary-red: #ff3333;
+  --dark-bg: #001800;
+  --mid-bg: #005000;
+  --text-light: #33ff33;
+}
+
+body {
+  background-color: var(--dark-bg);
+  color: var(--text-light);
+  font-family: 'Courier New', monospace;
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 2px solid var(--primary-green);
+  box-shadow: 0 0 10px var(--primary-green);
+}
+
+h1, h3 {
+  color: var(--primary-green);
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+p {
+  color: var(--primary-green);
+  font-size: 16px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Reusable Data Card for displaying VIX and other market data */
+.data-card {
+  background-color: rgba(51, 255, 51, 0.1);
+  border: 1px solid var(--primary-green);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 5px var(--primary-green);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.data-card-header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-bottom: 15px;
 }
 
-.App-link {
-  color: #61dafb;
+.data-card-header h2 {
+  margin: 0;
+  font-size: 1.5em;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.data-card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.data-card-value {
+  text-align: center;
+}
+
+.data-card-value h3 {
+  font-size: 2.5em;
+  margin: 0;
+  color: var(--primary-green);
+}
+
+.data-card-value small {
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+
+.data-card-explanation {
+  flex: 1;
+  margin-left: 20px;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+.data-card-chart {
+  margin-top: 20px;
+}
+
+.category-tag {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: var(--mid-bg);
+  color: var(--primary-green);
+  border-radius: 15px;
+  font-size: 0.8em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.data-card .recharts-wrapper {
+  margin-top: 20px;
+}
+
+.data-card .recharts-surface {
+  overflow: visible;
+}
+
+.data-card .recharts-tooltip-cursor {
+  stroke: var(--primary-green);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.data-card .recharts-cartesian-axis-tick-value {
+  font-size: 12px;
+}
+
+.data-card .recharts-tooltip-label {
+  color: var(--primary-green);
+}
+
+.data-card .recharts-tooltip-item {
+  color: var(--text-light);
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 20px;
+  border: 1px solid var(--primary-yellow);
+  background-color: rgba(255, 255, 51, 0.05);
+  margin-bottom: 20px;
+}
+
+/* Terminal-style debug log */
+.debug-log {
+  background-color: var(--dark-bg);
+  color: var(--primary-green);
+  padding: 20px;
+  margin-top: 20px;
+  border: 2px solid var(--primary-green);
+  font-family: 'Courier New', monospace;
+  max-height: 300px;
+  overflow-y: scroll;
+  box-shadow: 0 0 5px var(--primary-green);
+}
+
+.debug-log h2 {
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.debug-log ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.debug-log li {
+  margin-bottom: 5px;
+  line-height: 1.5;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.99; }
+  50% { opacity: 1; }
+  100% { opacity: 0.99; }
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    margin: 20px;
+    padding: 15px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .data-card p {
+    font-size: 18px;
+  }
+
+  .data-card h3 {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 24px;
+  }
+
+  .data-card p {
+    font-size: 16px;
   }
 }
