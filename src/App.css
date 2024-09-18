@@ -192,3 +192,106 @@ p {
     font-size: 16px;
   }
 }
+
+/* Login Overlay Styles */
+.login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 24, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.login-form-container {
+  background-color: var(--mid-bg);
+  border: 2px solid var(--primary-green);
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 0 20px rgba(51, 255, 51, 0.3);
+  max-width: 400px;
+  width: 90%;
+}
+
+.login-form-container h2 {
+  color: var(--primary-green);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.login-form-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form-container input {
+  background-color: var(--dark-bg);
+  border: 1px solid var(--primary-green);
+  color: var(--text-light);
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+}
+
+.login-form-container button {
+  background-color: var(--primary-green);
+  color: var(--dark-bg);
+  border: none;
+  padding: 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.login-form-container button:hover {
+  background-color: #66ff66;
+}
+
+.login-form-container .error {
+  color: var(--primary-red);
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* Adjust the app-container to allow the background to be visible */
+.app-container {
+  min-height: 100vh;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+/* Add these styles at the end of the file */
+
+.account-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.account-info {
+  background-color: var(--mid-bg);
+  border: 1px solid var(--primary-green);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.logout-button {
+  background-color: var(--primary-red);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.logout-button:hover {
+  background-color: #ff6666;
+}
