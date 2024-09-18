@@ -9,40 +9,47 @@ SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 # Initialize Supabase client
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# Fetch VIX data for the last 2 years
-def fetch_vix_data():
+# Fetch today's VIX data
+def fetch_todays_vix_data():
     vix = yf.Ticker("^VIX")
-    end_date = datetime.datetime.now().date()
-    start_date = end_date - datetime.timedelta(days=730)  # Two years back
-    vix_data = vix.history(start=start_date, end=end_date)
+    today = datetime.datetime.now().date()
+    vix_data = vix.history(period="1d")
+    
+    if not vix_data.empty:
+        return today, vix_data['Close'].iloc[-1]
+    else:
+        return None, None
 
-    return vix_data
+# Insert or update today's VIX data in Supabase
+def upsert_vix_data(date, vix_value):
+    timestamp = date.isoformat()
+    
+    # Check if an entry for today already exists
+    response = supabase.table('vix_data').select('*').eq('timestamp', timestamp).execute()
+    
+    if response.data:
+        # Update existing entry
+        response = supabase.table('vix_data').update({'VIX': vix_value}).eq('timestamp', timestamp).execute()
+        print(f"Updated VIX data for {timestamp}: {vix_value}")
+    else:
+        # Insert new entry
+        response = supabase.table('vix_data').insert({'timestamp': timestamp, 'VIX': vix_value}).execute()
+        print(f"Inserted new VIX data for {timestamp}: {vix_value}")
 
-# Insert VIX data into Supabase
-def insert_vix_data(vix_data):
-    for index, row in vix_data.iterrows():
-        timestamp = index.isoformat()
-        vix_value = row['Close']
-        
-        # Insert the data into the vix_data table
-        response = supabase.table('vix_data').insert({
-            'timestamp': timestamp,
-            'VIX': vix_value
-        }).execute()
-
-        # Check for errors in the response
-        if response.data is None:
-            print(f"Failed to insert data for {timestamp}: {response}")
-        else:
-            print(f"Inserted VIX data for {timestamp}: {vix_value}")
+    # Check for errors in the response
+    if response.data is None:
+        print(f"Failed to upsert data for {timestamp}: {response}")
 
 # Main function
 def main():
-    print("Fetching VIX data for the last two years...")
-    vix_data = fetch_vix_data()
+    print("Fetching today's VIX data...")
+    date, vix_value = fetch_todays_vix_data()
 
-    print("Inserting VIX data into the vix_data table...")
-    insert_vix_data(vix_data)
+    if date and vix_value:
+        print("Upserting VIX data into the vix_data table...")
+        upsert_vix_data(date, vix_value)
+    else:
+        print("Failed to fetch today's VIX data.")
 
 if __name__ == "__main__":
     main()
