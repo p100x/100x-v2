@@ -26,8 +26,8 @@ const UnemploymentComponent = () => {
   ];
 
   const getUnemploymentState = (current, previous) => {
-    if (current === previous) return 'stable';
-    return current > previous ? 'rising' : 'falling';
+    if (current === previous) return 'stabil';
+    return current > previous ? 'steigend' : 'fallend';
   };
 
   // Manually set Sahm rule to triggered
@@ -40,26 +40,64 @@ const UnemploymentComponent = () => {
     dataKey: 'unemployment'
   };
 
-  const interpretationText = `The current unemployment rate is <strong>${unemploymentData.unemployment.toFixed(1)}%</strong> and is ${state}. ${
+  const interpretationText = `Die aktuelle Arbeitslosenquote beträgt <strong>${unemploymentData.unemployment.toFixed(1)}%</strong> und ist ${state}. ${
     unemploymentData.unemployment < 4
-      ? "This is considered low unemployment, indicating a strong job market."
+      ? "Dies gilt als niedrige Arbeitslosigkeit und deutet auf einen starken Arbeitsmarkt hin."
       : unemploymentData.unemployment >= 4 && unemploymentData.unemployment < 6
-      ? "This is still within the normal range for unemployment but could change quickly."
-      : "This is considered high unemployment, indicating potential economic challenges."
+      ? "Dies liegt noch im normalen Bereich für die Arbeitslosigkeit, könnte sich aber schnell ändern."
+      : "Dies gilt als hohe Arbeitslosigkeit und deutet auf mögliche wirtschaftliche Herausforderungen hin."
   } ${
     sahmRuleTriggered
-      ? "The Sahm rule has been triggered, suggesting a possible recession."
-      : "The Sahm rule has not been triggered, indicating relative economic stability."
+      ? "Die Sahm-Regel wurde ausgelöst, was auf eine mögliche Rezession hindeutet."
+      : "Die Sahm-Regel wurde nicht ausgelöst, was auf relative wirtschaftliche Stabilität hindeutet."
   }`;
+
+  const expandedExplanation = `
+Die Arbeitslosenquote misst den Prozentsatz der Erwerbsbevölkerung, der arbeitslos ist und aktiv nach Arbeit sucht. Aus der Perspektive eines konträren Investors:
+
+1. Niedrige Arbeitslosigkeit (< 4%):
+   • Konventionelle Sicht: Starke Wirtschaft, gute Investitionsbedingungen
+   • Konträre Sicht: Mögliche Überhitzung, Lohninflation, Zinserhöhungen
+   • Strategie: Vorsicht bei zyklischen Aktien, Fokus auf defensive Sektoren
+
+2. Hohe Arbeitslosigkeit (> 6%):
+   • Konventionelle Sicht: Schwache Wirtschaft, schlechte Investitionsbedingungen
+   • Konträre Sicht: Potenzial für wirtschaftliche Erholung, expansive Geldpolitik
+   • Strategie: Suche nach unterbewerteten zyklischen Aktien, Vorbereitung auf Erholung
+
+3. Trendwenden:
+   • Beginn steigender Arbeitslosigkeit: Möglicher Indikator für Rezession
+   • Beginn fallender Arbeitslosigkeit: Möglicher Indikator für wirtschaftliche Erholung
+   • Strategie: Positionierung für den nächsten Wirtschaftszyklus
+
+4. Sahm-Regel:
+   • Definition: Ausgelöst, wenn der 3-Monats-Durchschnitt der Arbeitslosenquote um 0,5 Prozentpunkte oder mehr über dem Tief der letzten 12 Monate liegt
+   • Konventionelle Sicht: Warnsignal für Rezession
+   • Konträre Sicht: Möglicher Wendepunkt, Beginn einer Erholungsphase
+   • Strategie: Vorbereitung auf antizyklische Investitionen
+
+5. Sektorale Auswirkungen:
+   • Niedrige Arbeitslosigkeit: Vorteilhaft für Konsumgüter, Einzelhandel
+   • Hohe Arbeitslosigkeit: Vorteilhaft für defensive Sektoren, Grundbedarfsgüter
+   • Strategie: Sektorrotation basierend auf Arbeitsmarkttrends
+
+6. Geldpolitische Implikationen:
+   • Niedrige Arbeitslosigkeit: Mögliche Zinserhöhungen
+   • Hohe Arbeitslosigkeit: Mögliche geldpolitische Lockerung
+   • Strategie: Anpassung der Anleihen- und Aktienallokation
+
+Wichtiger Hinweis:
+Konträres Investieren basierend auf Arbeitslosendaten erfordert sorgfältige Analyse und Timing. Die Arbeitslosenquote ist ein nachlaufender Indikator und sollte in Kombination mit anderen wirtschaftlichen Daten betrachtet werden.
+`;
 
   return (
     <DataCard 
-      title="US Unemployment"
+      title="US-Arbeitslosigkeit"
       value={`${unemploymentData.unemployment.toFixed(1)}% (${state})`}
       timestamp={unemploymentData.timestamp}
       chartData={historicalData}
-      category="Labor Market"
-      explanation={`The unemployment rate measures the percentage of the labor force that is jobless and actively seeking employment. ${sahmRuleTriggered ? 'The Sahm rule has been triggered, indicating a possible recession.' : 'The Sahm rule has not been triggered.'} The Sahm rule is triggered when the 3-month average unemployment rate rises 0.5 percentage points or more above its low during the previous 12 months.`}
+      category="Arbeitsmarkt"
+      explanation={<pre className="expanded-explanation">{expandedExplanation}</pre>}
       chartConfig={chartConfig}
       isRealtime={false}
       interpretationText={interpretationText}

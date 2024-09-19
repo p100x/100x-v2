@@ -167,12 +167,38 @@ p {
   opacity: 0.7;
 }
 
+.data-card-explanation-container {
+  width: 100%;
+  text-align: center;
+}
+
+.explanation-toggle {
+  background-color: transparent;
+  color: var(--primary-text);
+  border: 1px solid var(--primary-text);
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.explanation-toggle:hover {
+  background-color: var(--primary-text);
+  color: var(--primary-bg);
+}
+
 .data-card-explanation {
   text-align: center;
   font-size: 0.9em;
   line-height: 1.5;
   max-width: 90%;
-  margin-top: 10px; /* Add top margin to the explanation */
+  margin: 10px auto 0;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .data-card-chart {
@@ -754,4 +780,45 @@ input:focus, textarea:focus, select:focus {
 
 .data-card-interpretation strong {
   color: var(--primary-text);
+}
+
+/* Add these styles to your existing CSS file */
+
+.expanded-explanation {
+  text-align: left;
+  white-space: pre-wrap;
+  font-family: 'Consolas', 'Courier New', monospace;
+  background-color: rgba(0, 255, 65, 0.05);
+  border: 1px solid var(--primary-text);
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 15px;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+.expanded-explanation ul {
+  padding-left: 20px;
+  margin: 10px 0;
+}
+
+.expanded-explanation li {
+  margin-bottom: 5px;
+}
+
+.expanded-explanation strong {
+  color: var(--highlight);
+}
+
+.expanded-explanation ul {
+  padding-left: 20px;
+  margin: 10px 0;
+}
+
+.expanded-explanation li {
+  margin-bottom: 5px;
+}
+
+.expanded-explanation strong {
+  color: var(--highlight);
 }

@@ -93,3 +93,75 @@ export const updateFiscalFlows = async (newState) => {
   if (error) throw new Error(error.message);
   return data;
 };
+
+// Fetch latest M2 data
+export const fetchLatestM2Data = async () => {
+  const { data, error } = await supabase
+    .from('m2_data')
+    .select('*')
+    .order('date', { ascending: false })
+    .limit(1);
+  
+  if (error) throw new Error(error.message);
+  return data[0];
+};
+
+// Fetch historical M2 data
+export const fetchHistoricalM2Data = async () => {
+  const { data, error } = await supabase
+    .from('m2_data')
+    .select('*')
+    .order('date', { ascending: true });
+
+  if (error) throw new Error(error.message);
+
+  return data;
+};
+
+// Add these new functions to your existing marketDataService.js file
+
+export const fetchLatestCreditCardDelinquency = async () => {
+  const { data, error } = await supabase
+    .from('credit_card_delinquency_data')
+    .select('*')
+    .order('date', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const fetchHistoricalCreditCardDelinquency = async () => {
+  const { data, error } = await supabase
+    .from('credit_card_delinquency_data')
+    .select('*')
+    .order('date', { ascending: true });
+
+  if (error) throw error;
+  return data;
+};
+
+// Fetch latest Personal Saving Rate
+export const fetchLatestPersonalSavingRate = async () => {
+  const { data, error } = await supabase
+    .from('personal_saving_rate_data')
+    .select('*')
+    .order('date', { ascending: false })
+    .limit(1)
+    .single();
+  
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+// Fetch historical Personal Saving Rate data
+export const fetchHistoricalPersonalSavingRate = async () => {
+  const { data, error } = await supabase
+    .from('personal_saving_rate_data')
+    .select('*')
+    .order('date', { ascending: true });
+
+  if (error) throw new Error(error.message);
+  return data;
+};

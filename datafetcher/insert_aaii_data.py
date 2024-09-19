@@ -8,8 +8,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Supabase-Konfiguration
-SUPABASE_URL = os.getenv('NEXT_PUBLIC_SUPABASE_URL')
-SUPABASE_KEY = os.getenv('NEXT_PUBLIC_SUPABASE_ANON_KEY')
+# Supabase credentials (matching your .env file)
+SUPABASE_URL = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+SUPABASE_KEY = os.getenv("NEXT_PUBLIC_SUPABASE_ANON_KEY")
 
 # Initialisiere Supabase Client
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)

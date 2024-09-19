@@ -6,8 +6,11 @@ import SummaryComponent from '../components/SummaryComponent';
 import MarketScoreComponent from '../components/MarketScoreComponent'; // Added import
 import UnemploymentComponent from '../components/UnemploymentComponent'; // Added import
 import FiscalFlowsComponent from '../components/FiscalFlowsComponent'; // Added import
+import M2MoneyGrowthComponent from '../components/M2MoneyGrowthComponent'; // Add this import
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import CreditCardDelinquencyComponent from '../components/CreditCardDelinquencyComponent'; // Add this import
+import PersonalSavingRateComponent from '../components/PersonalSavingRateComponent'; // Add this import
 
 const Home = () => {
   const [activeFilters, setActiveFilters] = useState(['all']);
@@ -19,6 +22,8 @@ const Home = () => {
     { id: 'sentiment', label: 'Sentiment' },
     { id: 'labor', label: 'Labor Market' },
     { id: 'fiscal', label: 'Fiscal Flows' },
+    { id: 'economic', label: 'Economic Indicators' }, // Add this new filter option
+    { id: 'consumer', label: 'Consumer Credit' }, // Add this new filter option
   ];
 
   const handleFilterClick = (filterId) => {
@@ -61,6 +66,13 @@ const Home = () => {
       {(isFilterActive('all') || isFilterActive('sentiment')) && <AAIIComponent />}
       {(isFilterActive('all') || isFilterActive('labor')) && <UnemploymentComponent />}
       {(isFilterActive('all') || isFilterActive('fiscal')) && <FiscalFlowsComponent setFiscalFlowsState={setFiscalFlowsState} />}
+      {(isFilterActive('all') || isFilterActive('economic')) && (
+        <>
+          <M2MoneyGrowthComponent />
+          <PersonalSavingRateComponent /> {/* Add this line */}
+        </>
+      )}
+      {(isFilterActive('all') || isFilterActive('consumer')) && <CreditCardDelinquencyComponent />}
       <MarketScoreComponent fiscalFlowsState={fiscalFlowsState.state} />
     </div>
   );
