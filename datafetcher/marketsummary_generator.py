@@ -103,7 +103,7 @@ def generate_llm_interpretation(market_data_text):
 
     {market_data_text}
 
-    Erstelle eine kurze, prägnante Analyse (maximal 3-4 Sätze) des globalen Marktgeschehens. Immer mit dem Bias dass gerade die Leitzinsen in den USA gesenkt werden und es die Befürchtung eines sich rapide abkühlenden Arbeitsmarktes gibt.
+    Erstelle eine kurze, prägnante Analyse (maximal 3-4 Sätze) des globalen Marktgeschehens. Für den Nutzer, der einen Schnellüberblick über den Markt benötigt. Zusatzinfo für die KI zur Einordnung der Lage: US-Arbeitsmarkt schwächelt (Sahm-Regel ausgelöst), Leitzinsen fallen, Zinsstrukturkurve gerde re-inverted.
     """
 
     response = client.chat.completions.create(
