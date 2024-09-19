@@ -2,8 +2,8 @@ name: Run Market Analysis Script
 
 on:
   schedule:
-    # This runs the script every day at 00:00 UTC
-    - cron: '0 0 * * *'
+    # This runs the script every hour from 7:00 to 23:00 UTC on weekdays (Monday to Friday)
+    - cron: '0 7-23 * * 1-5'
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
@@ -28,4 +28,4 @@ jobs:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-      run: python your_script_name.py
+      run: python3 datafetcher/marketsummary_generator.py
