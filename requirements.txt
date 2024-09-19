@@ -1,5 +1,5 @@
 yfinance
-supabase-py>=0.6.1  # Die neueste Version von supabase-py
+supabase-py>=0.6.1
 openai
 python-dotenv
 pandas
@@ -7,3 +7,4 @@ google-auth
 google-auth-oauthlib
 google-auth-httplib2
 google-api-python-client
+postgrest-py>=0.5.0,<0.6.0  # Setze explizit eine kompatible Version
