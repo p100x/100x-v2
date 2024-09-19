@@ -47,6 +47,14 @@ const VixComponent = () => {
     dataKey: 'VIX'
   };
 
+  const interpretationText = `The current VIX Index value is <strong>${vixData.VIX.toFixed(2)}</strong>. ${
+    vixData.VIX < 20
+      ? "This indicates low market volatility and relative calm."
+      : vixData.VIX >= 20 && vixData.VIX < 30
+      ? "This suggests moderate market volatility."
+      : "This indicates high market volatility and increased uncertainty."
+  }`;
+
   return (
     <DataCard 
       title="VIX Index"
@@ -59,7 +67,8 @@ const VixComponent = () => {
         xAxisDataKey: 'date',
         dataKey: 'VIX'
       }}
-      isRealtime={true} // Set this to true if the data is real-time, or false if it's delayed
+      isRealtime={true}
+      interpretationText={interpretationText}
     />
   );
 };

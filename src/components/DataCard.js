@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import RealtimeIndicator from './RealtimeIndicator';
 
-const DataCard = ({ title, value, chartData, category, explanation, chartConfig = {}, isRealtime = false }) => {
+const DataCard = ({ title, value, chartData, category, explanation, chartConfig = {}, isRealtime = false, interpretationText }) => {
   const yAxisDomain = useMemo(() => {
     if (!chartData || chartData.length === 0 || !chartConfig.dataKey) return [0, 'auto'];
     
@@ -30,6 +30,12 @@ const DataCard = ({ title, value, chartData, category, explanation, chartConfig 
         <div className="data-card-value">
           {typeof value === 'string' ? <h3>{value}</h3> : value}
         </div>
+        {interpretationText && (
+          <p 
+            className="data-card-interpretation"
+            dangerouslySetInnerHTML={{ __html: interpretationText }}
+          />
+        )}
         {explanation && <p className="data-card-explanation">{explanation}</p>}
       </div>
       {chartData && chartConfig && chartConfig.dataKey && (

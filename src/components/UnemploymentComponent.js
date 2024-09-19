@@ -40,6 +40,18 @@ const UnemploymentComponent = () => {
     dataKey: 'unemployment'
   };
 
+  const interpretationText = `The current unemployment rate is <strong>${unemploymentData.unemployment.toFixed(1)}%</strong> and is ${state}. ${
+    unemploymentData.unemployment < 4
+      ? "This is considered low unemployment, indicating a strong job market."
+      : unemploymentData.unemployment >= 4 && unemploymentData.unemployment < 6
+      ? "This is still within the normal range for unemployment but could change quickly."
+      : "This is considered high unemployment, indicating potential economic challenges."
+  } ${
+    sahmRuleTriggered
+      ? "The Sahm rule has been triggered, suggesting a possible recession."
+      : "The Sahm rule has not been triggered, indicating relative economic stability."
+  }`;
+
   return (
     <DataCard 
       title="US Unemployment"
@@ -47,9 +59,10 @@ const UnemploymentComponent = () => {
       timestamp={unemploymentData.timestamp}
       chartData={historicalData}
       category="Labor Market"
-      explanation={`The current unemployment rate is ${unemploymentData.unemployment.toFixed(1)}% and is ${state}. ${sahmRuleTriggered ? 'The Sahm rule has been triggered, indicating a possible recession.' : 'The Sahm rule has not been triggered.'} The Sahm rule is triggered when the 3-month average unemployment rate rises 0.5 percentage points or more above its low during the previous 12 months.`}
+      explanation={`The unemployment rate measures the percentage of the labor force that is jobless and actively seeking employment. ${sahmRuleTriggered ? 'The Sahm rule has been triggered, indicating a possible recession.' : 'The Sahm rule has not been triggered.'} The Sahm rule is triggered when the 3-month average unemployment rate rises 0.5 percentage points or more above its low during the previous 12 months.`}
       chartConfig={chartConfig}
       isRealtime={false}
+      interpretationText={interpretationText}
     />
   );
 };

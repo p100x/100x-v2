@@ -46,15 +46,29 @@ const AAIIComponent = () => {
     dataKey: 'spread'
   };
 
+  const spread = aaiiData.spread * 100;
+  const interpretationText = `The current AAII Sentiment spread is <strong>${spread.toFixed(2)}%</strong>. ${
+    spread > 0
+      ? "A positive spread indicates more bullish than bearish sentiment."
+      : spread < 0
+      ? "A negative spread indicates more bearish than bullish sentiment."
+      : "A zero spread indicates equal bullish and bearish sentiment."
+  } ${
+    Math.abs(spread) > 20
+      ? "This is considered an extreme reading, which could signal a potential market reversal."
+      : "This is within the normal range."
+  }`;
+
   return (
     <DataCard 
       title="AAII Sentiment"
-      value={`${aaiiData.spread.toFixed(2)}%`}
+      value={`${spread.toFixed(2)}%`}
       timestamp={aaiiData.created_at}
       chartData={historicalData}
       category="Investor Sentiment"
       explanation="The AAII Sentiment Survey measures the percentage of individual investors who are bullish, bearish, and neutral on the stock market for the next six months. The bull-bear spread indicates the difference between bullish and bearish sentiment, with positive values suggesting optimism and negative values indicating pessimism."
       chartConfig={chartConfig}
+      interpretationText={interpretationText}
     />
   );
 };

@@ -745,3 +745,13 @@ input:focus, textarea:focus, select:focus {
     left: 100%;
   }
 }
+
+.data-card-interpretation {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: var(--secondary-text);
+}
+
+.data-card-interpretation strong {
+  color: var(--primary-text);
+}

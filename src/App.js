@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './pages/Home';
 import AdminPage from './pages/AdminPage';
@@ -8,7 +8,20 @@ import { useAuth } from './contexts/AuthContext';
 import './App.css';
 
 function App() {
-  const { user } = useAuth();
+  const { user, signOut, checkUserActive } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      const checkInterval = setInterval(async () => {
+        const isActive = await checkUserActive(user.email);
+        if (!isActive) {
+          signOut();
+        }
+      }, 60000); // Check every minute
+
+      return () => clearInterval(checkInterval);
+    }
+  }, [user, checkUserActive, signOut]);
 
   return (
     <div className="app">
@@ -24,14 +37,14 @@ function App() {
               </ul>
             </nav>
           )}
-          <div className={`app-container ${!user ? 'blurred' : ''}`}>
+          <div className={`app-content ${!user ? 'blurred' : ''}`}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/admin" element={<AdminPage />} />
               <Route path="/account" element={<AccountPage />} />
             </Routes>
           </div>
-          {!user && <LoginOverlay />}
+          <LoginOverlay />
         </div>
       </Router>
     </div>
