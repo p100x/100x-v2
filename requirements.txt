@@ -1,5 +1,5 @@
 yfinance
-supabase-py==0.0.2  # Verwende die neueste verfügbare Version
+supabase
 openai
 python-dotenv
 pandas
