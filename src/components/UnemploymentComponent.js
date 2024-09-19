@@ -49,6 +49,7 @@ const UnemploymentComponent = () => {
       category="Labor Market"
       explanation={`The current unemployment rate is ${unemploymentData.unemployment.toFixed(1)}% and is ${state}. ${sahmRuleTriggered ? 'The Sahm rule has been triggered, indicating a possible recession.' : 'The Sahm rule has not been triggered.'} The Sahm rule is triggered when the 3-month average unemployment rate rises 0.5 percentage points or more above its low during the previous 12 months.`}
       chartConfig={chartConfig}
+      isRealtime={false}
     />
   );
 };

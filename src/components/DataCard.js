@@ -4,8 +4,9 @@ import '../App.css';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
+import RealtimeIndicator from './RealtimeIndicator';
 
-const DataCard = ({ title, value, timestamp, chartData, category, explanation, chartConfig = {} }) => {
+const DataCard = ({ title, value, chartData, category, explanation, chartConfig = {}, isRealtime = false }) => {
   const yAxisDomain = useMemo(() => {
     if (!chartData || chartData.length === 0 || !chartConfig.dataKey) return [0, 'auto'];
     
@@ -22,13 +23,12 @@ const DataCard = ({ title, value, timestamp, chartData, category, explanation, c
   return (
     <div className="data-card">
       <div className="data-card-header">
-        <h2>{title}</h2>
+        <h2>{title} <RealtimeIndicator isRealtime={isRealtime} /></h2>
         {category && <span className="category-tag">{category}</span>}
       </div>
       <div className="data-card-content">
         <div className="data-card-value">
           {typeof value === 'string' ? <h3>{value}</h3> : value}
-          <small>as of {new Date(timestamp).toLocaleString()}</small>
         </div>
         {explanation && <p className="data-card-explanation">{explanation}</p>}
       </div>
@@ -36,30 +36,30 @@ const DataCard = ({ title, value, timestamp, chartData, category, explanation, c
         <div className="data-card-chart">
           <ResponsiveContainer width="100%" height={200}>
             <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(51, 255, 51, 0.1)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
               <XAxis 
                 dataKey={chartConfig.xAxisDataKey} 
-                stroke="var(--text-light)" 
-                tick={{ fill: 'var(--text-light)', fontSize: 12 }}
+                stroke="var(--primary-text)" 
+                tick={{ fill: 'var(--primary-text)', fontSize: 12 }}
               />
               <YAxis 
-                stroke="var(--text-light)" 
-                tick={{ fill: 'var(--text-light)', fontSize: 12 }}
+                stroke="var(--primary-text)" 
+                tick={{ fill: 'var(--primary-text)', fontSize: 12 }}
                 domain={yAxisDomain}
                 allowDataOverflow={false}
                 tickFormatter={formatYAxis}
               />
               <Tooltip 
                 contentStyle={{ 
-                  backgroundColor: 'var(--dark-bg)', 
-                  border: '1px solid var(--primary-green)',
-                  color: 'var(--text-light)'
+                  backgroundColor: 'var(--secondary-bg)', 
+                  border: '1px solid var(--primary-text)',
+                  color: 'var(--primary-text)'
                 }}
               />
               <Line 
                 type="monotone" 
                 dataKey={chartConfig.dataKey} 
-                stroke="var(--primary-green)" 
+                stroke="var(--chart-line)" 
                 strokeWidth={2}
                 dot={false}
                 animationDuration={1500}

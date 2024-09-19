@@ -59,6 +59,7 @@ const VixComponent = () => {
         xAxisDataKey: 'date',
         dataKey: 'VIX'
       }}
+      isRealtime={true} // Set this to true if the data is real-time, or false if it's delayed
     />
   );
 };

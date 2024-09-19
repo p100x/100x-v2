@@ -1,25 +1,40 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './pages/Home';
 import AdminPage from './pages/AdminPage';
 import AccountPage from './pages/AccountPage';
+import LoginOverlay from './components/LoginOverlay';
+import { useAuth } from './contexts/AuthContext';
 import './App.css';
 
 function App() {
-  const [fiscalFlowsState, setFiscalFlowsState] = useState({ state: 'stable', timestamp: new Date().toISOString() });
+  const { user } = useAuth();
 
   return (
-    <Router>
-      <div className="App">
+    <div className="app">
+      <div className="matrix-bg"></div>
+      <Router>
         <div className="app-container">
-          <Routes>
-            <Route path="/" element={<Home fiscalFlowsState={fiscalFlowsState} setFiscalFlowsState={setFiscalFlowsState} />} />
-            <Route path="/admin" element={<AdminPage fiscalFlowsState={fiscalFlowsState} setFiscalFlowsState={setFiscalFlowsState} />} />
-            <Route path="/account" element={<AccountPage />} />
-          </Routes>
+          {user && (
+            <nav className="menu-bar">
+              <ul>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/account">Account</Link></li>
+                <li><Link to="/admin">Admin</Link></li>
+              </ul>
+            </nav>
+          )}
+          <div className={`app-container ${!user ? 'blurred' : ''}`}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/account" element={<AccountPage />} />
+            </Routes>
+          </div>
+          {!user && <LoginOverlay />}
         </div>
-      </div>
-    </Router>
+      </Router>
+    </div>
   );
 }
 

@@ -40,6 +40,7 @@ const SummaryComponent = () => {
       category="Overview"
       explanation={null}
       chartConfig={{}} // Provide an empty object instead of null
+      isRealtime={true}
     />
   );
 };

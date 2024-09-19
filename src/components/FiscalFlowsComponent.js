@@ -43,6 +43,7 @@ const FiscalFlowsComponent = ({ setFiscalFlowsState }) => {
             <p>{getStateDescription(fiscalFlowsState)}</p>
           </div>
         }
+        isRealtime={true}
       />
     </div>
   );

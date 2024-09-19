@@ -10,37 +10,58 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-  const [filter, setFilter] = useState('all');
-  const [fiscalFlowsState, setFiscalFlowsState] = useState({ state: 'stable', timestamp: new Date().toISOString() });
+  const [activeFilters, setActiveFilters] = useState(['all']);
 
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value);
+  const filterOptions = [
+    { id: 'all', label: 'All' },
+    { id: 'summary', label: 'Summary' },
+    { id: 'volatility', label: 'Volatility' },
+    { id: 'sentiment', label: 'Sentiment' },
+    { id: 'labor', label: 'Labor Market' },
+    { id: 'fiscal', label: 'Fiscal Flows' },
+  ];
+
+  const handleFilterClick = (filterId) => {
+    setActiveFilters((prevFilters) => {
+      if (filterId === 'all') {
+        return ['all'];
+      } else {
+        const newFilters = prevFilters.filter((f) => f !== 'all');
+        if (newFilters.includes(filterId)) {
+          return newFilters.filter((f) => f !== filterId);
+        } else {
+          return [...newFilters, filterId];
+        }
+      }
+    });
   };
+
+  const isFilterActive = (filterId) => activeFilters.includes(filterId);
+
+  const [fiscalFlowsState, setFiscalFlowsState] = useState({ state: 'stable', timestamp: new Date().toISOString() });
 
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div className="home-page">
       <h1>Market Data Overview</h1>
-      <div>
-        <label htmlFor="category-filter">Filter by category: </label>
-        <select id="category-filter" value={filter} onChange={handleFilterChange}>
-          <option value="all">All</option>
-          <option value="summary">Summary</option>
-          <option value="volatility">Volatility</option>
-          <option value="sentiment">Sentiment</option>
-          <option value="labor">Labor Market</option> {/* Added option */}
-          <option value="fiscal">Fiscal Flows</option> {/* Added option */}
-        </select>
+      <div className="filter-container">
+        {filterOptions.map((filter) => (
+          <button
+            key={filter.id}
+            className={`filter-chip ${isFilterActive(filter.id) ? 'active' : ''} ${filter.id === 'all' ? 'all' : ''}`}
+            onClick={() => handleFilterClick(filter.id)}
+          >
+            {filter.label}
+          </button>
+        ))}
       </div>
-      {(filter === 'all' || filter === 'summary') && <SummaryComponent />}
-      {(filter === 'all' || filter === 'volatility') && <VixComponent />}
-      {(filter === 'all' || filter === 'sentiment') && <AAIIComponent />}
-      {(filter === 'all' || filter === 'labor') && <UnemploymentComponent />} {/* Added UnemploymentComponent */}
-      {(filter === 'all' || filter === 'fiscal') && <FiscalFlowsComponent setFiscalFlowsState={setFiscalFlowsState} />}
-      <MarketScoreComponent fiscalFlowsState={fiscalFlowsState.state} /> {/* Added MarketScoreComponent */}
-      <Link to="/admin">Admin Panel</Link>
-      <Link to="/account">Account Page</Link>  {/* Add this line */}
+      {(isFilterActive('all') || isFilterActive('summary')) && <SummaryComponent />}
+      {(isFilterActive('all') || isFilterActive('volatility')) && <VixComponent />}
+      {(isFilterActive('all') || isFilterActive('sentiment')) && <AAIIComponent />}
+      {(isFilterActive('all') || isFilterActive('labor')) && <UnemploymentComponent />}
+      {(isFilterActive('all') || isFilterActive('fiscal')) && <FiscalFlowsComponent setFiscalFlowsState={setFiscalFlowsState} />}
+      <MarketScoreComponent fiscalFlowsState={fiscalFlowsState.state} />
     </div>
   );
 };

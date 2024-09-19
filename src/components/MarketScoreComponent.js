@@ -10,6 +10,13 @@ const SIGNAL_LEVELS = {
   VERY_BULLISH: 2
 };
 
+const SIGNAL_WEIGHTS = {
+  VIX: 1,
+  AAII: 1,
+  Unemployment: 1.5,
+  FiscalFlows: 1.5
+};
+
 const getVIXSignal = (vix) => {
   if (vix >= 40) return SIGNAL_LEVELS.VERY_BULLISH;
   if (vix >= 30) return SIGNAL_LEVELS.BULLISH;
@@ -45,14 +52,17 @@ const calculateScore = (signals) => {
   let totalScore = 0;
   let totalWeight = 0;
 
-  for (const signal of signals) {
-    const weight = Math.exp(Math.abs(signal));
-    totalScore += signal * weight;
+  for (const [key, signal] of Object.entries(signals)) {
+    const weight = SIGNAL_WEIGHTS[key] || 1; // Use default weight of 1 if not specified
+    const signalValue = typeof signal === 'number' ? signal : 0; // Ensure signal is a number
+    totalScore += signalValue * weight;
     totalWeight += weight;
   }
 
+  if (totalWeight === 0) return 50; // Return a neutral score if no valid signals
+
   const normalizedScore = (totalScore / totalWeight + 2) / 4; // Normalize to 0-1 range
-  return normalizedScore * 100; // Convert to 0-100 scale
+  return Math.max(0, Math.min(100, normalizedScore * 100)); // Ensure score is between 0-100
 };
 
 const MarketScoreComponent = ({ fiscalFlowsState }) => {
@@ -86,7 +96,12 @@ const MarketScoreComponent = ({ fiscalFlowsState }) => {
           FiscalFlows: fiscalFlowsSignal
         });
 
-        const score = calculateScore([vixSignal, aaiiSignal, unemploymentSignal, fiscalFlowsSignal]);
+        const score = calculateScore({
+          VIX: vixSignal,
+          AAII: aaiiSignal,
+          Unemployment: unemploymentSignal,
+          FiscalFlows: fiscalFlowsSignal
+        });
         setMarketScore(score);
       } catch (err) {
         setError(err.message);
@@ -106,6 +121,25 @@ const MarketScoreComponent = ({ fiscalFlowsState }) => {
     return "Very Bearish";
   };
 
+  const renderScoreScale = (score) => {
+    const position = `${score}%`;
+    return (
+      <div className="market-score-scale-container">
+        <div className="market-score-scale">
+          <div 
+            className="market-score-indicator" 
+            style={{ left: position }}
+          ></div>
+        </div>
+        <div className="market-score-labels">
+          <span>0</span>
+          <span>50</span>
+          <span>100</span>
+        </div>
+      </div>
+    );
+  };
+
   if (loading) {
     return <div className="loading">Calculating market score...</div>;
   }
@@ -119,38 +153,30 @@ const MarketScoreComponent = ({ fiscalFlowsState }) => {
   return (
     <DataCard
       title="Market Score"
-      value={`${marketScore.toFixed(2)} - ${condition}`}
+      value={`${marketScore.toFixed(2)}`}
       timestamp={Date.now()}
       category="Market Health"
       explanation={
-        <div className="market-score-table">
-          <div className="market-score-row">
-            <span>VIX:</span>
-            <span className={`pill ${Object.keys(SIGNAL_LEVELS).find(key => SIGNAL_LEVELS[key] === signals.VIX).toLowerCase()}`}>
-              {Object.keys(SIGNAL_LEVELS).find(key => SIGNAL_LEVELS[key] === signals.VIX)}
-            </span>
+        <div className="market-score-content">
+          <div className="market-score-header">
+            <h3>{condition}</h3>
+            <p>This score emphasizes extreme signals to capture significant market movements.</p>
           </div>
-          <div className="market-score-row">
-            <span>AAII:</span>
-            <span className={`pill ${Object.keys(SIGNAL_LEVELS).find(key => SIGNAL_LEVELS[key] === signals.AAII).toLowerCase()}`}>
-              {Object.keys(SIGNAL_LEVELS).find(key => SIGNAL_LEVELS[key] === signals.AAII)}
-            </span>
+          {renderScoreScale(marketScore)}
+          <div className="market-score-table">
+            {Object.entries(signals).map(([key, value]) => (
+              <div key={key} className="market-score-row">
+                <span className="signal-name">{key}:</span>
+                <span className={`pill ${Object.keys(SIGNAL_LEVELS).find(k => SIGNAL_LEVELS[k] === value).toLowerCase()}`}>
+                  {Object.keys(SIGNAL_LEVELS).find(k => SIGNAL_LEVELS[k] === value)}
+                </span>
+                <span className="signal-weight">Weight: {SIGNAL_WEIGHTS[key]}</span>
+              </div>
+            ))}
           </div>
-          <div className="market-score-row">
-            <span>Unemployment:</span>
-            <span className={`pill ${Object.keys(SIGNAL_LEVELS).find(key => SIGNAL_LEVELS[key] === signals.Unemployment).toLowerCase()}`}>
-              {Object.keys(SIGNAL_LEVELS).find(key => SIGNAL_LEVELS[key] === signals.Unemployment)}
-            </span>
-          </div>
-          <div className="market-score-row">
-            <span>Fiscal Flows:</span>
-            <span className={`pill ${Object.keys(SIGNAL_LEVELS).find(key => SIGNAL_LEVELS[key] === signals.FiscalFlows).toLowerCase()}`}>
-              {Object.keys(SIGNAL_LEVELS).find(key => SIGNAL_LEVELS[key] === signals.FiscalFlows)}
-            </span>
-          </div>
-          <p>This score emphasizes extreme signals to capture significant market movements.</p>
         </div>
       }
+      isRealtime={true}
     />
   );
 };

@@ -1,76 +1,165 @@
 /* App.css */
 
 :root {
-  --primary-green: #33ff33;
-  --primary-yellow: #ffff33;
-  --primary-red: #ff3333;
-  --dark-bg: #001800;
-  --mid-bg: #005000;
-  --text-light: #33ff33;
+  --primary-bg: #0A0A0A;
+  --secondary-bg: #1A1A1A;
+  --primary-text: #00FF41;
+  --secondary-text: #CCCCCC;
+  --disabled-text: #555555;
+  --highlight: #00CC33;
+  --error: #FF3131;
+  --warning: #FF8800;
+  --success: #33FF99;
+  --chart-line: #33FF33;
+  --chart-bar: #009900;
+  --chart-grid: #555555;
 }
 
 body {
-  background-color: var(--dark-bg);
-  color: var(--text-light);
-  font-family: 'Courier New', monospace;
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  font-family: 'Consolas', 'Courier New', 'Lucida Console', monospace;
+  line-height: 1.5;
   margin: 0;
   padding: 0;
+  animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.99; }
+  50% { opacity: 1; }
+  100% { opacity: 0.99; }
+}
+
+/* Add a subtle Matrix rain effect to the background */
+.matrix-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.05;
+  background: linear-gradient(0deg, rgba(0,255,65,0.1) 0%, rgba(0,255,65,0) 100%);
+  animation: matrix-rain 20s linear infinite;
+}
+
+@keyframes matrix-rain {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 1000px; }
 }
 
 .app-container {
-  max-width: 960px;
-  margin: 40px auto;
-  padding: 20px;
-  border: 2px solid var(--primary-green);
-  box-shadow: 0 0 10px var(--primary-green);
+  max-width: 1200px; /* Add a max-width */
+  margin: 0 auto; /* Center the container */
+  padding: 20px 40px; /* Increase horizontal padding */
+  border: none;
+  box-shadow: none;
 }
 
-h1, h3 {
-  color: var(--primary-green);
-  text-align: center;
+h1, h2, h3 {
+  color: var(--primary-text);
+  text-align: left;
+  position: relative;
+  display: inline-block;
+}
+
+h1 { font-size: 24px; }
+h2 { font-size: 20px; }
+h3 { font-size: 18px; }
+
+h1::before, h2::before, h3::before {
+  content: attr(data-text);
+  position: absolute;
+  left: -2px;
+  text-shadow: 2px 0 var(--highlight);
+  top: 0;
+  color: var(--primary-text);
+  overflow: hidden;
+  clip: rect(0, 900px, 0, 0);
+  animation: glitch-effect 3s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-effect {
+  0% {
+    clip: rect(44px, 9999px, 56px, 0);
+  }
+  5% {
+    clip: rect(32px, 9999px, 94px, 0);
+  }
+  10% {
+    clip: rect(54px, 9999px, 85px, 0);
+  }
+  15% {
+    clip: rect(66px, 9999px, 31px, 0);
+  }
+  20% {
+    clip: rect(47px, 9999px, 73px, 0);
+  }
+  25% {
+    clip: rect(25px, 9999px, 97px, 0);
+  }
 }
 
 p {
-  color: var(--primary-green);
+  color: var(--primary-text);
   font-size: 16px;
 }
 
 /* Reusable Data Card for displaying VIX and other market data */
 .data-card {
-  background-color: rgba(51, 255, 51, 0.1);
-  border: 1px solid var(--primary-green);
-  padding: 20px;
+  background-color: rgba(26, 26, 26, 0.8);
+  border: 1px solid var(--primary-text);
+  padding: 15px;
   margin-bottom: 20px;
-  box-shadow: 0 0 5px var(--primary-green);
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  max-width: 900px; /* Add a max-width */
+  margin-left: auto; /* Center the card */
+  margin-right: auto; /* Center the card */
+}
+
+.data-card:hover {
+  box-shadow: 0 0 25px rgba(0, 255, 65, 0.4);
+  transform: translateY(-5px);
+}
+
+.data-card:first-of-type {
+  margin-top: 0;
 }
 
 .data-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .data-card-header h2 {
   margin: 0;
   font-size: 1.5em;
+  display: flex;
+  align-items: center;
 }
 
 .data-card-content {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 20px;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px; /* Increase bottom margin */
 }
 
 .data-card-value {
   text-align: center;
+  margin-bottom: 15px; /* Increase margin below the value */
 }
 
 .data-card-value h3 {
   font-size: 2.5em;
   margin: 0;
-  color: var(--primary-green);
+  color: var(--primary-text);
 }
 
 .data-card-value small {
@@ -79,10 +168,11 @@ p {
 }
 
 .data-card-explanation {
-  flex: 1;
-  margin-left: 20px;
+  text-align: center;
   font-size: 0.9em;
-  line-height: 1.4;
+  line-height: 1.5;
+  max-width: 90%;
+  margin-top: 10px; /* Add top margin to the explanation */
 }
 
 .data-card-chart {
@@ -92,8 +182,8 @@ p {
 .category-tag {
   display: inline-block;
   padding: 5px 10px;
-  background-color: var(--mid-bg);
-  color: var(--primary-green);
+  background-color: var(--secondary-bg);
+  color: var(--primary-text);
   border-radius: 15px;
   font-size: 0.8em;
   font-weight: bold;
@@ -109,42 +199,44 @@ p {
 }
 
 .data-card .recharts-tooltip-cursor {
-  stroke: var(--primary-green);
+  stroke: var(--primary-text);
   stroke-width: 1;
   stroke-dasharray: 3 3;
 }
 
 .data-card .recharts-cartesian-axis-tick-value {
   font-size: 12px;
+  fill: var(--primary-text);
 }
 
 .data-card .recharts-tooltip-label {
-  color: var(--primary-green);
+  color: var(--primary-text);
 }
 
 .data-card .recharts-tooltip-item {
-  color: var(--text-light);
+  color: var(--secondary-text);
 }
 
 .loading, .error {
   text-align: center;
   padding: 20px;
-  border: 1px solid var(--primary-yellow);
-  background-color: rgba(255, 255, 51, 0.05);
+  border: 1px solid var(--warning);
+  background-color: rgba(255, 136, 0, 0.05);
   margin-bottom: 20px;
+  color: var(--warning);
 }
 
 /* Terminal-style debug log */
 .debug-log {
-  background-color: var(--dark-bg);
-  color: var(--primary-green);
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
   padding: 20px;
   margin-top: 20px;
-  border: 2px solid var(--primary-green);
-  font-family: 'Courier New', monospace;
+  border: 2px solid var(--primary-text);
+  font-family: 'Consolas', 'Courier New', 'Lucida Console', monospace;
   max-height: 300px;
   overflow-y: scroll;
-  box-shadow: 0 0 5px var(--primary-green);
+  box-shadow: 0 0 5px var(--primary-text);
 }
 
 .debug-log h2 {
@@ -162,16 +254,9 @@ p {
   line-height: 1.5;
 }
 
-@keyframes flicker {
-  0% { opacity: 0.99; }
-  50% { opacity: 1; }
-  100% { opacity: 0.99; }
-}
-
 @media (max-width: 768px) {
   .app-container {
-    margin: 20px;
-    padding: 15px;
+    padding: 15px 20px; /* Adjust padding for smaller screens */
   }
 
   .data-card p {
@@ -180,6 +265,10 @@ p {
 
   .data-card h3 {
     font-size: 18px;
+  }
+
+  .data-card {
+    padding: 15px; /* Reduce padding for smaller screens */
   }
 }
 
@@ -191,6 +280,10 @@ p {
   .data-card p {
     font-size: 16px;
   }
+
+  .app-container {
+    padding: 10px 15px; /* Further adjust padding for very small screens */
+  }
 }
 
 /* Login Overlay Styles */
@@ -200,8 +293,7 @@ p {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 24, 0, 0.7);
-  backdrop-filter: blur(8px);
+  background-color: rgba(10, 10, 10, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -209,17 +301,17 @@ p {
 }
 
 .login-form-container {
-  background-color: var(--mid-bg);
-  border: 2px solid var(--primary-green);
+  background-color: var(--secondary-bg);
+  border: 2px solid var(--primary-text);
   border-radius: 10px;
   padding: 2rem;
-  box-shadow: 0 0 20px rgba(51, 255, 51, 0.3);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
   max-width: 400px;
   width: 90%;
 }
 
 .login-form-container h2 {
-  color: var(--primary-green);
+  color: var(--primary-text);
   text-align: center;
   margin-bottom: 1.5rem;
 }
@@ -230,17 +322,17 @@ p {
 }
 
 .login-form-container input {
-  background-color: var(--dark-bg);
-  border: 1px solid var(--primary-green);
-  color: var(--text-light);
+  background-color: var(--primary-bg);
+  border: 1px solid var(--primary-text);
+  color: var(--primary-text);
   padding: 0.5rem;
   margin-bottom: 1rem;
   border-radius: 5px;
 }
 
 .login-form-container button {
-  background-color: var(--primary-green);
-  color: var(--dark-bg);
+  background-color: var(--highlight);
+  color: var(--primary-bg);
   border: none;
   padding: 0.5rem;
   border-radius: 5px;
@@ -250,24 +342,16 @@ p {
 }
 
 .login-form-container button:hover {
-  background-color: #66ff66;
+  background-color: var(--primary-text);
 }
 
 .login-form-container .error {
-  color: var(--primary-red);
+  color: var(--error);
   text-align: center;
   margin-top: 1rem;
 }
 
-/* Adjust the app-container to allow the background to be visible */
-.app-container {
-  min-height: 100vh;
-  padding: 40px;
-  box-sizing: border-box;
-}
-
-/* Add these styles at the end of the file */
-
+/* Account Page Styles */
 .account-page {
   max-width: 600px;
   margin: 0 auto;
@@ -275,16 +359,16 @@ p {
 }
 
 .account-info {
-  background-color: var(--mid-bg);
-  border: 1px solid var(--primary-green);
+  background-color: var(--secondary-bg);
+  border: 1px solid var(--primary-text);
   padding: 20px;
   margin-bottom: 20px;
   border-radius: 5px;
 }
 
 .logout-button {
-  background-color: var(--primary-red);
-  color: white;
+  background-color: var(--error);
+  color: var(--primary-bg);
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
@@ -303,82 +387,97 @@ p {
   max-height: 300px;
   overflow-y: auto;
   padding: 10px;
-  background-color: rgba(51, 255, 51, 0.05);
-  border: 1px solid var(--primary-green);
+  background-color: rgba(0, 255, 65, 0.05);
+  border: 1px solid var(--primary-text);
   border-radius: 5px;
 }
 
-.data-card-value h3 {
-  font-size: 2em;
-  margin: 0 0 10px 0;
-}
-
-.data-card-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.data-card-explanation {
-  margin-top: 10px;
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.market-score-table {
+/* Market Score Table Styles */
+.market-score-content {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.market-score-row {
+.market-score-header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.market-score-header h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.market-score-header p {
+  margin: 0;
+  font-size: 0.9em;
+  color: var(--secondary-text);
+}
+
+.market-score-table {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.market-score-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
   align-items: center;
+  background-color: rgba(0, 255, 65, 0.05);
+  padding: 8px 10px;
+  border-radius: 5px;
+  gap: 10px;
+}
+
+.signal-name {
+  font-weight: bold;
+}
+
+.signal-weight {
+  font-size: 0.8em;
+  color: var(--secondary-text);
 }
 
 .pill {
   padding: 2px 8px;
   border-radius: 12px;
   font-weight: bold;
-  text-transform: uppercase;
+  text-transform: uppercase;  
   font-size: 0.8em;
+  text-align: center;
+  min-width: 80px;
 }
 
-.pill.very_bearish {
-  background-color: #ff3333;
-  color: white;
+.pill.very_bearish { background-color: var(--error); color: var(--primary-bg); }
+.pill.bearish { background-color: #ff9999; color: var(--primary-bg); }
+.pill.neutral { background-color: var(--warning); color: var(--primary-bg); }
+.pill.bullish { background-color: #99ff99; color: var(--primary-bg); }
+.pill.very_bullish { background-color: var(--success); color: var(--primary-bg); }
+
+@media (max-width: 480px) {
+  .market-score-row {
+    grid-template-columns: 1fr auto;
+  }
+  
+  .signal-weight {
+    grid-column: 1 / -1;
+    text-align: right;
+  }
 }
 
-.pill.bearish {
-  background-color: #ff9999;
-  color: black;
-}
-
-.pill.neutral {
-  background-color: #ffff99;
-  color: black;
-}
-
-.pill.bullish {
-  background-color: #99ff99;
-  color: black;
-}
-
-.pill.very_bullish {
-  background-color: #33ff33;
-  color: black;
-}
-
+/* Admin Page Styles */
 .admin-page {
-  max-width: 600px;
+  max-width: 800px; /* Increase max-width */
   margin: 0 auto;
   padding: 20px;
 }
 
 .admin-section {
-  background-color: var(--mid-bg);
-  border: 1px solid var(--primary-green);
+  background-color: var(--secondary-bg);
+  border: 1px solid var(--primary-text);
   padding: 20px;
   margin-bottom: 20px;
   border-radius: 5px;
@@ -391,8 +490,8 @@ p {
 }
 
 .admin-page button {
-  background-color: var(--primary-green);
-  color: var(--dark-bg);
+  background-color: var(--highlight);
+  color: var(--primary-bg);
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
@@ -401,5 +500,248 @@ p {
 }
 
 .admin-page button:hover {
-  background-color: #66ff66;
+  background-color: var(--primary-text);
+}
+
+.blurred {
+  filter: blur(5px);
+  pointer-events: none;
+}
+
+/* Chart Styles */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: rgba(0, 255, 65, 0.2);
+  stroke-dasharray: 3 3;
+}
+
+.recharts-cartesian-axis-tick-value {
+  fill: var(--primary-text);
+}
+
+.recharts-tooltip-wrapper {
+  background-color: rgba(26, 26, 26, 0.9);
+  border: 1px solid var(--primary-text);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+.recharts-line {
+  filter: drop-shadow(0 0 5px var(--chart-line));
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--secondary-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-text);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--highlight);
+  box-shadow: 0 0 10px var(--highlight);
+}
+
+/* Enhance button styles */
+button, .button {
+  background-color: var(--highlight);
+  color: var(--primary-bg);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+button::before, .button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: all 0.5s;
+}
+
+button:hover::before, .button:hover::before {
+  left: 100%;
+}
+
+button:hover, .button:hover {
+  background-color: var(--primary-text);
+  box-shadow: 0 0 15px var(--primary-text);
+}
+
+/* Enhance input styles */
+input, textarea, select {
+  background-color: rgba(10, 10, 10, 0.8);
+  border: 1px solid var(--primary-text);
+  color: var(--primary-text);
+  padding: 10px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--highlight);
+  box-shadow: 0 0 10px var(--highlight);
+  outline: none;
+}
+
+/* Matrix-style top menu */
+.menu-bar {
+  background-color: var(--secondary-bg);
+  border-bottom: 1px solid var(--primary-text);
+  padding: 10px 0;
+}
+
+.menu-bar ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-bar li {
+  margin: 0 15px;
+}
+
+.menu-bar a {
+  color: var(--primary-text);
+  text-decoration: none;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.menu-bar a::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: var(--primary-text);
+  visibility: hidden;
+  transform: scaleX(0);
+  transition: all 0.3s ease-in-out;
+}
+
+.menu-bar a:hover::before {
+  visibility: visible;
+  transform: scaleX(1);
+}
+
+.menu-bar a:hover {
+  color: var(--highlight);
+  text-shadow: 0 0 10px var(--highlight);
+}
+
+@media (max-width: 768px) {
+  .market-score-table {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Market Score Scale Styles */
+.market-score-scale {
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(to right, var(--error), var(--warning), var(--success));
+  position: relative;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+.market-score-indicator {
+  width: 4px;
+  height: 30px;
+  background-color: var(--primary-text);
+  position: absolute;
+  top: -5px;
+  transform: translateX(-50%);
+}
+
+.market-score-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  font-size: 0.8em;
+  color: var(--secondary-text);
+}
+
+.filter-container {
+  margin-bottom: 40px;
+}
+
+/* Indicator Styles */
+.realtime-indicator,
+.delayed-indicator {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+  margin-left: 0.5rem;
+}
+
+.indicator-box {
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+
+.realtime-indicator .indicator-box {
+  background-color: rgba(0, 255, 0, 0.3);
+  color: var(--primary-text);
+}
+
+.delayed-indicator .indicator-box {
+  background-color: rgba(255, 165, 0, 0.3);
+  color: var(--primary-text);
+}
+
+.realtime-indicator .indicator-box::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: lightingEffect 2s linear infinite;
+}
+
+@keyframes lightingEffect {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
 }
