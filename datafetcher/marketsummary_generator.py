@@ -5,6 +5,8 @@ from openai import OpenAI
 from dotenv import load_dotenv  # To load environment variables
 from datetime import datetime
 import pandas as pd  # Import pandas for moving average calculations
+import requests
+from bs4 import BeautifulSoup
 
 # Load environment variables from .env file
 load_dotenv()
@@ -76,6 +78,14 @@ def get_market_data_with_moving_averages(tickers):
             }
     return market_data
 
+# Function to scrape CNBC headlines
+def scrape_cnbc_headlines():
+    url = "https://www.cnbc.com/world/?region=world"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    headlines = soup.find_all('a', class_='LatestNews-headline')
+    return [headline.text.strip() for headline in headlines[:10]]  # Get top 10 headlines
+
 # Function to generate a concise interpretation focusing only on notable trends
 def format_data_for_llm(market_data):
     trends = []
@@ -97,22 +107,26 @@ def format_data_for_llm(market_data):
         return " ".join(trends)
 
 # Function to generate a concise market interpretation in simple language
-def generate_llm_interpretation(market_data_text):
+def generate_llm_interpretation(market_data_text, headlines):
     prompt = f"""
-    Basierend auf den folgenden aktuellen Marktdaten und den erkannten Trends:
+    Basierend auf den folgenden aktuellen Marktdaten, den erkannten Trends und den aktuellen CNBC-Schlagzeilen:
 
+    Marktdaten und Trends:
     {market_data_text}
 
-    Erstelle eine kurze, prägnante Analyse (maximal 3-4 Sätze) des globalen Marktgeschehens. Für den Nutzer, der einen Schnellüberblick über den Markt benötigt. Zusatzinfo für die KI zur Einordnung der Lage: US-Arbeitsmarkt schwächelt (Sahm-Regel ausgelöst), Leitzinsen fallen, Zinsstrukturkurve gerde re-inverted.
+    Aktuelle CNBC-Schlagzeilen:
+    {'. '.join(headlines)}
+
+    Erstelle eine kurze, prägnante Analyse (maximal 4-5 Sätze) des globalen Marktgeschehens. Berücksichtige dabei sowohl die Marktdaten als auch die Schlagzeilen. Für den Nutzer, der einen Schnellüberblick über den Markt benötigt. Zusatzinfo für die KI zur Einordnung der Lage: US-Arbeitsmarkt schwächelt (Sahm-Regel ausgelöst), Leitzinsen fallen, Zinsstrukturkurve gerade re-inverted.
     """
 
     response = client.chat.completions.create(
-        model="gpt-4o", 
+        model="gpt-4",
         messages=[
             {"role": "system", "content": "Du bist ein erfahrener Börsenanalyst."},
             {"role": "user", "content": prompt}
         ],
-        max_tokens=800,
+        max_tokens=1000,
         temperature=0.7,
     )
     
@@ -148,8 +162,13 @@ market_data = get_market_data_with_moving_averages(tickers)
 # Format the data for LLM
 formatted_market_data = format_data_for_llm(market_data)
 
+# Scrape CNBC headlines
+cnbc_headlines = scrape_cnbc_headlines()
+
 # Generate longer-term trend analysis using LLM
-llm_interpretation = generate_llm_interpretation(formatted_market_data)
+llm_interpretation = generate_llm_interpretation(formatted_market_data, cnbc_headlines)
 
 # Store the market overview in the Supabase database
 store_in_database(llm_interpretation)
+
+print("Market analysis completed and stored in the database.")
