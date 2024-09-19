@@ -1,6 +1,5 @@
 yfinance
 openai
-python-dotenv
 pandas
 google-auth
 google-auth-oauthlib
