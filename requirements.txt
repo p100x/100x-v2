@@ -1,5 +1,5 @@
 yfinance
-supabase-py>=0.6.1  # Use the latest version of supabase-py
+supabase-py>=0.6.1  # Die neueste Version von supabase-py
 openai
 python-dotenv
 pandas
