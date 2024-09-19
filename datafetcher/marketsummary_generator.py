@@ -107,7 +107,7 @@ def generate_llm_interpretation(market_data_text):
     """
 
     response = client.chat.completions.create(
-        model="gpt-4",  # Changed from "gpt-4o" to "gpt-4"
+        model="gpt-4o", 
         messages=[
             {"role": "system", "content": "Du bist ein erfahrener Börsenanalyst."},
             {"role": "user", "content": prompt}
