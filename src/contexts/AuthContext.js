@@ -24,8 +24,22 @@ export const AuthProvider = ({ children }) => {
 
   const signIn = async (email) => {
     console.log('SignIn function called with email:', email);
-    const { user, error } = await supabaseSignIn(email);
-    if (error) throw error;
+    const { data, error } = await supabase
+      .from('user_data')
+      .select('is_active')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error fetching user data:', error);
+      throw new Error('An error occurred while signing in');
+    }
+    
+    if (!data) {
+      throw new Error('User not found');
+    }
+    
+    const user = { email, is_active: data.is_active };
     setUser(user);
     return user;
   };

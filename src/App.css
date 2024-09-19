@@ -295,3 +295,111 @@ p {
 .logout-button:hover {
   background-color: #ff6666;
 }
+
+.summary-text {
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: rgba(51, 255, 51, 0.05);
+  border: 1px solid var(--primary-green);
+  border-radius: 5px;
+}
+
+.data-card-value h3 {
+  font-size: 2em;
+  margin: 0 0 10px 0;
+}
+
+.data-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.data-card-explanation {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.market-score-table {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.market-score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pill {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.8em;
+}
+
+.pill.very_bearish {
+  background-color: #ff3333;
+  color: white;
+}
+
+.pill.bearish {
+  background-color: #ff9999;
+  color: black;
+}
+
+.pill.neutral {
+  background-color: #ffff99;
+  color: black;
+}
+
+.pill.bullish {
+  background-color: #99ff99;
+  color: black;
+}
+
+.pill.very_bullish {
+  background-color: #33ff33;
+  color: black;
+}
+
+.admin-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.admin-section {
+  background-color: var(--mid-bg);
+  border: 1px solid var(--primary-green);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.admin-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.admin-page button {
+  background-color: var(--primary-green);
+  color: var(--dark-bg);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.admin-page button:hover {
+  background-color: #66ff66;
+}

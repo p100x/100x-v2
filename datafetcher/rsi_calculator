@@ -1,0 +1,47 @@
+import yfinance as yf
+import pandas as pd
+import numpy as np
+
+def calculate_rsi(data, window=14):
+    delta = data.diff()
+    gain = (delta.where(delta > 0, 0)).rolling(window=window).mean()
+    loss = (-delta.where(delta < 0, 0)).rolling(window=window).mean()
+    rs = gain / loss
+    return 100 - (100 / (1 + rs))
+
+def get_combined_rsi(tickers, window=14, period="1mo"):
+    combined_data = pd.DataFrame()
+    
+    for ticker in tickers:
+        stock = yf.Ticker(ticker)
+        history = stock.history(period=period)
+        rsi = calculate_rsi(history['Close'], window=window)
+        combined_data[ticker] = rsi
+    
+    # Remove any rows with NaN values
+    combined_data.dropna(inplace=True)
+    
+    # Calculate the average RSI across all tickers
+    combined_data['Average RSI'] = combined_data.mean(axis=1)
+    
+    return combined_data
+
+# List of major US indices
+indices = ['^GSPC', '^DJI', '^IXIC', '^RUT']  # S&P 500, Dow Jones, NASDAQ, Russell 2000
+
+# Get the combined RSI data
+rsi_data = get_combined_rsi(indices)
+
+# Print the latest combined RSI value
+latest_rsi = rsi_data['Average RSI'].iloc[-1]
+print(f"Latest Combined RSI for US Indices: {latest_rsi:.2f}")
+
+# Print individual RSI values for each index
+for index in indices:
+    print(f"RSI for {index}: {rsi_data[index].iloc[-1]:.2f}")
+
+# Optional: If you want to see the full dataset
+# print(rsi_data)
+
+# Optional: If you want to save the data to a CSV file
+# rsi_data.to_csv('combined_rsi_data.csv')

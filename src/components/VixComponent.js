@@ -14,9 +14,12 @@ const VixComponent = () => {
       try {
         setLoading(true);
         const latestData = await fetchLatestVIX();
-        const historicalVIX = await fetchHistoricalVIX(); // Fetch historical VIX data
+        const historicalVIX = await fetchHistoricalVIX();
         setVixData(latestData);
-        setHistoricalData(historicalVIX); // Store the historical data
+        setHistoricalData(historicalVIX.map(d => ({
+          date: new Date(d.timestamp).toLocaleDateString(),
+          VIX: d.VIX
+        })));
       } catch (err) {
         setError(err.message);
       } finally {
@@ -39,6 +42,11 @@ const VixComponent = () => {
     return <div className="error">No VIX data available.</div>;
   }
 
+  const chartConfig = {
+    xAxisDataKey: 'date',
+    dataKey: 'VIX'
+  };
+
   return (
     <DataCard 
       title="VIX Index"
@@ -47,6 +55,10 @@ const VixComponent = () => {
       chartData={historicalData}
       category="Market Volatility"
       explanation="The VIX Index, also known as the 'Fear Index', measures the stock market's expectation of volatility based on S&P 500 index options. A high VIX value indicates increased market uncertainty, while a low value suggests relative calm."
+      chartConfig={{
+        xAxisDataKey: 'date',
+        dataKey: 'VIX'
+      }}
     />
   );
 };

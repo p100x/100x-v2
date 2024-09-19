@@ -1,22 +1,23 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
+import AdminPage from './pages/AdminPage';
 import AccountPage from './pages/AccountPage';
-import LoginOverlay from './components/LoginOverlay';
-import { useAuth } from './contexts/AuthContext';
 import './App.css';
 
 function App() {
-  const { user } = useAuth();
+  const [fiscalFlowsState, setFiscalFlowsState] = useState({ state: 'stable', timestamp: new Date().toISOString() });
 
   return (
     <Router>
-      <div className="app-container">
-        <Routes>
-          <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
-          <Route path="/account" element={user ? <AccountPage /> : <Navigate to="/login" />} />
-          <Route path="/login" element={user ? <Navigate to="/" /> : <LoginOverlay />} />
-        </Routes>
+      <div className="App">
+        <div className="app-container">
+          <Routes>
+            <Route path="/" element={<Home fiscalFlowsState={fiscalFlowsState} setFiscalFlowsState={setFiscalFlowsState} />} />
+            <Route path="/admin" element={<AdminPage fiscalFlowsState={fiscalFlowsState} setFiscalFlowsState={setFiscalFlowsState} />} />
+            <Route path="/account" element={<AccountPage />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );

@@ -34,10 +34,12 @@ const SummaryComponent = () => {
   return (
     <DataCard
       title="Market Summary"
-      value={summary}
+      value={<div className="summary-text">{summary}</div>}
       timestamp={Date.now()}
       chartData={null}
       category="Overview"
+      explanation={null}
+      chartConfig={{}} // Provide an empty object instead of null
     />
   );
 };
