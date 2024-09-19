@@ -1,5 +1,7 @@
 yfinance
+supabase-py>=0.6.1  # Verwende die neueste Version
 openai
+python-dotenv
 pandas
 google-auth
 google-auth-oauthlib
