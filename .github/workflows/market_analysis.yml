@@ -2,7 +2,7 @@ name: Run Market Analysis Script
 
 on:
   schedule:
-    # This runs the script every hour from 7:00 to 23:00 UTC on weekdays (Monday to Friday)
+    # This runs the scripts every hour from 7:00 to 23:00 UTC on weekdays (Monday to Friday)
     - cron: '0 7-23 * * 1-5'
   workflow_dispatch:  # Allows manual triggering
 
@@ -29,3 +29,17 @@ jobs:
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
       run: python3 datafetcher/marketsummary_generator.py
+
+    - name: Run insert VIX data script
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      run: python3 datafetcher/insert_vix_data.py
+
+    - name: Run insert AAII data script
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      run: python3 datafetcher/insert_aaii_data.py
