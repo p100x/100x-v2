@@ -1,6 +1,5 @@
 yfinance
-supabase-py>=0.6.1  # Latest stable version of supabase-py
-postgrest-py==0.5.5  # Compatible with supabase-py version 0.6.1
+supabase-py>=0.6.1  # Use the latest version of supabase-py
 openai
 python-dotenv
 pandas
