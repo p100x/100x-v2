@@ -109,19 +109,19 @@ def format_data_for_llm(market_data):
 # Function to generate a concise market interpretation in simple language
 def generate_llm_interpretation(market_data_text, headlines):
     prompt = f"""
-    Basierend auf den folgenden aktuellen Marktdaten, den erkannten Trends und den aktuellen CNBC-Schlagzeilen:
+    Basierend auf den folgenden aktuellen Marktdaten, den erkannten Trends und relevanten Wirtschaftsnachrichten:
 
     Marktdaten und Trends:
     {market_data_text}
 
-    Aktuelle CNBC-Schlagzeilen:
+    Aktuelle Wirtschaftsnachrichten:
     {'. '.join(headlines)}
 
-    Erstelle eine kurze, prägnante Analyse (maximal 4-5 Sätze) des globalen Marktgeschehens. Berücksichtige dabei sowohl die Marktdaten als auch die Schlagzeilen. Für den Nutzer, der einen Schnellüberblick über den Markt benötigt. Zusatzinfo für die KI zur Einordnung der Lage: US-Arbeitsmarkt schwächelt (Sahm-Regel ausgelöst), Leitzinsen fallen, Zinsstrukturkurve gerade re-inverted.
+    Erstelle eine kurze, prägnante Analyse (maximal 4-5 Sätze) des globalen Marktgeschehens. Berücksichtige dabei sowohl die Marktdaten als auch die relevanten Wirtschaftsnachrichten, die sich auf Marktbewegungen und makroökonomische Faktoren beziehen. Ignoriere Nachrichten, die nicht direkt mit den Finanzmärkten oder der Wirtschaft zusammenhängen. Für den Nutzer, der einen Schnellüberblick über den Markt benötigt. Zusatzinfo für die KI zur Einordnung der Lage: US-Arbeitsmarkt schwächelt (Sahm-Regel ausgelöst), Leitzinsen fallen, Zinsstrukturkurve gerade re-inverted.
     """
 
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-4o",
         messages=[
             {"role": "system", "content": "Du bist ein erfahrener Börsenanalyst."},
             {"role": "user", "content": prompt}
