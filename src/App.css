@@ -1,23 +1,32 @@
 :root {
-  --primary-bg: #121212;
-  --secondary-bg: #1e1e1e;
-  --primary-text: #e0e0e0;
-  --secondary-text: #b3b3b3;
+  --primary-bg: #0c0c0c;
+  --secondary-bg: #0a0a0a;
+  --primary-text: #f5f5f5;
+  --secondary-text: #cccccc;
   --disabled-text: #555555;
-  --highlight: #00ff41;
+  --highlight: #39FF14;
+  --secondary-highlight: #66FF66;
   --error: #ff3131;
   --warning: #ff8800;
   --success: #33ff99;
-  --chart-line: #33ff33;
-  --chart-bar: #009900;
+  --chart-line: #39FF14;
+  --chart-bar: #66FF66;
   --chart-grid: #555555;
+  --font-primary: 'Courier New', 'Lucida Console', 'Source Code Pro', monospace;
+  --font-size-base: 16px;
+  --font-size-h1: 2rem;
+  --font-size-h2: 1.75rem;
+  --font-size-h3: 1.5rem;
+  --font-size-body: 1rem;
+  --line-height-base: 1.6;
 }
 
 body {
   background-color: var(--primary-bg);
   color: var(--primary-text);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  line-height: 1.6;
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
   margin: 0;
   padding: 0;
 }
@@ -31,7 +40,7 @@ body {
   pointer-events: none;
   z-index: -1;
   opacity: 0.05;
-  background: linear-gradient(0deg, rgba(0,255,65,0.1) 0%, rgba(0,255,65,0) 100%);
+  background: linear-gradient(0deg, rgba(57,255,20,0.1) 0%, rgba(57,255,20,0) 100%);
   animation: matrix-rain 20s linear infinite;
 }
 
@@ -56,14 +65,18 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--highlight);
   margin-top: 1.5em;
   margin-bottom: 0.5em;
+  font-family: var(--font-primary);
+  line-height: 1.2;
+  letter-spacing: 0.05em;
 }
 
-h1 { font-size: 2rem; }
-h2 { font-size: 1.75rem; }
-h3 { font-size: 1.5rem; }
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); }
 
-p {
+p, ul, ol {
   margin-bottom: 1.5em;
+  font-size: var(--font-size-body);
 }
 
 a {
@@ -73,17 +86,17 @@ a {
 }
 
 a:hover, a:focus {
-  color: var(--primary-text);
+  color: var(--secondary-highlight);
   text-decoration: underline;
 }
 
 .data-card {
   background-color: var(--secondary-bg);
-  border: 1px solid var(--primary-text);
+  border: 2px solid var(--highlight);
   border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px var(--highlight);
   transition: all 0.3s ease;
   max-width: 900px;
   margin-left: auto;
@@ -91,7 +104,7 @@ a:hover, a:focus {
 }
 
 .data-card:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 12px rgba(57, 255, 20, 0.15);
   transform: translateY(-2px);
 }
 
@@ -120,9 +133,10 @@ a:hover, a:focus {
 }
 
 .data-card-value h3 {
-  font-size: 2rem;
-  margin: 0;
-  color: var(--highlight);
+  font-size: 2.5rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px var(--highlight);
 }
 
 .data-card-value small {
@@ -146,7 +160,7 @@ a:hover, a:focus {
 }
 
 .explanation-toggle:hover {
-  background-color: var(--primary-text);
+  background-color: var(--highlight);
   color: var(--primary-bg);
 }
 
@@ -237,7 +251,7 @@ a:hover, a:focus {
   border: 2px solid var(--primary-text);
   border-radius: 10px;
   padding: 2rem;
-  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
   max-width: 400px;
   width: 90%;
 }
@@ -274,7 +288,7 @@ a:hover, a:focus {
 }
 
 .login-form-container button:hover {
-  background-color: var(--primary-text);
+  background-color: var(--secondary-highlight);
 }
 
 .login-form-container .error {
@@ -378,6 +392,7 @@ a:hover, a:focus {
 .market-score-header h3 {
   margin: 0;
   font-size: 1.2rem;
+  letter-spacing: 0.05em;
 }
 
 .market-score-header p {
@@ -396,14 +411,17 @@ a:hover, a:focus {
   display: grid;
   grid-template-columns: 1fr auto auto;
   align-items: center;
-  background-color: rgba(0, 255, 65, 0.05);
+  background-color: rgba(57, 255, 20, 0.05);
   padding: 0.5rem 1rem;
   border-radius: 5px;
   gap: 1rem;
+  border: 2px solid var(--highlight);
+  box-shadow: 0 0 10px var(--highlight);
 }
 
 .signal-name {
   font-weight: bold;
+  letter-spacing: 0.05em;
 }
 
 .signal-weight {
@@ -481,12 +499,17 @@ a:hover, a:focus {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-family: var(--font-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 2px solid var(--highlight);
+  box-shadow: 0 0 10px var(--highlight);
 }
 
 .button-group button:hover,
 .submit-button:hover,
 .back-button:hover {
-  background-color: var(--primary-text);
+  background-color: var(--secondary-highlight);
 }
 
 .message {
@@ -555,7 +578,7 @@ a:hover, a:focus {
 }
 
 .markdown-buttons button:hover {
-  background-color: var(--primary-text);
+  background-color: var(--secondary-highlight);
   color: var(--primary-bg);
 }
 
@@ -575,7 +598,7 @@ a:hover, a:focus {
 /* Chart Styles */
 .recharts-cartesian-grid-horizontal line,
 .recharts-cartesian-grid-vertical line {
-  stroke: rgba(0, 255, 65, 0.2);
+  stroke: rgba(57, 255, 20, 0.2);
   stroke-dasharray: 3 3;
 }
 
@@ -586,7 +609,7 @@ a:hover, a:focus {
 .recharts-tooltip-wrapper {
   background-color: rgba(26, 26, 26, 0.9);
   border: 1px solid var(--primary-text);
-  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
 }
 
 .recharts-line {
@@ -626,6 +649,11 @@ button, .button {
   letter-spacing: 1px;
   position: relative;
   overflow: hidden;
+  font-family: var(--font-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 2px solid var(--highlight);
+  box-shadow: 0 0 10px var(--highlight);
 }
 
 button::before, .button::before {
@@ -649,8 +677,8 @@ button:hover::before, .button:hover::before {
 }
 
 button:hover, .button:hover {
-  background-color: var(--primary-text);
-  box-shadow: 0 0 15px var(--primary-text);
+  background-color: var(--secondary-highlight);
+  box-shadow: 0 0 15px var(--secondary-highlight);
 }
 
 .dark-mode-toggle {
@@ -681,12 +709,15 @@ input:focus, textarea:focus, select:focus {
   background-color: var(--secondary-bg);
   border-bottom: 1px solid var(--primary-text);
   padding: 0.75rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .menu-bar ul {
   list-style-type: none;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   padding: 0;
   margin: 0;
 }
@@ -695,37 +726,36 @@ input:focus, textarea:focus, select:focus {
   margin: 0 1rem;
 }
 
-.menu-bar a {
-  color: var(--primary-text);
-  text-decoration: none;
-  font-size: 1.1rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.menu-bar a::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  bottom: -5px;
-  left: 0;
-  background-color: var(--primary-text);
-  visibility: hidden;
-  transform: scaleX(0);
-  transition: all 0.3s ease-in-out;
-}
-
-.menu-bar a:hover::before {
-  visibility: visible;
-  transform: scaleX(1);
-}
-
-.menu-bar a:hover {
+/* App Name Styles */
+.app-name {
+  font-size: 2.5rem;
+  font-weight: bold;
   color: var(--highlight);
-  text-shadow: 0 0 10px var(--highlight);
+  text-shadow: 0 0 5px #39FF14, 0 0 10px #39FF14, 0 0 20px #39FF14;
+  margin-left: 1rem;
+  animation: flicker 5s infinite alternate;
+}
+
+.cursor {
+  animation: blink 1.5s infinite;
+}
+
+@keyframes flicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+@keyframes blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
 }
 
 /* Market Score Scale Styles */
@@ -777,7 +807,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 .realtime-indicator .indicator-box {
-  background-color: rgba(0, 255, 0, 0.2);
+  background-color: rgba(57, 255, 20, 0.2);
   color: var(--success);
   border: 1px solid var(--success);
 }
@@ -843,21 +873,22 @@ input:focus, textarea:focus, select:focus {
 
 .earnings-call-item {
   margin-bottom: 1rem;
-  border: 1px solid var(--primary-text);
+  border: 2px solid var(--highlight);
   border-radius: 5px;
   overflow: hidden;
   transition: all 0.3s ease;
+  box-shadow: 0 0 10px var(--highlight);
 }
 
 .earnings-call-summary {
   cursor: pointer;
   padding: 1rem;
-  background-color: rgba(0, 255, 65, 0.05);
+  background-color: rgba(57, 255, 20, 0.05);
   transition: all 0.3s ease;
 }
 
 .earnings-call-summary:hover {
-  background-color: rgba(0, 255, 65, 0.1);
+  background-color: rgba(57, 255, 20, 0.1);
 }
 
 .earnings-call-header {
@@ -877,12 +908,14 @@ input:focus, textarea:focus, select:focus {
 }
 
 .earnings-call-company {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: bold;
   color: var(--primary-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 5px var(--highlight);
 }
 
 .earnings-call-info {
@@ -1000,14 +1033,14 @@ input:focus, textarea:focus, select:focus {
 }
 
 .earnings-call-section .react-markdown code {
-  background-color: rgba(0, 255, 65, 0.1);
+  background-color: rgba(57, 255, 20, 0.1);
   padding: 0.2rem 0.4rem;
   border-radius: 3px;
   font-family: 'Consolas', 'Courier New', monospace;
 }
 
 .earnings-call-section .react-markdown pre {
-  background-color: rgba(0, 255, 65, 0.1);
+  background-color: rgba(57, 255, 20, 0.1);
   padding: 0.75rem;
   border-radius: 5px;
   overflow-x: auto;
@@ -1081,7 +1114,7 @@ input:focus, textarea:focus, select:focus {
   max-width: 600px;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
   position: relative;
   z-index: 10000;
   transform: translateZ(0);
@@ -1106,7 +1139,7 @@ input:focus, textarea:focus, select:focus {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 0;
-  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+  border-bottom: 1px solid rgba(57, 255, 20, 0.2);
 }
 
 .calendar-list li:last-child {
@@ -1156,7 +1189,8 @@ input:focus, textarea:focus, select:focus {
 }
 
 .calendar-popup::-webkit-scrollbar-thumb:hover {
-  background-color: var(--highlight);
+  background: var(--highlight);
+  box-shadow: 0 0 10px var(--highlight);
 }
 
 /* Disable hover effects when calendar is open */
@@ -1215,7 +1249,7 @@ body.calendar-open .calendar-popup {
   border: 2px solid var(--primary-text);
   border-radius: 10px;
   padding: 2rem;
-  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
   max-width: 400px;
   width: 90%;
 }

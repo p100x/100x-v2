@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import VixComponent from '../components/VixComponent';
-import AAIIComponent from '../components/AAIIComponent'; // Import the new AAII component
+import AAIIComponent from '../components/AAIIComponent';
 import SummaryComponent from '../components/SummaryComponent';
-import MarketScoreComponent from '../components/MarketScoreComponent'; // Added import
-import UnemploymentComponent from '../components/UnemploymentComponent'; // Added import
-import FiscalFlowsComponent from '../components/FiscalFlowsComponent'; // Added import
-import M2MoneyGrowthComponent from '../components/M2MoneyGrowthComponent'; // Add this import
-import CreditCardDelinquencyComponent from '../components/CreditCardDelinquencyComponent'; // Add this import
-import PersonalSavingRateComponent from '../components/PersonalSavingRateComponent'; // Add this import
-import EarningsCallComponent from '../components/EarningsCallComponent'; // Add this import
+import MarketScoreComponent from '../components/MarketScoreComponent';
+import UnemploymentComponent from '../components/UnemploymentComponent';
+import FiscalFlowsComponent from '../components/FiscalFlowsComponent';
+import M2MoneyGrowthComponent from '../components/M2MoneyGrowthComponent';
+import CreditCardDelinquencyComponent from '../components/CreditCardDelinquencyComponent';
+import PersonalSavingRateComponent from '../components/PersonalSavingRateComponent';
+import EarningsCallComponent from '../components/EarningsCallComponent';
 import { useMediaQuery } from 'react-responsive';
-import Spinner from '../components/Spinner'; // We'll create this component
+import Spinner from '../components/Spinner';
 
 const Home = () => {
   const [activeFilters, setActiveFilters] = useState(['all']);
   const [fiscalFlowsState, setFiscalFlowsState] = useState({ state: 'stable', timestamp: new Date().toISOString() });
-  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const isMobile = useMediaQuery({ maxWidth: 768 });
@@ -27,9 +26,9 @@ const Home = () => {
     { id: 'sentiment', label: 'Sentiment' },
     { id: 'labor', label: 'Labor Market' },
     { id: 'fiscal', label: 'Fiscal Flows' },
-    { id: 'economic', label: 'Economic Indicators' }, // Add this new filter option
-    { id: 'consumer', label: 'Consumer Credit' }, // Add this new filter option
-    { id: 'earnings', label: 'Earnings Calls' }, // Add this option
+    { id: 'economic', label: 'Economic Indicators' },
+    { id: 'consumer', label: 'Consumer Credit' },
+    { id: 'earnings', label: 'Earnings Calls' },
   ];
 
   const handleFilterClick = (filterId) => {
@@ -45,26 +44,11 @@ const Home = () => {
         }
       }
     });
-    if (isMobile) {
-      setIsFilterMenuOpen(false);
-    }
   };
 
   const isFilterActive = (filterId) => activeFilters.includes(filterId);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 768) {
-        setIsFilterMenuOpen(false);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
-    // Simulate loading time (remove this in production)
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
@@ -74,42 +58,8 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      <h1>Market Data Overview</h1>
-      <div className="filter-container">
-        {isMobile ? (
-          <>
-            <button
-              className="filter-menu-toggle"
-              onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}
-            >
-              {isFilterMenuOpen ? 'Close Filters' : 'Open Filters'}
-            </button>
-            {isFilterMenuOpen && (
-              <div className="filter-menu">
-                {filterOptions.map((filter) => (
-                  <button
-                    key={filter.id}
-                    className={`filter-chip ${isFilterActive(filter.id) ? 'active' : ''} ${filter.id === 'all' ? 'all' : ''}`}
-                    onClick={() => handleFilterClick(filter.id)}
-                  >
-                    {filter.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </>
-        ) : (
-          filterOptions.map((filter) => (
-            <button
-              key={filter.id}
-              className={`filter-chip ${isFilterActive(filter.id) ? 'active' : ''} ${filter.id === 'all' ? 'all' : ''}`}
-              onClick={() => handleFilterClick(filter.id)}
-            >
-              {filter.label}
-            </button>
-          ))
-        )}
-      </div>
+      <h1>Echtzeit-Marktanalyse</h1>
+      <br></br>
       {isLoading ? (
         <Spinner />
       ) : (

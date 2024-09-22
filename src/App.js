@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './pages/Home';
 import AdminPage from './pages/AdminPage';
@@ -11,6 +11,17 @@ import './App.css';
 function App() {
   const { user } = useAuth();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [typedText, setTypedText] = useState('');
+  const fullText = '100X';
+
+  useEffect(() => {
+    if (typedText.length < fullText.length) {
+      const timeout = setTimeout(() => {
+        setTypedText(fullText.slice(0, typedText.length + 1));
+      }, 200); // Adjust typing speed here
+      return () => clearTimeout(timeout);
+    }
+  }, [typedText]);
 
   return (
     <div className="app">
@@ -19,6 +30,10 @@ function App() {
         <div className="app-container">
           {user && (
             <nav className="menu-bar">
+              <div className="app-name">
+                {typedText}
+                <span className="cursor">|</span>
+              </div>
               <ul>
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/account">Account</Link></li>
