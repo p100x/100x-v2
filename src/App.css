@@ -1421,3 +1421,45 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* App Name, Alpha Pill, and Version Number Styles */
+.app-name-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.logo-version-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.app-name {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--highlight);
+  text-shadow: 0 0 5px #39FF14, 0 0 10px #39FF14, 0 0 20px #39FF14;
+  line-height: 1;
+}
+
+.version-number {
+  font-size: 0.7rem;
+  color: var(--secondary-text);
+  margin-top: 0.2rem;
+  padding-left: 0.90rem; /* Adjust this value to align with the '1' in '100X' */
+}
+
+.alpha-pill {
+  background-color: var(--highlight);
+  color: var(--primary-bg);
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+  border-radius: 1rem;
+  margin-left: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 5px var(--highlight);
+  align-self: flex-start;
+  margin-top: 0.2rem; /* Align with the version number */
+}

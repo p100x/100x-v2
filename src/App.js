@@ -30,9 +30,15 @@ function App() {
         <div className="app-container">
           {user && (
             <nav className="menu-bar">
-              <div className="app-name">
-                {typedText}
-                <span className="cursor">|</span>
+              <div className="app-name-container">
+                <div className="logo-version-container">
+                  <div className="app-name">
+                    {typedText}
+                    <span className="cursor">|</span>
+                  </div>
+                  <div className="version-number">v0.0.9</div>
+                </div>
+                <div className="alpha-pill">alpha</div>
               </div>
               <ul>
                 <li><Link to="/">Home</Link></li>
