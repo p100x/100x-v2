@@ -1,16 +1,14 @@
-/* App.css */
-
 :root {
-  --primary-bg: #0A0A0A;
-  --secondary-bg: #1A1A1A;
-  --primary-text: #00FF41;
-  --secondary-text: #CCCCCC;
+  --primary-bg: #121212;
+  --secondary-bg: #1e1e1e;
+  --primary-text: #e0e0e0;
+  --secondary-text: #b3b3b3;
   --disabled-text: #555555;
-  --highlight: #00CC33;
-  --error: #FF3131;
-  --warning: #FF8800;
-  --success: #33FF99;
-  --chart-line: #33FF33;
+  --highlight: #00ff41;
+  --error: #ff3131;
+  --warning: #ff8800;
+  --success: #33ff99;
+  --chart-line: #33ff33;
   --chart-bar: #009900;
   --chart-grid: #555555;
 }
@@ -18,20 +16,12 @@
 body {
   background-color: var(--primary-bg);
   color: var(--primary-text);
-  font-family: 'Consolas', 'Courier New', 'Lucida Console', monospace;
-  line-height: 1.5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
   margin: 0;
   padding: 0;
-  animation: flicker 0.15s infinite;
 }
 
-@keyframes flicker {
-  0% { opacity: 0.99; }
-  50% { opacity: 1; }
-  100% { opacity: 0.99; }
-}
-
-/* Add a subtle Matrix rain effect to the background */
 .matrix-bg {
   position: fixed;
   top: 0;
@@ -51,115 +41,88 @@ body {
 }
 
 .app-container {
-  max-width: 1200px; /* Add a max-width */
-  margin: 0 auto; /* Center the container */
-  padding: 20px 40px; /* Increase horizontal padding */
-  border: none;
-  box-shadow: none;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  transition: filter 0.3s ease;
 }
 
-h1, h2, h3 {
-  color: var(--primary-text);
-  text-align: left;
-  position: relative;
-  display: inline-block;
+.app-container.blur {
+  filter: blur(5px);
+  pointer-events: none;
 }
 
-h1 { font-size: 24px; }
-h2 { font-size: 20px; }
-h3 { font-size: 18px; }
-
-h1::before, h2::before, h3::before {
-  content: attr(data-text);
-  position: absolute;
-  left: -2px;
-  text-shadow: 2px 0 var(--highlight);
-  top: 0;
-  color: var(--primary-text);
-  overflow: hidden;
-  clip: rect(0, 900px, 0, 0);
-  animation: glitch-effect 3s infinite linear alternate-reverse;
+h1, h2, h3, h4, h5, h6 {
+  color: var(--highlight);
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
 }
 
-@keyframes glitch-effect {
-  0% {
-    clip: rect(44px, 9999px, 56px, 0);
-  }
-  5% {
-    clip: rect(32px, 9999px, 94px, 0);
-  }
-  10% {
-    clip: rect(54px, 9999px, 85px, 0);
-  }
-  15% {
-    clip: rect(66px, 9999px, 31px, 0);
-  }
-  20% {
-    clip: rect(47px, 9999px, 73px, 0);
-  }
-  25% {
-    clip: rect(25px, 9999px, 97px, 0);
-  }
-}
+h1 { font-size: 2rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.5rem; }
 
 p {
-  color: var(--primary-text);
-  font-size: 16px;
+  margin-bottom: 1.5em;
 }
 
-/* Reusable Data Card for displaying VIX and other market data */
+a {
+  color: var(--highlight);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover, a:focus {
+  color: var(--primary-text);
+  text-decoration: underline;
+}
+
 .data-card {
-  background-color: rgba(26, 26, 26, 0.8);
+  background-color: var(--secondary-bg);
   border: 1px solid var(--primary-text);
-  padding: 15px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
-  border-radius: 5px;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  max-width: 900px; /* Add a max-width */
-  margin-left: auto; /* Center the card */
-  margin-right: auto; /* Center the card */
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .data-card:hover {
-  box-shadow: 0 0 25px rgba(0, 255, 65, 0.4);
-  transform: translateY(-5px);
-}
-
-.data-card:first-of-type {
-  margin-top: 0;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
 .data-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 }
 
 .data-card-header h2 {
   margin: 0;
-  font-size: 1.5em;
-  display: flex;
-  align-items: center;
+  font-size: 1.25rem;
 }
 
 .data-card-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px; /* Increase bottom margin */
+  align-items: stretch;
+  margin-bottom: 1.5rem;
 }
 
 .data-card-value {
   text-align: center;
-  margin-bottom: 15px; /* Increase margin below the value */
+  margin-bottom: 1rem;
 }
 
 .data-card-value h3 {
-  font-size: 2.5em;
+  font-size: 2rem;
   margin: 0;
-  color: var(--primary-text);
+  color: var(--highlight);
 }
 
 .data-card-value small {
@@ -176,8 +139,8 @@ p {
   background-color: transparent;
   color: var(--primary-text);
   border: 1px solid var(--primary-text);
-  padding: 5px 10px;
-  margin-bottom: 10px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -188,11 +151,11 @@ p {
 }
 
 .data-card-explanation {
-  text-align: center;
+  text-align: left;
   font-size: 0.9em;
-  line-height: 1.5;
-  max-width: 90%;
-  margin: 10px auto 0;
+  line-height: 1.6;
+  max-width: 100%;
+  margin: 1rem auto 0;
   animation: fadeIn 0.3s ease-in-out;
 }
 
@@ -202,12 +165,12 @@ p {
 }
 
 .data-card-chart {
-  margin-top: 20px;
+  margin-top: 1.5rem;
 }
 
 .category-tag {
   display: inline-block;
-  padding: 5px 10px;
+  padding: 0.25rem 0.5rem;
   background-color: var(--secondary-bg);
   color: var(--primary-text);
   border-radius: 15px;
@@ -216,103 +179,46 @@ p {
   text-transform: uppercase;
 }
 
-.data-card .recharts-wrapper {
-  margin-top: 20px;
-}
-
-.data-card .recharts-surface {
-  overflow: visible;
-}
-
-.data-card .recharts-tooltip-cursor {
-  stroke: var(--primary-text);
-  stroke-width: 1;
-  stroke-dasharray: 3 3;
-}
-
-.data-card .recharts-cartesian-axis-tick-value {
-  font-size: 12px;
-  fill: var(--primary-text);
-}
-
-.data-card .recharts-tooltip-label {
-  color: var(--primary-text);
-}
-
-.data-card .recharts-tooltip-item {
-  color: var(--secondary-text);
-}
-
 .loading, .error {
   text-align: center;
-  padding: 20px;
+  padding: 1.5rem;
   border: 1px solid var(--warning);
   background-color: rgba(255, 136, 0, 0.05);
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
   color: var(--warning);
+  border-radius: 8px;
 }
 
-/* Terminal-style debug log */
 .debug-log {
-  background-color: var(--primary-bg);
+  background-color: var(--secondary-bg);
   color: var(--primary-text);
-  padding: 20px;
-  margin-top: 20px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
   border: 2px solid var(--primary-text);
   font-family: 'Consolas', 'Courier New', 'Lucida Console', monospace;
   max-height: 300px;
-  overflow-y: scroll;
+  overflow-y: auto;
   box-shadow: 0 0 5px var(--primary-text);
+  border-radius: 8px;
 }
 
 .debug-log h2 {
-  font-size: 18px;
+  font-size: 1.2rem;
   text-transform: uppercase;
+  margin-top: 0;
 }
 
 .debug-log ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 .debug-log li {
-  margin-bottom: 5px;
+  margin-bottom: 0.5rem;
   line-height: 1.5;
 }
 
-@media (max-width: 768px) {
-  .app-container {
-    padding: 15px 20px; /* Adjust padding for smaller screens */
-  }
-
-  .data-card p {
-    font-size: 18px;
-  }
-
-  .data-card h3 {
-    font-size: 18px;
-  }
-
-  .data-card {
-    padding: 15px; /* Reduce padding for smaller screens */
-  }
-}
-
-@media (max-width: 480px) {
-  h1 {
-    font-size: 24px;
-  }
-
-  .data-card p {
-    font-size: 16px;
-  }
-
-  .app-container {
-    padding: 10px 15px; /* Further adjust padding for very small screens */
-  }
-}
-
-/* Login Overlay Styles */
 .login-overlay {
   position: fixed;
   top: 0;
@@ -337,7 +243,7 @@ p {
 }
 
 .login-form-container h2 {
-  color: var(--primary-text);
+  color: var(--highlight);
   text-align: center;
   margin-bottom: 1.5rem;
 }
@@ -377,75 +283,113 @@ p {
   margin-top: 1rem;
 }
 
-/* Account Page Styles */
 .account-page {
   max-width: 600px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 2rem;
 }
 
 .account-info {
   background-color: var(--secondary-bg);
   border: 1px solid var(--primary-text);
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 5px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
 }
 
 .logout-button {
   background-color: var(--error);
   color: var(--primary-bg);
   border: none;
-  padding: 10px 20px;
+  padding: 0.5rem 1rem;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
 }
 
 .logout-button:hover {
   background-color: #ff6666;
 }
 
-.summary-text {
-  font-size: 14px;
+.summary-text,
+.context-preview,
+.expanded-explanation {
+  font-size: 1rem;
   line-height: 1.6;
   white-space: pre-wrap;
-  max-height: 300px;
-  overflow-y: auto;
-  padding: 10px;
-  background-color: rgba(0, 255, 65, 0.05);
+  font-family: 'Consolas', 'Courier New', monospace;
+  background-color: var(--secondary-bg);
   border: 1px solid var(--primary-text);
-  border-radius: 5px;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  overflow-x: auto;
+  color: var(--primary-text);
 }
 
-/* Market Score Table Styles */
+.summary-text p,
+.context-preview p,
+.expanded-explanation p,
+.earnings-call-expanded-section .react-markdown p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.summary-text h4,
+.context-preview h4,
+.expanded-explanation h4,
+.earnings-call-expanded-section .react-markdown h4 {
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--highlight);
+}
+
+.summary-text ul,
+.context-preview ul,
+.expanded-explanation ul,
+.earnings-call-expanded-section .react-markdown ul {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.summary-text li,
+.context-preview li,
+.expanded-explanation li,
+.earnings-call-expanded-section .react-markdown li {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 .market-score-content {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 1rem;
 }
 
 .market-score-header {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 0.5rem;
 }
 
 .market-score-header h3 {
   margin: 0;
-  font-size: 1.2em;
+  font-size: 1.2rem;
 }
 
 .market-score-header p {
   margin: 0;
-  font-size: 0.9em;
+  font-size: 0.9rem;
   color: var(--secondary-text);
 }
 
 .market-score-table {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .market-score-row {
@@ -453,9 +397,9 @@ p {
   grid-template-columns: 1fr auto auto;
   align-items: center;
   background-color: rgba(0, 255, 65, 0.05);
-  padding: 8px 10px;
+  padding: 0.5rem 1rem;
   border-radius: 5px;
-  gap: 10px;
+  gap: 1rem;
 }
 
 .signal-name {
@@ -463,16 +407,16 @@ p {
 }
 
 .signal-weight {
-  font-size: 0.8em;
+  font-size: 0.8rem;
   color: var(--secondary-text);
 }
 
 .pill {
-  padding: 2px 8px;
+  padding: 0.25rem 0.5rem;
   border-radius: 12px;
   font-weight: bold;
   text-transform: uppercase;  
-  font-size: 0.8em;
+  font-size: 0.8rem;
   text-align: center;
   min-width: 80px;
 }
@@ -483,55 +427,149 @@ p {
 .pill.bullish { background-color: #99ff99; color: var(--primary-bg); }
 .pill.very_bullish { background-color: var(--success); color: var(--primary-bg); }
 
-@media (max-width: 480px) {
-  .market-score-row {
-    grid-template-columns: 1fr auto;
-  }
-  
-  .signal-weight {
-    grid-column: 1 / -1;
-    text-align: right;
-  }
-}
-
-/* Admin Page Styles */
 .admin-page {
-  max-width: 800px; /* Increase max-width */
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 2rem;
 }
 
-.admin-section {
+.admin-page h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.fiscal-flows,
+.recent-calls,
+.add-earnings-call {
   background-color: var(--secondary-bg);
-  border: 1px solid var(--primary-text);
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 5px;
+  padding: 1.5rem;
+  border-radius: 8px;
 }
 
-.admin-controls {
+.fiscal-flows,
+.recent-calls {
+  grid-column: span 1;
+}
+
+.add-earnings-call {
+  grid-column: span 2;
+}
+
+.admin-page h2 {
+  margin-bottom: 1rem;
+}
+
+.button-group {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
-.admin-page button {
+.button-group button,
+.submit-button,
+.back-button {
+  padding: 0.5rem 1rem;
   background-color: var(--highlight);
   color: var(--primary-bg);
   border: none;
-  padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
-.admin-page button:hover {
+.button-group button:hover,
+.submit-button:hover,
+.back-button:hover {
   background-color: var(--primary-text);
 }
 
-.blurred {
-  filter: blur(5px);
-  pointer-events: none;
+.message {
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.admin-page ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-page li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--primary-bg);
+  margin-bottom: 0.75rem;
+  border-radius: 5px;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+.admin-page label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.admin-page input,
+.admin-page textarea,
+.admin-page select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--primary-text);
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  border-radius: 5px;
+}
+
+.admin-page textarea {
+  min-height: 100px;
+}
+
+.markdown-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.markdown-buttons button {
+  padding: 0.25rem 0.5rem;
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  border: 1px solid var(--primary-text);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.markdown-buttons button:hover {
+  background-color: var(--primary-text);
+  color: var(--primary-bg);
+}
+
+.admin-page .context-preview {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: var(--primary-bg);
+  border-radius: 5px;
+}
+
+.submit-button,
+.back-button {
+  width: 100%;
+  margin-top: 1.5rem;
 }
 
 /* Chart Styles */
@@ -574,12 +612,12 @@ p {
   box-shadow: 0 0 10px var(--highlight);
 }
 
-/* Enhance button styles */
+/* Button Styles */
 button, .button {
   background-color: var(--highlight);
   color: var(--primary-bg);
   border: none;
-  padding: 10px 20px;
+  padding: 0.5rem 1rem;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
@@ -615,12 +653,19 @@ button:hover, .button:hover {
   box-shadow: 0 0 15px var(--primary-text);
 }
 
-/* Enhance input styles */
+.dark-mode-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+/* Input Styles */
 input, textarea, select {
   background-color: rgba(10, 10, 10, 0.8);
   border: 1px solid var(--primary-text);
   color: var(--primary-text);
-  padding: 10px;
+  padding: 0.5rem;
   border-radius: 5px;
   transition: all 0.3s ease;
 }
@@ -631,11 +676,11 @@ input:focus, textarea:focus, select:focus {
   outline: none;
 }
 
-/* Matrix-style top menu */
+/* Menu Bar Styles */
 .menu-bar {
   background-color: var(--secondary-bg);
   border-bottom: 1px solid var(--primary-text);
-  padding: 10px 0;
+  padding: 0.75rem 0;
 }
 
 .menu-bar ul {
@@ -647,13 +692,13 @@ input:focus, textarea:focus, select:focus {
 }
 
 .menu-bar li {
-  margin: 0 15px;
+  margin: 0 1rem;
 }
 
 .menu-bar a {
   color: var(--primary-text);
   text-decoration: none;
-  font-size: 18px;
+  font-size: 1.1rem;
   text-transform: uppercase;
   letter-spacing: 2px;
   position: relative;
@@ -683,12 +728,6 @@ input:focus, textarea:focus, select:focus {
   text-shadow: 0 0 10px var(--highlight);
 }
 
-@media (max-width: 768px) {
-  .market-score-table {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* Market Score Scale Styles */
 .market-score-scale {
   width: 100%;
@@ -696,7 +735,7 @@ input:focus, textarea:focus, select:focus {
   background: linear-gradient(to right, var(--error), var(--warning), var(--success));
   position: relative;
   border-radius: 10px;
-  margin-top: 15px;
+  margin-top: 1rem;
 }
 
 .market-score-indicator {
@@ -711,13 +750,13 @@ input:focus, textarea:focus, select:focus {
 .market-score-labels {
   display: flex;
   justify-content: space-between;
-  margin-top: 5px;
-  font-size: 0.8em;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
   color: var(--secondary-text);
 }
 
 .filter-container {
-  margin-bottom: 40px;
+  margin-bottom: 2.5rem;
 }
 
 /* Indicator Styles */
@@ -738,13 +777,27 @@ input:focus, textarea:focus, select:focus {
 }
 
 .realtime-indicator .indicator-box {
-  background-color: rgba(0, 255, 0, 0.3);
-  color: var(--primary-text);
+  background-color: rgba(0, 255, 0, 0.2);
+  color: var(--success);
+  border: 1px solid var(--success);
 }
 
 .delayed-indicator .indicator-box {
-  background-color: rgba(255, 165, 0, 0.3);
-  color: var(--primary-text);
+  background-color: rgba(128, 128, 128, 0.2);
+  color: #a0a0a0;
+  border: 1px solid #888;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .realtime-indicator .indicator-box::after {
@@ -773,8 +826,8 @@ input:focus, textarea:focus, select:focus {
 }
 
 .data-card-interpretation {
-  margin-top: 10px;
-  font-size: 0.9em;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
   color: var(--secondary-text);
 }
 
@@ -782,65 +835,555 @@ input:focus, textarea:focus, select:focus {
   color: var(--primary-text);
 }
 
-/* Add these styles to your existing CSS file */
+/* Earnings Call Styles */
+.earnings-call-container {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
 
-.expanded-explanation {
-  text-align: left;
-  white-space: pre-wrap;
-  font-family: 'Consolas', 'Courier New', monospace;
-  background-color: rgba(0, 255, 65, 0.05);
+.earnings-call-item {
+  margin-bottom: 1rem;
   border: 1px solid var(--primary-text);
   border-radius: 5px;
-  padding: 15px;
-  margin-top: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.earnings-call-summary {
+  cursor: pointer;
+  padding: 1rem;
+  background-color: rgba(0, 255, 65, 0.05);
+  transition: all 0.3s ease;
+}
+
+.earnings-call-summary:hover {
+  background-color: rgba(0, 255, 65, 0.1);
+}
+
+.earnings-call-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.earnings-call-company-container {
+  flex: 1;
+  min-width: 0;
+  margin-right: 0.75rem;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.earnings-call-company {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--primary-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.earnings-call-info {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.earnings-call-date {
+  font-size: 0.9rem;
+  color: var(--secondary-text);
+  margin-right: 0.75rem;
+  white-space: nowrap;
+}
+
+.earnings-call-interpretation {
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.earnings-call-interpretation.bullish { background-color: var(--success); color: var(--primary-bg); }
+.earnings-call-interpretation.bearish { background-color: var(--error); color: var(--primary-bg); }
+.earnings-call-interpretation.neutral { background-color: var(--warning); color: var(--primary-bg); }
+
+.earnings-call-text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--primary-text);
+  text-align: left;
+}
+
+.earnings-call-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+  opacity: 0;
+  background-color: var(--secondary-bg);
+}
+
+.earnings-call-item.expanded .earnings-call-details {
+  max-height: 2000px;
+  opacity: 1;
+  padding: 1rem;
+  border-top: 1px solid var(--primary-text);
+}
+
+.earnings-call-section {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.earnings-call-section:last-child {
+  margin-bottom: 0;
+}
+
+.earnings-call-subtitle {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: var(--highlight);
+  font-size: 1.1rem;
+}
+
+.earnings-call-section p,
+.earnings-call-section ul {
+  color: var(--primary-text);
+  font-size: 0.95rem;
   line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.earnings-call-list {
+  padding-left: 1.5rem;
+}
+
+.earnings-call-list li {
+  margin-bottom: 0.5rem;
+}
+
+/* Markdown styles for expanded sections */
+.earnings-call-section .react-markdown {
+  color: var(--primary-text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.earnings-call-section .react-markdown p {
+  margin-bottom: 1rem;
+}
+
+.earnings-call-section .react-markdown h1,
+.earnings-call-section .react-markdown h2,
+.earnings-call-section .react-markdown h3,
+.earnings-call-section .react-markdown h4,
+.earnings-call-section .react-markdown h5,
+.earnings-call-section .react-markdown h6 {
+  color: var(--highlight);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.earnings-call-section .react-markdown ul,
+.earnings-call-section .react-markdown ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.earnings-call-section .react-markdown li {
+  margin-bottom: 0.5rem;
+}
+
+.earnings-call-section .react-markdown code {
+  background-color: rgba(0, 255, 65, 0.1);
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: 'Consolas', 'Courier New', monospace;
+}
+
+.earnings-call-section .react-markdown pre {
+  background-color: rgba(0, 255, 65, 0.1);
+  padding: 0.75rem;
+  border-radius: 5px;
   overflow-x: auto;
+  font-family: 'Consolas', 'Courier New', monospace;
 }
 
-.expanded-explanation ul {
-  padding-left: 20px;
-  margin: 10px 0;
+.earnings-call-countdown {
+  background-color: var(--secondary-bg);
+  border: 1px solid var(--primary-text);
+  border-radius: 5px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
-.expanded-explanation li {
-  margin-bottom: 5px;
-}
-
-.expanded-explanation strong {
+.earnings-call-countdown h4 {
+  margin: 0 0 0.75rem 0;
   color: var(--highlight);
+  font-size: 1.2rem;
 }
 
-.expanded-explanation ul {
-  padding-left: 20px;
-  margin: 10px 0;
+.earnings-call-countdown p {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--primary-text);
 }
 
-.expanded-explanation li {
-  margin-bottom: 5px;
+/* EarningsCalendar Styles */
+.earnings-calendar {
+  margin-top: 1.5rem;
+  position: relative;
 }
 
-.expanded-explanation strong {
-  color: var(--highlight);
+.calendar-button {
+  background-color: var(--secondary-bg);
+  color: var(--primary-text);
+  border: 1px solid var(--primary-text);
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  border-radius: 5px;
 }
 
-/* Spinner Styles */
-.spinner-container {
+.calendar-button:hover {
+  background-color: var(--primary-text);
+  color: var(--primary-bg);
+}
+
+.calendar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(10, 10, 10, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 200px;
+  z-index: 9999;
+  backdrop-filter: blur(5px);
 }
 
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid var(--primary-text);
-  border-top: 3px solid var(--highlight);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+.calendar-popup {
+  background-color: var(--secondary-bg);
+  border: 2px solid var(--primary-text);
+  border-radius: 10px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+  position: relative;
+  z-index: 10000;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.calendar-popup h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: var(--highlight);
+  text-align: center;
+}
+
+.calendar-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.calendar-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+.calendar-list li:last-child {
+  border-bottom: none;
+}
+
+.calendar-company {
+  font-weight: bold;
+  color: var(--primary-text);
+  font-size: 1.1rem;
+}
+
+.calendar-date {
+  color: var(--secondary-text);
+}
+
+.calendar-close {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1.5rem;
+  background-color: var(--highlight);
+  color: var(--primary-bg);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.calendar-close:hover {
+  background-color: var(--primary-text);
+}
+
+/* Ensure the scrollbar is visible and styled */
+.calendar-popup::-webkit-scrollbar {
+  width: 8px;
+}
+
+.calendar-popup::-webkit-scrollbar-track {
+  background: var(--secondary-bg);
+}
+
+.calendar-popup::-webkit-scrollbar-thumb {
+  background-color: var(--primary-text);
+  border-radius: 4px;
+}
+
+.calendar-popup::-webkit-scrollbar-thumb:hover {
+  background-color: var(--highlight);
+}
+
+/* Disable hover effects when calendar is open */
+body.calendar-open .app-container *:not(.calendar-overlay *) {
+  pointer-events: none !important;
+}
+
+body.calendar-open .app-container *:not(.calendar-overlay *):hover {
+  background-color: inherit !important;
+  color: inherit !important;
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: inherit !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* Ensure calendar elements are still interactive */
+body.calendar-open .calendar-overlay,
+body.calendar-open .calendar-popup,
+body.calendar-open .calendar-popup * {
+  pointer-events: auto !important;
+}
+
+body.calendar-open {
+  overflow: hidden;
+}
+
+body.calendar-open .app-container {
+  filter: blur(5px);
+  pointer-events: none;
+}
+
+body.calendar-open .calendar-overlay,
+body.calendar-open .calendar-popup {
+  filter: none;
+  pointer-events: auto;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 10, 10, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--secondary-bg);
+  border: 2px solid var(--primary-text);
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-content h2 {
+  color: var(--primary-text);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-close {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  background-color: var(--highlight);
+  color: var(--primary-bg);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.modal-close:hover {
+  background-color: var(--primary-text);
+}
+
+/* Calendar Modal Specific Styles */
+.calendar-modal {
+  max-width: 500px;
+}
+
+/* Calendar Toggle Button */
+.calendar-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--highlight);
+  color: var(--primary-bg);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 999;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.calendar-toggle:hover {
+  background-color: var(--primary-text);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 1rem;
+  }
+
+  .data-card {
+    padding: 1rem;
+  }
+
+  .market-score-table {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+
+  .fiscal-flows,
+  .recent-calls,
+  .add-earnings-call,
+  .full-width {
+    grid-column: span 1;
+  }
+
+  .earnings-call-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .earnings-call-company-container {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
+
+  .earnings-call-info {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .earnings-call-date {
+    margin-right: 0;
+  }
+
+  .earnings-call-item.expanded .earnings-call-details {
+    padding: 0.75rem;
+  }
+
+  .earnings-call-subtitle {
+    font-size: 1rem;
+  }
+
+  .earnings-call-section p,
+  .earnings-call-section ul,
+  .earnings-call-section .react-markdown {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .data-card-value h3 {
+    font-size: 1.75rem;
+  }
+
+  .app-container {
+    padding: 0.75rem;
+  }
+
+  .calendar-popup {
+    padding: 1.5rem;
+  }
+
+  .calendar-company {
+    font-size: 1rem;
+  }
+
+  .calendar-date {
+    font-size: 0.9rem;
+  }
+}
+
+/* Accessibility Improvements */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+*:focus {
+  outline: 2px solid var(--highlight);
+  outline-offset: 2px;
+}
+
+/* Ensure sufficient color contrast */
+.data-card-explanation,
+.market-score-header p,
+.signal-weight,
+.earnings-call-date {
+  color: var(--secondary-text);
+}
+
+/* Improve text readability */
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

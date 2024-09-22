@@ -165,3 +165,66 @@ export const fetchHistoricalPersonalSavingRate = async () => {
   if (error) throw new Error(error.message);
   return data;
 };
+
+// Fetch latest earnings calls
+export const fetchLatestEarningsCalls = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('earnings_calls')
+      .select('*')
+      .order('date', { ascending: false })
+      .limit(10);
+    
+    if (error) throw new Error(error.message);
+    console.log('Fetched earnings calls:', data);
+    return data;
+  } catch (error) {
+    console.error('Error in fetchLatestEarningsCalls:', error);
+    throw error;
+  }
+};
+
+// Add a new earnings call
+export const addEarningsCall = async (earningsCall) => {
+  console.log('Adding earnings call:', earningsCall);
+  const { data, error } = await supabase
+    .from('earnings_calls')
+    .insert([earningsCall])
+    .select();
+
+  if (error) {
+    console.error('Supabase error:', error);
+    throw new Error(error.message);
+  }
+  
+  if (!data || data.length === 0) {
+    console.error('No data returned after insert');
+    throw new Error('Failed to add earnings call');
+  }
+  
+  console.log('Added earnings call:', data[0]);
+  return data[0];
+};
+
+// Update an existing earnings call
+export const updateEarningsCall = async (id, updates) => {
+  const { data, error } = await supabase
+    .from('earnings_calls')
+    .update(updates)
+    .eq('id', id)
+    .select();
+
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) throw new Error('No data returned after update');
+  return data[0];
+};
+
+// Delete an earnings call
+export const deleteEarningsCall = async (id) => {
+  const { error } = await supabase
+    .from('earnings_calls')
+    .delete()
+    .eq('id', id);
+
+  if (error) throw new Error(error.message);
+};

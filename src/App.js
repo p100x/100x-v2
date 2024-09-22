@@ -1,27 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './pages/Home';
 import AdminPage from './pages/AdminPage';
 import AccountPage from './pages/AccountPage';
 import LoginOverlay from './components/LoginOverlay';
 import { useAuth } from './contexts/AuthContext';
+import EarningsCalendar from './components/EarningsCalendar';
 import './App.css';
 
 function App() {
-  const { user, signOut, checkUserActive } = useAuth();
-
-  useEffect(() => {
-    if (user) {
-      const checkInterval = setInterval(async () => {
-        const isActive = await checkUserActive(user.email);
-        if (!isActive) {
-          signOut();
-        }
-      }, 60000); // Check every minute
-
-      return () => clearInterval(checkInterval);
-    }
-  }, [user, checkUserActive, signOut]);
+  const { user } = useAuth();
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   return (
     <div className="app">
@@ -46,6 +35,13 @@ function App() {
           </div>
           <LoginOverlay />
         </div>
+        <button 
+          className="calendar-toggle"
+          onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+        >
+          {isCalendarOpen ? 'Kalender schließen' : 'Kalender öffnen'}
+        </button>
+        <EarningsCalendar isOpen={isCalendarOpen} setIsOpen={setIsCalendarOpen} />
       </Router>
     </div>
   );

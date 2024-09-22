@@ -8,6 +8,7 @@ import FiscalFlowsComponent from '../components/FiscalFlowsComponent'; // Added 
 import M2MoneyGrowthComponent from '../components/M2MoneyGrowthComponent'; // Add this import
 import CreditCardDelinquencyComponent from '../components/CreditCardDelinquencyComponent'; // Add this import
 import PersonalSavingRateComponent from '../components/PersonalSavingRateComponent'; // Add this import
+import EarningsCallComponent from '../components/EarningsCallComponent'; // Add this import
 import { useMediaQuery } from 'react-responsive';
 import Spinner from '../components/Spinner'; // We'll create this component
 
@@ -28,6 +29,7 @@ const Home = () => {
     { id: 'fiscal', label: 'Fiscal Flows' },
     { id: 'economic', label: 'Economic Indicators' }, // Add this new filter option
     { id: 'consumer', label: 'Consumer Credit' }, // Add this new filter option
+    { id: 'earnings', label: 'Earnings Calls' }, // Add this option
   ];
 
   const handleFilterClick = (filterId) => {
@@ -113,6 +115,7 @@ const Home = () => {
       ) : (
         <div className="components-grid">
           {(isFilterActive('all') || isFilterActive('summary')) && <SummaryComponent />}
+          {(isFilterActive('all') || isFilterActive('earnings')) && <EarningsCallComponent />}
           {(isFilterActive('all') || isFilterActive('volatility')) && <VixComponent />}
           {(isFilterActive('all') || isFilterActive('sentiment')) && <AAIIComponent />}
           {(isFilterActive('all') || isFilterActive('labor')) && <UnemploymentComponent />}
@@ -120,7 +123,7 @@ const Home = () => {
           {(isFilterActive('all') || isFilterActive('economic')) && (
             <>
               <M2MoneyGrowthComponent />
-              <PersonalSavingRateComponent /> {/* Add this line */}
+              <PersonalSavingRateComponent />
             </>
           )}
           {(isFilterActive('all') || isFilterActive('consumer')) && <CreditCardDelinquencyComponent />}

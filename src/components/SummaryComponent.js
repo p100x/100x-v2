@@ -32,16 +32,12 @@ const SummaryComponent = () => {
   }
 
   return (
-    <DataCard
-      title="Market Summary"
-      value={<div className="summary-text">{summary}</div>}
-      timestamp={Date.now()}
-      chartData={null}
-      category="Overview"
-      explanation={null}
-      chartConfig={{}} // Provide an empty object instead of null
-      isRealtime={true}
-    />
+    <div className="data-card">
+      <h2>Marktzusammenfassung</h2>
+      <div className="summary-text">
+        {summary}
+      </div>
+    </div>
   );
 };
 

@@ -44,7 +44,7 @@ const DataCard = ({ title, value, chartData, category, explanation, chartConfig 
               className="explanation-toggle"
               onClick={() => setIsExplanationExpanded(!isExplanationExpanded)}
             >
-              {isExplanationExpanded ? 'Hide' : 'Show'} Explanation
+              {isExplanationExpanded ? 'Erklärung ausblenden' : 'Erklärung anzeigen'}
             </button>
             {isExplanationExpanded && (
               <p className="data-card-explanation">{explanation}</p>
