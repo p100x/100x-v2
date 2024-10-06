@@ -15,7 +15,8 @@ const AdminPage = () => {
     summary: '',
     context: '',
     stock_response: '',
-    interpretation: ''
+    interpretation: '',
+    company_info: '' // Add this new field
   });
   const [showContextPreview, setShowContextPreview] = useState(false);
 
@@ -70,7 +71,8 @@ const AdminPage = () => {
         summary: '',
         context: '',
         stock_response: '',
-        interpretation: ''
+        interpretation: '',
+        company_info: '' // Reset this field as well
       });
       loadEarningsCalls();
     } catch (error) {
@@ -239,6 +241,17 @@ const AdminPage = () => {
               <option value="bearish">Bearish</option>
               <option value="neutral">Neutral</option>
             </select>
+          </div>
+          
+          <div className="form-group full-width">
+            <label htmlFor="company_info">Company Info:</label>
+            <textarea
+              id="company_info"
+              name="company_info"
+              value={newEarningsCall.company_info}
+              onChange={handleEarningsCallChange}
+              placeholder="Brief description of the company (1-2 sentences)"
+            />
           </div>
           
           <button type="submit" className="submit-button">Add Earnings Call</button>

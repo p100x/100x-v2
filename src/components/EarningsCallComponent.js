@@ -54,21 +54,27 @@ const EarningsCallComponent = () => {
     <div key={index} className={`earnings-call-item ${expandedCall === index ? 'expanded' : ''}`}>
       <div className="earnings-call-summary" onClick={() => toggleExpand(index)}>
         <div className="earnings-call-header">
-          <span className="earnings-call-company">{call.company}</span>
-          <span className="earnings-call-date">{new Date(call.date).toLocaleDateString()}</span>
-          {call.interpretation && (
-            <span className={`earnings-call-interpretation ${call.interpretation.toLowerCase()}`}>
-              {call.interpretation}
-            </span>
-          )}
+          <div className="earnings-call-company-container">
+            <span className="earnings-call-company">{call.company}</span>
+          </div>
+          <div className="earnings-call-info">
+            <span className="earnings-call-date">{new Date(call.date).toLocaleDateString()}</span>
+            {call.interpretation && (
+              <span className={`earnings-call-interpretation ${call.interpretation.toLowerCase()}`}>
+                {call.interpretation}
+              </span>
+            )}
+          </div>
         </div>
         <p className="earnings-call-text">{call.summary}</p>
       </div>
       <div className="earnings-call-details">
-        <div className="earnings-call-section">
-          <h4 className="earnings-call-subtitle">Kontext</h4>
-          <ReactMarkdown className="earnings-call-text">{call.context}</ReactMarkdown>
-        </div>
+        {call.company_info && (
+          <div className="earnings-call-section">
+            <h4 className="earnings-call-subtitle">Über das Unternehmen</h4>
+            <p className="earnings-call-text">{call.company_info}</p>
+          </div>
+        )}
         <div className="earnings-call-section">
           <h4 className="earnings-call-subtitle">Marktreaktion</h4>
           <p className="earnings-call-text">{call.stock_response}%</p>
@@ -81,6 +87,12 @@ const EarningsCallComponent = () => {
                 <li key={i} className="earnings-call-text">{point}</li>
               ))}
             </ul>
+          </div>
+        )}
+        {call.context && (
+          <div className="earnings-call-section">
+            <h4 className="earnings-call-subtitle">Kontext</h4>
+            <ReactMarkdown>{call.context}</ReactMarkdown>
           </div>
         )}
       </div>
