@@ -4,6 +4,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from supabase import create_client, Client
 from datetime import datetime
+import logging
 
 # Load environment variables from .env file
 load_dotenv()
@@ -33,44 +34,54 @@ def fetch_fred_data(series_id, api_key, start_date):
         'observation_start': start_date
     }
 
+    logging.info(f"Fetching FRED data at {datetime.now().isoformat()}")
     response = requests.get(url, params=params)
     
     if response.status_code == 200:
         data = response.json()
+        logging.info(f"Successfully fetched {len(data['observations'])} observations")
+        
+        print("Data delivered by the API:")
+        for observation in data['observations']:
+            print(f"Date: {observation['date']}, Value: {observation['value']}")
+        
         return data['observations']
     else:
-        print(f"Error fetching data: {response.status_code}")
-        print(f"Response message: {response.text}")
+        logging.error(f"Error fetching data: {response.status_code}")
+        logging.error(f"Response message: {response.text}")
         return None
 
-def save_to_supabase(df):
+def wipe_and_refill_supabase(df):
     """
-    Save personal saving rate data to Supabase.
+    Wipe all existing data from the table and refill it with new data, ensuring one entry per month.
     """
-    for index, row in df.iterrows():
-        try:
-            data = {
-                'date': index.isoformat(),
-                'saving_rate': row['value']
+    try:
+        # Wipe all existing data
+        response = supabase.table('personal_saving_rate_data').delete().neq('id', 0).execute()
+        print(f"Wiped {len(response.data)} existing records from the table.")
+
+        # Prepare data for insertion, keeping only the latest entry for each month
+        df_monthly = df.resample('M').last()
+        data_to_insert = [
+            {
+                'date': index.replace(day=1).isoformat(),
+                'saving_rate': float(row['value'])
             }
+            for index, row in df_monthly.iterrows()
+        ]
 
-            existing_record = supabase.table('personal_saving_rate_data').select('*').eq('date', data['date']).execute()
+        # Insert new data
+        response = supabase.table('personal_saving_rate_data').insert(data_to_insert).execute()
+        print(f"Inserted {len(response.data)} new records into the table.")
 
-            if existing_record.data:
-                record_id = existing_record.data[0]['id']
-                response = supabase.table('personal_saving_rate_data').update(data).eq('id', record_id).execute()
-                print(f"Record updated for date {data['date']}")
-            else:
-                response = supabase.table('personal_saving_rate_data').insert(data).execute()
-                print(f"New record inserted for date {data['date']}")
+        # Verify the data in the database after insertion
+        print("\nVerifying data in the database:")
+        response = supabase.table('personal_saving_rate_data').select('*').order('date').execute()
+        for record in response.data:
+            print(f"Date: {record['date']}, Saving Rate: {record['saving_rate']}")
 
-            if response.data:
-                print(f"Operation successful for {data['date']}")
-            else:
-                print("No changes made.")
-                
-        except Exception as e:
-            print(f"Error: {e}")
+    except Exception as e:
+        print(f"Error processing data: {e}")
 
 def main():
     # Define the start date for fetching the last two years of data
@@ -86,9 +97,12 @@ def main():
         df['value'] = pd.to_numeric(df['value'], errors='coerce')
         df.set_index('date', inplace=True)
         
-        # Save the data to Supabase
+        print("\nProcessed DataFrame:")
+        print(df)
+        
+        # Wipe existing data and refill with new data
         if not df.empty:
-            save_to_supabase(df)
+            wipe_and_refill_supabase(df)
         else:
             print("No data available to save.")
     else:

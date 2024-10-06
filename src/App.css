@@ -1488,3 +1488,18 @@ body {
   align-self: flex-start;
   margin-top: 0.2rem; /* Align with the version number */
 }
+
+.data-card-warning {
+  background-color: rgba(255, 0, 0, 0.2);  /* Red background with 20% opacity */
+  border: 1px solid var(--error);
+  color: var(--primary-text);  /* Changed to white */
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.data-card-warning p {
+  margin: 0;
+  font-weight: normal;  /* Changed from bold to normal */
+  font-size: 0.9rem;  /* Smaller font size */
+}

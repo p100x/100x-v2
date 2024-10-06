@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import RealtimeIndicator from './RealtimeIndicator';
 
-const DataCard = ({ title, value, chartData, category, explanation, chartConfig = {}, isRealtime = false, interpretationText }) => {
+const DataCard = ({ title, value, chartData, category, explanation, chartConfig = {}, isRealtime = false, interpretationText, warningMessage }) => {
   const [isExplanationExpanded, setIsExplanationExpanded] = useState(false);
 
   const yAxisDomain = useMemo(() => {
@@ -17,9 +17,12 @@ const DataCard = ({ title, value, chartData, category, explanation, chartConfig 
     const minValue = Math.min(...values);
     const maxValue = Math.max(...values);
     
+    // Set the minimum y-axis value to 3% for unemployment rate
+    const minYAxis = title.toLowerCase().includes('arbeitslosigkeit') ? 3 : Math.min(0, minValue);
+    
     const padding = (maxValue - minValue) * 0.1;
-    return [Math.min(0, minValue - padding), Math.max(0, maxValue + padding)];
-  }, [chartData, chartConfig.dataKey, chartConfig.yAxisDomain]);
+    return [minYAxis, Math.max(minYAxis, maxValue + padding)];
+  }, [chartData, chartConfig.dataKey, chartConfig.yAxisDomain, title]);
 
   const formatYAxis = (tickItem) => {
     if (chartConfig.yAxisFormatter) {
@@ -35,6 +38,11 @@ const DataCard = ({ title, value, chartData, category, explanation, chartConfig 
         {category && <span className="category-tag">{category}</span>}
       </div>
       <div className="data-card-content">
+        {warningMessage && (
+          <div className="data-card-warning">
+            <p>⚠️ {warningMessage}</p>
+          </div>
+        )}
         <div className="data-card-value">
           {typeof value === 'string' ? <h3>{value}</h3> : value}
         </div>

@@ -9,6 +9,7 @@ import M2MoneyGrowthComponent from '../components/M2MoneyGrowthComponent';
 import CreditCardDelinquencyComponent from '../components/CreditCardDelinquencyComponent';
 import PersonalSavingRateComponent from '../components/PersonalSavingRateComponent';
 import EarningsCallComponent from '../components/EarningsCallComponent';
+import RecessionIndicatorComponent from '../components/RecessionIndicatorComponent';
 import { useMediaQuery } from 'react-responsive';
 import Spinner from '../components/Spinner';
 
@@ -65,6 +66,7 @@ const Home = () => {
       ) : (
         <div className="components-grid">
           {(isFilterActive('all') || isFilterActive('summary')) && <SummaryComponent />}
+          {(isFilterActive('all') || isFilterActive('summary')) && <RecessionIndicatorComponent />}
           {(isFilterActive('all') || isFilterActive('earnings')) && <EarningsCallComponent />}
           {(isFilterActive('all') || isFilterActive('volatility')) && <VixComponent />}
           {(isFilterActive('all') || isFilterActive('sentiment')) && <AAIIComponent />}
