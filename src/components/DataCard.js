@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import RealtimeIndicator from './RealtimeIndicator';
 
-const DataCard = ({ title, value, chartData, category, explanation, chartConfig = {}, isRealtime = false, interpretationText, warningMessage }) => {
+const DataCard = ({ title, value, chartData, category, explanation, chartConfig = {}, isRealtime = false, interpretationText, warningMessage, children }) => {
   const [isExplanationExpanded, setIsExplanationExpanded] = useState(false);
 
   const yAxisDomain = useMemo(() => {
@@ -61,52 +61,30 @@ const DataCard = ({ title, value, chartData, category, explanation, chartConfig 
         )}
         {interpretationText && <p className="data-card-interpretation" dangerouslySetInnerHTML={{ __html: interpretationText }}></p>}
       </div>
-      {chartData && chartConfig && chartConfig.dataKey && (
-        <div className="data-card-chart">
-          <ResponsiveContainer width="100%" height={200}>
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
-              <XAxis 
-                dataKey={chartConfig.xAxisDataKey} 
-                stroke="var(--primary-text)" 
-                tick={{ fill: 'var(--primary-text)', fontSize: 12 }}
-              />
-              <YAxis 
-                stroke="var(--primary-text)" 
-                tick={{ fill: 'var(--primary-text)', fontSize: 12 }}
-                domain={yAxisDomain}
-                allowDataOverflow={false}
-                tickFormatter={formatYAxis}
-                ticks={chartConfig.yAxisTicks}
-                includeHidden={true}
-              />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'var(--secondary-bg)', 
-                  border: '1px solid var(--primary-text)',
-                  color: 'var(--primary-text)'
-                }}
-                formatter={chartConfig.tooltipFormatter || ((value) => value)}
-              />
-              <Line 
-                type="monotone" 
-                dataKey={chartConfig.dataKey} 
-                stroke="var(--chart-line)" 
-                strokeWidth={2}
-                dot={false}
-                animationDuration={1500}
-              />
-              {chartConfig.referenceLine && (
-                <ReferenceLine
-                  y={chartConfig.referenceLine.y}
-                  stroke={chartConfig.referenceLine.stroke}
-                  strokeDasharray={chartConfig.referenceLine.strokeDasharray}
+      <div className="data-card-chart">
+        {children ? children : (
+          chartData && chartData.length > 0 && (
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey={chartConfig.xAxisDataKey} />
+                <YAxis domain={yAxisDomain} tickFormatter={formatYAxis} />
+                <Tooltip />
+                {chartConfig.referenceLine && (
+                  <ReferenceLine y={chartConfig.referenceLine.y} stroke={chartConfig.referenceLine.stroke} strokeDasharray="3 3" />
+                )}
+                <Line 
+                  type="monotone" 
+                  dataKey={chartConfig.dataKey} 
+                  stroke="var(--highlight)" 
+                  strokeWidth={2}
+                  dot={false}
                 />
-              )}
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      )}
+              </LineChart>
+            </ResponsiveContainer>
+          )
+        )}
+      </div>
     </div>
   );
 };

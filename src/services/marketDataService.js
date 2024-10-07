@@ -228,3 +228,59 @@ export const deleteEarningsCall = async (id) => {
 
   if (error) throw new Error(error.message);
 };
+
+// Add this new function to your existing marketDataService.js file
+
+export const fetchLatestLiquidityScore = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('liquidity_vs_qqq')  // Make sure this table name is correct
+      .select('liquidity')
+      .order('date', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (error) throw error;
+    return data ? data.liquidity : null;
+  } catch (error) {
+    console.error('Error fetching latest liquidity score:', error);
+    throw error;
+  }
+};
+
+// Add this new function
+export const fetchHistoricalLiquidityData = async () => {
+  try {
+    const startDate = '2021-01-01';
+    const { data, error } = await supabase
+      .from('liquidity_vs_qqq')
+      .select('*')
+      .gte('date', startDate)
+      .order('date', { ascending: true });
+
+    if (error) throw error;
+
+    return data.map(item => ({
+      date: new Date(item.date).getTime(),
+      qqq: parseFloat(item.qqq),
+      liquidity: parseFloat(item.liquidity)
+    }));
+  } catch (error) {
+    console.error('Error fetching historical liquidity data:', error);
+    throw error;
+  }
+};
+
+// Add this new function
+export const saveMarketScore = async (score) => {
+  const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+
+  const { data, error } = await supabase
+    .from('market_score')
+    .upsert({ date: today, score: score }, { onConflict: 'date' })
+    .select();
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+

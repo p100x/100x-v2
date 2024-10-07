@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext'; // Import the useAuth hook
 import { updateFiscalFlows, fetchFiscalFlows, addEarningsCall, fetchLatestEarningsCalls, deleteEarningsCall } from '../services/marketDataService';
 import ReactMarkdown from 'react-markdown';
 import { Bold, Italic, List, ListOrdered } from 'lucide-react';
 
 const AdminPage = () => {
   const navigate = useNavigate();
+  const { user } = useAuth(); // Get the current user from the AuthContext
   const [currentState, setCurrentState] = useState('');
   const [message, setMessage] = useState('');
   const [earningsCalls, setEarningsCalls] = useState([]);
@@ -21,9 +23,15 @@ const AdminPage = () => {
   const [showContextPreview, setShowContextPreview] = useState(false);
 
   useEffect(() => {
+    // Check if the user is authorized
+    if (!user || user.email !== 'max@max.de') {
+      navigate('/'); // Redirect to home page if not authorized
+      return;
+    }
+
     loadCurrentState();
     loadEarningsCalls();
-  }, []);
+  }, [user, navigate]);
 
   const loadCurrentState = async () => {
     try {
@@ -123,143 +131,149 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="admin-page">
-      <h1>Admin Panel</h1>
-      
-      <div className="grid-container">
-        <div className="fiscal-flows">
-          <h2>Fiscal Flows Controls</h2>
-          <div className="button-group">
-            <button onClick={() => handleStateChange('decreasing')}>Set Decreasing</button>
-            <button onClick={() => handleStateChange('increasing')}>Set Increasing</button>
-            <button onClick={() => handleStateChange('stable')}>Set Stable</button>
-          </div>
-          {currentState && <p>Current state: <span>{currentState}</span></p>}
-          {message && <p className="message">{message}</p>}
-        </div>
-
-        <div className="recent-calls">
-          <h2>Recent Earnings Calls</h2>
-          <ul>
-            {earningsCalls.map((call) => (
-              <li key={call.id}>
-                <span>{call.company} - {new Date(call.date).toLocaleDateString()}</span>
-                <button onClick={() => handleDeleteEarningsCall(call.id)}>Delete</button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      
-        <form onSubmit={handleAddEarningsCall} className="add-earnings-call">
-          <h2>Add New Earnings Call</h2>
+    <>
+      {user && user.email === 'max@max.de' ? (
+        <div className="admin-page">
+          <h1>Admin Panel</h1>
           
-          <div className="form-group">
-            <label htmlFor="company">Company:</label>
-            <input
-              id="company"
-              type="text"
-              name="company"
-              value={newEarningsCall.company}
-              onChange={handleEarningsCallChange}
-              placeholder="Company"
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="date">Date:</label>
-            <input
-              id="date"
-              type="date"
-              name="date"
-              value={newEarningsCall.date}
-              onChange={handleEarningsCallChange}
-              required
-            />
-          </div>
-          
-          <div className="form-group full-width">
-            <label htmlFor="summary">Summary:</label>
-            <textarea
-              id="summary"
-              name="summary"
-              value={newEarningsCall.summary}
-              onChange={handleEarningsCallChange}
-              placeholder="Summary"
-              required
-            />
-          </div>
-          
-          <div className="form-group full-width">
-            <label htmlFor="context">Context (Markdown supported):</label>
-            <div className="markdown-buttons">
-              <button type="button" onClick={() => insertMarkdown('bold')}><Bold size={16} /></button>
-              <button type="button" onClick={() => insertMarkdown('italic')}><Italic size={16} /></button>
-              <button type="button" onClick={() => insertMarkdown('ul')}><List size={16} /></button>
-              <button type="button" onClick={() => insertMarkdown('ol')}><ListOrdered size={16} /></button>
-            </div>
-            <textarea
-              id="context"
-              name="context"
-              value={newEarningsCall.context}
-              onChange={handleEarningsCallChange}
-              placeholder="Context (Markdown supported)"
-            />
-            <button type="button" onClick={() => setShowContextPreview(!showContextPreview)}>
-              {showContextPreview ? 'Hide Preview' : 'Show Preview'}
-            </button>
-            {showContextPreview && (
-              <div className="context-preview">
-                <h4>Context Preview:</h4>
-                <ReactMarkdown>{newEarningsCall.context}</ReactMarkdown>
+          <div className="grid-container">
+            <div className="fiscal-flows">
+              <h2>Fiscal Flows Controls</h2>
+              <div className="button-group">
+                <button onClick={() => handleStateChange('decreasing')}>Set Decreasing</button>
+                <button onClick={() => handleStateChange('increasing')}>Set Increasing</button>
+                <button onClick={() => handleStateChange('stable')}>Set Stable</button>
               </div>
-            )}
+              {currentState && <p>Current state: <span>{currentState}</span></p>}
+              {message && <p className="message">{message}</p>}
+            </div>
+
+            <div className="recent-calls">
+              <h2>Recent Earnings Calls</h2>
+              <ul>
+                {earningsCalls.map((call) => (
+                  <li key={call.id}>
+                    <span>{call.company} - {new Date(call.date).toLocaleDateString()}</span>
+                    <button onClick={() => handleDeleteEarningsCall(call.id)}>Delete</button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          
+            <form onSubmit={handleAddEarningsCall} className="add-earnings-call">
+              <h2>Add New Earnings Call</h2>
+              
+              <div className="form-group">
+                <label htmlFor="company">Company:</label>
+                <input
+                  id="company"
+                  type="text"
+                  name="company"
+                  value={newEarningsCall.company}
+                  onChange={handleEarningsCallChange}
+                  placeholder="Company"
+                  required
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="date">Date:</label>
+                <input
+                  id="date"
+                  type="date"
+                  name="date"
+                  value={newEarningsCall.date}
+                  onChange={handleEarningsCallChange}
+                  required
+                />
+              </div>
+              
+              <div className="form-group full-width">
+                <label htmlFor="summary">Summary:</label>
+                <textarea
+                  id="summary"
+                  name="summary"
+                  value={newEarningsCall.summary}
+                  onChange={handleEarningsCallChange}
+                  placeholder="Summary"
+                  required
+                />
+              </div>
+              
+              <div className="form-group full-width">
+                <label htmlFor="context">Context (Markdown supported):</label>
+                <div className="markdown-buttons">
+                  <button type="button" onClick={() => insertMarkdown('bold')}><Bold size={16} /></button>
+                  <button type="button" onClick={() => insertMarkdown('italic')}><Italic size={16} /></button>
+                  <button type="button" onClick={() => insertMarkdown('ul')}><List size={16} /></button>
+                  <button type="button" onClick={() => insertMarkdown('ol')}><ListOrdered size={16} /></button>
+                </div>
+                <textarea
+                  id="context"
+                  name="context"
+                  value={newEarningsCall.context}
+                  onChange={handleEarningsCallChange}
+                  placeholder="Context (Markdown supported)"
+                />
+                <button type="button" onClick={() => setShowContextPreview(!showContextPreview)}>
+                  {showContextPreview ? 'Hide Preview' : 'Show Preview'}
+                </button>
+                {showContextPreview && (
+                  <div className="context-preview">
+                    <h4>Context Preview:</h4>
+                    <ReactMarkdown>{newEarningsCall.context}</ReactMarkdown>
+                  </div>
+                )}
+              </div>
+              
+              <div className="form-group full-width">
+                <label htmlFor="stock_response">Stock Response:</label>
+                <textarea
+                  id="stock_response"
+                  name="stock_response"
+                  value={newEarningsCall.stock_response}
+                  onChange={handleEarningsCallChange}
+                  placeholder="Stock Response"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="interpretation">Interpretation:</label>
+                <select
+                  id="interpretation"
+                  name="interpretation"
+                  value={newEarningsCall.interpretation}
+                  onChange={handleEarningsCallChange}
+                  required
+                >
+                  <option value="">Select an interpretation</option>
+                  <option value="bullish">Bullish</option>
+                  <option value="bearish">Bearish</option>
+                  <option value="neutral">Neutral</option>
+                </select>
+              </div>
+              
+              <div className="form-group full-width">
+                <label htmlFor="company_info">Company Info:</label>
+                <textarea
+                  id="company_info"
+                  name="company_info"
+                  value={newEarningsCall.company_info}
+                  onChange={handleEarningsCallChange}
+                  placeholder="Brief description of the company (1-2 sentences)"
+                />
+              </div>
+              
+              <button type="submit" className="submit-button">Add Earnings Call</button>
+            </form>
           </div>
           
-          <div className="form-group full-width">
-            <label htmlFor="stock_response">Stock Response:</label>
-            <textarea
-              id="stock_response"
-              name="stock_response"
-              value={newEarningsCall.stock_response}
-              onChange={handleEarningsCallChange}
-              placeholder="Stock Response"
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="interpretation">Interpretation:</label>
-            <select
-              id="interpretation"
-              name="interpretation"
-              value={newEarningsCall.interpretation}
-              onChange={handleEarningsCallChange}
-              required
-            >
-              <option value="">Select an interpretation</option>
-              <option value="bullish">Bullish</option>
-              <option value="bearish">Bearish</option>
-              <option value="neutral">Neutral</option>
-            </select>
-          </div>
-          
-          <div className="form-group full-width">
-            <label htmlFor="company_info">Company Info:</label>
-            <textarea
-              id="company_info"
-              name="company_info"
-              value={newEarningsCall.company_info}
-              onChange={handleEarningsCallChange}
-              placeholder="Brief description of the company (1-2 sentences)"
-            />
-          </div>
-          
-          <button type="submit" className="submit-button">Add Earnings Call</button>
-        </form>
-      </div>
-      
-      <button onClick={() => navigate('/')} className="back-button">Back to Home</button>
-    </div>
+          <button onClick={() => navigate('/')} className="back-button">Back to Home</button>
+        </div>
+      ) : (
+        <div>You are not authorized to view this page.</div>
+      )}
+    </>
   );
 };
 

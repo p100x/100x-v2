@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import VixComponent from '../components/VixComponent';
 import AAIIComponent from '../components/AAIIComponent';
 import SummaryComponent from '../components/SummaryComponent';
@@ -11,12 +11,10 @@ import PersonalSavingRateComponent from '../components/PersonalSavingRateCompone
 import EarningsCallComponent from '../components/EarningsCallComponent';
 import RecessionIndicatorComponent from '../components/RecessionIndicatorComponent';
 import { useMediaQuery } from 'react-responsive';
-import Spinner from '../components/Spinner';
 
 const Home = () => {
   const [activeFilters, setActiveFilters] = useState(['all']);
   const [fiscalFlowsState, setFiscalFlowsState] = useState({ state: 'stable', timestamp: new Date().toISOString() });
-  const [isLoading, setIsLoading] = useState(true);
 
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
@@ -49,38 +47,26 @@ const Home = () => {
 
   const isFilterActive = (filterId) => activeFilters.includes(filterId);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className="home-page">
       <h1>Echtzeit-Marktanalyse</h1>
-      <br></br>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <div className="components-grid">
-          {(isFilterActive('all') || isFilterActive('summary')) && <SummaryComponent />}
-          {(isFilterActive('all') || isFilterActive('summary')) && <RecessionIndicatorComponent />}
-          {(isFilterActive('all') || isFilterActive('earnings')) && <EarningsCallComponent />}
-          {(isFilterActive('all') || isFilterActive('volatility')) && <VixComponent />}
-          {(isFilterActive('all') || isFilterActive('sentiment')) && <AAIIComponent />}
-          {(isFilterActive('all') || isFilterActive('labor')) && <UnemploymentComponent />}
-          {(isFilterActive('all') || isFilterActive('fiscal')) && <FiscalFlowsComponent setFiscalFlowsState={setFiscalFlowsState} />}
-          {(isFilterActive('all') || isFilterActive('economic')) && (
-            <>
-              <M2MoneyGrowthComponent />
-              <PersonalSavingRateComponent />
-            </>
-          )}
-          {(isFilterActive('all') || isFilterActive('consumer')) && <CreditCardDelinquencyComponent />}
-        </div>
-      )}
+      <br />
+      <div className="components-grid">
+        {(isFilterActive('all') || isFilterActive('summary')) && <SummaryComponent />}
+        {(isFilterActive('all') || isFilterActive('summary')) && <RecessionIndicatorComponent />}
+        {(isFilterActive('all') || isFilterActive('earnings')) && <EarningsCallComponent />}
+        {(isFilterActive('all') || isFilterActive('volatility')) && <VixComponent />}
+        {(isFilterActive('all') || isFilterActive('sentiment')) && <AAIIComponent />}
+        {(isFilterActive('all') || isFilterActive('labor')) && <UnemploymentComponent />}
+        {(isFilterActive('all') || isFilterActive('fiscal')) && <FiscalFlowsComponent setFiscalFlowsState={setFiscalFlowsState} />}
+        {(isFilterActive('all') || isFilterActive('economic')) && (
+          <>
+            <M2MoneyGrowthComponent />
+            <PersonalSavingRateComponent />
+          </>
+        )}
+        {(isFilterActive('all') || isFilterActive('consumer')) && <CreditCardDelinquencyComponent />}
+      </div>
       <MarketScoreComponent fiscalFlowsState={fiscalFlowsState.state} />
     </div>
   );

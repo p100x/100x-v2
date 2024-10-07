@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { fetchLatestVIX, fetchLatestAAII, fetchLatestM2Data, fetchLatestCreditCardDelinquency, fetchLatestPersonalSavingRate } from '../services/marketDataService';
+import { 
+  fetchLatestVIX, 
+  fetchLatestAAII, 
+  fetchLatestM2Data, 
+  fetchLatestCreditCardDelinquency, 
+  fetchLatestPersonalSavingRate, 
+  fetchHistoricalLiquidityData
+} from '../services/marketDataService';
 import DataCard from './DataCard';
 
 const SIGNAL_LEVELS = {
@@ -17,7 +24,9 @@ const SIGNAL_WEIGHTS = {
   FiscalFlows: 1.5,
   M2Growth: 1.5,
   CreditCardDelinquency: 1.5,
-  PersonalSavingRate: 1.5  // Add weight for Personal Saving Rate
+  PersonalSavingRate: 1.5,  // Add weight for Personal Saving Rate
+  GlobalLiquidity: 1.5,  // Add weight for Global Liquidity Index
+  RecessionIndicator: 2  // Add weight for Recession Indicator (higher weight due to its importance)
 };
 
 const getVIXSignal = (vix) => {
@@ -74,7 +83,32 @@ const getPersonalSavingRateSignal = (rate) => {
   return SIGNAL_LEVELS.VERY_BULLISH;
 };
 
+const getGlobalLiquiditySignal = (currentLiquidity, oneMonthAvg, threeMonthAvg) => {
+  const isDecreasing1Month = currentLiquidity < oneMonthAvg;
+  const isDecreasing3Month = currentLiquidity < threeMonthAvg;
+
+  if (isDecreasing1Month && isDecreasing3Month) return SIGNAL_LEVELS.VERY_BEARISH;
+  if (isDecreasing1Month || isDecreasing3Month) return SIGNAL_LEVELS.BEARISH;
+  if (!isDecreasing1Month && !isDecreasing3Month) return SIGNAL_LEVELS.VERY_BULLISH;
+  return SIGNAL_LEVELS.BULLISH;
+};
+
+const getRecessionIndicatorSignal = (currentValue) => {
+  if (currentValue > 50) return SIGNAL_LEVELS.VERY_BEARISH;
+  if (currentValue > 30) return SIGNAL_LEVELS.BEARISH;
+  if (currentValue > 20) return SIGNAL_LEVELS.NEUTRAL;
+  if (currentValue > 10) return SIGNAL_LEVELS.BULLISH;
+  return SIGNAL_LEVELS.VERY_BULLISH;
+};
+
 const calculateScore = (signals) => {
+  const expectedSignals = Object.keys(SIGNAL_WEIGHTS);
+  const missingSignals = expectedSignals.filter(signal => !(signal in signals));
+  
+  if (missingSignals.length > 0) {
+    console.warn(`Missing signals: ${missingSignals.join(', ')}`);
+  }
+
   let totalScore = 0;
   let totalWeight = 0;
 
@@ -106,20 +140,32 @@ const MarketScoreComponent = ({ fiscalFlowsState }) => {
         const m2Data = await fetchLatestM2Data();
         const creditCardDelinquencyData = await fetchLatestCreditCardDelinquency();
         const personalSavingRateData = await fetchLatestPersonalSavingRate();
+        const liquidityData = await fetchHistoricalLiquidityData();
 
-        // Manually set unemployment data
-        const unemploymentData = {
-          state: 'rising',
-          sahmRuleTriggered: true
-        };
+        // Use hardcoded recession data
+        const recessionData = [
+          { date: 'Apr 24', value: 29 },
+          { date: 'May 24', value: 27 },
+          { date: 'Jun 24', value: 30 },
+          { date: 'Jul 24', value: 31 },
+          { date: 'Aug 24', value: 34 },
+          { date: 'Sep 24', value: 35 },
+        ];
+        const latestRecessionIndicator = recessionData[recessionData.length - 1];
 
         const vixSignal = getVIXSignal(vixData.VIX);
         const aaiiSignal = getAAIISignal(aaiiData.spread);
-        const unemploymentSignal = getUnemploymentSignal(unemploymentData.state, unemploymentData.sahmRuleTriggered);
+        const unemploymentSignal = getUnemploymentSignal('rising', true); // Hardcoded for now
         const fiscalFlowsSignal = getFiscalFlowsSignal(fiscalFlowsState);
         const m2GrowthSignal = getM2GrowthSignal(m2Data.yoy);
         const creditCardDelinquencySignal = getCreditCardDelinquencySignal(creditCardDelinquencyData.delinquency_rate);
         const personalSavingRateSignal = getPersonalSavingRateSignal(personalSavingRateData.saving_rate);
+        const globalLiquiditySignal = getGlobalLiquiditySignal(
+          liquidityData[liquidityData.length - 1].liquidity,
+          liquidityData.reduce((sum, d) => sum + d.liquidity, 0) / liquidityData.length,
+          liquidityData.reduce((sum, d) => sum + d.liquidity, 0) / liquidityData.length
+        );
+        const recessionIndicatorSignal = getRecessionIndicatorSignal(latestRecessionIndicator.value);
 
         setSignals({
           VIX: vixSignal,
@@ -128,7 +174,9 @@ const MarketScoreComponent = ({ fiscalFlowsState }) => {
           FiscalFlows: fiscalFlowsSignal,
           M2Growth: m2GrowthSignal,
           CreditCardDelinquency: creditCardDelinquencySignal,
-          PersonalSavingRate: personalSavingRateSignal
+          PersonalSavingRate: personalSavingRateSignal,
+          GlobalLiquidity: globalLiquiditySignal,
+          RecessionIndicator: recessionIndicatorSignal
         });
 
         const score = calculateScore({
@@ -138,18 +186,21 @@ const MarketScoreComponent = ({ fiscalFlowsState }) => {
           FiscalFlows: fiscalFlowsSignal,
           M2Growth: m2GrowthSignal,
           CreditCardDelinquency: creditCardDelinquencySignal,
-          PersonalSavingRate: personalSavingRateSignal
+          PersonalSavingRate: personalSavingRateSignal,
+          GlobalLiquidity: globalLiquiditySignal,
+          RecessionIndicator: recessionIndicatorSignal
         });
         setMarketScore(score);
       } catch (err) {
-        setError(err.message);
+        console.error('Error in calculateMarketScore:', err);
+        setError('Ein Fehler ist bei der Berechnung der Marktbewertung aufgetreten. Bitte versuchen Sie es später erneut.');
       } finally {
         setLoading(false);
       }
     };
 
     calculateMarketScore();
-  }, [fiscalFlowsState]); // Add fiscalFlowsState to the dependency array
+  }, [fiscalFlowsState]);
 
   const getMarketCondition = (score) => {
     if (score >= 80) return "Sehr Bullisch";
@@ -195,7 +246,9 @@ const MarketScoreComponent = ({ fiscalFlowsState }) => {
     FiscalFlows: "Fiskalströme",
     M2Growth: "M2-Wachstum",
     CreditCardDelinquency: "Kreditkartenverzug",
-    PersonalSavingRate: "Persönliche Sparquote"
+    PersonalSavingRate: "Persönliche Sparquote",
+    GlobalLiquidity: "Globaler Liquiditätsindex",
+    RecessionIndicator: "Rezessionsindikator"
   };
 
   const signalLevelTranslations = {
