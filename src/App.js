@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, useLocation, Navigate } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import Home from './pages/Home';
 import AdminPage from './pages/AdminPage';
 import AccountPage from './pages/AccountPage';
@@ -22,6 +23,33 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+// New MobileMenu component
+function MobileMenu({ user }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
+
+  return (
+    <div className="mobile-menu-container">
+      <button className="mobile-menu-toggle" onClick={toggleMenu}>
+        {isOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+      {isOpen && (
+        <nav className="mobile-menu">
+          <ul>
+            <li><Link to="/" onClick={toggleMenu}>Home</Link></li>
+            <li><Link to="/portfolio" onClick={toggleMenu}>Portfolio</Link></li>
+            <li><Link to="/chat" onClick={toggleMenu}>Chat</Link></li>
+            <li><Link to="/mastermind" onClick={toggleMenu}>Mastermind</Link></li>
+            <li><Link to="/account" onClick={toggleMenu}>Account</Link></li>
+            {user.email === 'max@max.de' && <li><Link to="/admin" onClick={toggleMenu}>Admin</Link></li>}
+          </ul>
+        </nav>
+      )}
+    </div>
+  );
+}
+
 function AppContent() {
   const { user } = useAuth();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -42,26 +70,29 @@ function AppContent() {
     <>
       <div className="app-container">
         {user && (
-          <nav className="menu-bar">
-            <div className="app-name-container">
-              <div className="logo-version-container">
-                <div className="app-name">
-                  {typedText}
-                  <span className="cursor">|</span>
+          <>
+            <nav className="menu-bar desktop-menu">
+              <div className="app-name-container">
+                <div className="logo-version-container">
+                  <div className="app-name">
+                    {typedText}
+                    <span className="cursor">|</span>
+                  </div>
+                  <div className="version-number">v0.0.9</div>
                 </div>
-                <div className="version-number">v0.0.9</div>
+                <div className="alpha-pill">alpha</div>
               </div>
-              <div className="alpha-pill">alpha</div>
-            </div>
-            <ul>
-              <li><Link to="/">Home</Link></li>
-              <li><Link to="/portfolio">Portfolio</Link></li>
-              <li><Link to="/chat">Chat</Link></li>
-              <li><Link to="/mastermind">Mastermind</Link></li>
-              <li><Link to="/account">Account</Link></li>
-              {user.email === 'max@max.de' && <li><Link to="/admin">Admin</Link></li>}
-            </ul>
-          </nav>
+              <ul>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/portfolio">Portfolio</Link></li>
+                <li><Link to="/chat">Chat</Link></li>
+                <li><Link to="/mastermind">Mastermind</Link></li>
+                <li><Link to="/account">Account</Link></li>
+                {user.email === 'max@max.de' && <li><Link to="/admin">Admin</Link></li>}
+              </ul>
+            </nav>
+            <MobileMenu user={user} />
+          </>
         )}
         <div className={`app-content ${!user ? 'blurred' : ''}`}>
           <Routes>

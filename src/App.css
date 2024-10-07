@@ -1791,9 +1791,7 @@ body {
   gap: 2rem;
 }
 
-.course-card,
-.resource-item,
-.webinar-item {
+.course-card {
   background-color: var(--frosted-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -1802,8 +1800,6 @@ body {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  position: relative;
-  overflow: hidden;
 }
 
 .course-video-placeholder {
@@ -1813,27 +1809,8 @@ body {
   margin-bottom: 1rem;
 }
 
-.coming-soon-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(10, 10, 10, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--highlight);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  text-shadow: 0 0 10px var(--highlight);
-}
-
 .enroll-button,
-.register-button,
-.resource-link {
+.register-button {
   background-color: var(--highlight);
   color: var(--primary-bg);
   border: none;
@@ -1843,14 +1820,10 @@ body {
   font-weight: bold;
   margin-top: auto;
   transition: background-color 0.3s ease;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
 }
 
 .enroll-button:hover,
-.register-button:hover,
-.resource-link:hover {
+.register-button:hover {
   background-color: var(--secondary-highlight);
 }
 
@@ -1861,6 +1834,29 @@ body {
   gap: 2rem;
 }
 
+.resource-item,
+.webinar-item {
+  background-color: var(--frosted-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--frosted-border);
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.resource-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--highlight);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.resource-link:hover {
+  color: var(--secondary-highlight);
+}
+
 @media (max-width: 768px) {
   .course-grid,
   .resource-list,
@@ -1868,3 +1864,164 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Mobile Menu Styles */
+.mobile-menu-container {
+  display: none;
+}
+
+.mobile-menu-toggle {
+  background: none;
+  border: none;
+  color: var(--primary-text);
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--frosted-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.mobile-menu ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobile-menu li {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.mobile-menu a {
+  color: var(--primary-text);
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .desktop-menu {
+    display: none;
+  }
+
+  .mobile-menu-container {
+    display: block;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1001;
+  }
+
+  .app-container {
+    padding-top: 4rem;
+  }
+
+  .app-content {
+    padding: 1rem;
+  }
+
+  .data-card {
+    padding: 1rem;
+  }
+
+  .market-score-table {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+
+  .fiscal-flows,
+  .recent-calls,
+  .add-earnings-call,
+  .full-width {
+    grid-column: span 1;
+  }
+
+  .earnings-call-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .earnings-call-company-container {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
+
+  .earnings-call-info {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .earnings-call-date {
+    margin-right: 0;
+  }
+
+  .earnings-call-item.expanded .earnings-call-details {
+    padding: 0.75rem;
+  }
+
+  .earnings-call-subtitle {
+    font-size: 1rem;
+  }
+
+  .earnings-call-section p,
+  .earnings-call-section ul,
+  .earnings-call-section .react-markdown {
+    font-size: 0.9rem;
+  }
+
+  .calendar-toggle {
+    bottom: 1rem;
+    right: 1rem;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .data-card-value h3 {
+    font-size: 1.75rem;
+  }
+
+  .app-container {
+    padding: 0.75rem;
+  }
+
+  .calendar-popup {
+    padding: 1.5rem;
+  }
+
+  .calendar-company {
+    font-size: 1rem;
+  }
+
+  .calendar-date {
+    font-size: 0.9rem;
+  }
+
+  .mobile-menu a {
+    font-size: 1.2rem;
+  }
+}
+
+/* ... (other existing styles remain unchanged) ... */
