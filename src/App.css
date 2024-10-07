@@ -109,7 +109,6 @@ a:hover, a:focus {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  min-height: auto; /* Remove any minimum height */
 }
 
 .data-card:hover {
@@ -244,7 +243,7 @@ a:hover, a:focus {
 }
 
 .data-card-chart {
-  margin-top: 1rem; /* Add some space only when the chart is present */
+  margin-top: 1.5rem;
   width: 100%;
   height: 200px;
   flex-grow: 1;
@@ -1668,7 +1667,7 @@ body {
 
 .portfolio-item-name {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.5rem;
 }
 
@@ -1699,6 +1698,32 @@ body {
 .portfolio-item-details {
   font-size: 0.9rem;
   color: var(--secondary-text);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  // ... other existing mobile styles ...
+
+  .portfolio-item-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .portfolio-item-name {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .portfolio-item-symbol {
+    margin-top: 0.25rem;
+  }
+
+  .portfolio-item-gain {
+    align-self: flex-start;
+    margin-top: 0.5rem;
+  }
 }
 
 /* Chat Page Styles */
@@ -2146,6 +2171,20 @@ body {
     white-space: normal;
     word-wrap: break-word;
   }
+
+  .portfolio-item-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .portfolio-item-name {
+    width: 100%;
+  }
+
+  .portfolio-item-gain {
+    align-self: flex-end;
+  }
 }
 
 @media (max-width: 480px) {
@@ -2179,3 +2218,13 @@ body {
 }
 
 /* ... (other existing styles remain unchanged) ... */
+
+.portfolio-item-info {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--secondary-text);
+}
+
+.portfolio-item-info p {
+  margin: 0;
+}
