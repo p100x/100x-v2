@@ -105,6 +105,8 @@ a:hover, a:focus {
   margin-left: auto;
   margin-right: auto;
   color: var(--primary-text);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .data-card:hover {
@@ -114,14 +116,30 @@ a:hover, a:focus {
 
 .data-card-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  gap: 0.5rem;
 }
 
 .data-card-header h2 {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  flex-grow: 1;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.category-tag {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--secondary-bg);
+  color: var(--primary-text);
+  border-radius: 15px;
+  font-size: 0.8em;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 .data-card-content {
@@ -141,11 +159,19 @@ a:hover, a:focus {
   font-weight: bold;
   letter-spacing: 0.1em;
   text-shadow: 0 0 10px var(--highlight);
+  margin: 0.5rem 0;
 }
 
-.data-card-value small {
-  font-size: 0.8em;
-  opacity: 0.7;
+.data-card-interpretation {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--secondary-text);
+}
+
+.data-card-chart {
+  margin-top: 1.5rem;
+  width: 100%;
+  height: 200px;
 }
 
 .data-card-explanation-container {
@@ -180,21 +206,6 @@ a:hover, a:focus {
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
-}
-
-.data-card-chart {
-  margin-top: 1.5rem;
-}
-
-.category-tag {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  background-color: var(--secondary-bg);
-  color: var(--primary-text);
-  border-radius: 15px;
-  font-size: 0.8em;
-  font-weight: bold;
-  text-transform: uppercase;
 }
 
 .loading, .error {
@@ -1911,6 +1922,16 @@ body {
   text-decoration: none;
 }
 
+/* Global styles to prevent horizontal scrolling */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  position: relative;
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
   .desktop-menu {
@@ -1927,100 +1948,118 @@ body {
 
   .app-container {
     padding-top: 4rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .app-content {
-    padding: 1rem;
+    padding: 0;
+    width: 100%;
   }
 
   .data-card {
     padding: 1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    width: calc(100% + 2rem);
+    border-radius: 0;
   }
 
-  .market-score-table {
-    grid-template-columns: 1fr;
-  }
-
-  .grid-container {
-    grid-template-columns: 1fr;
-  }
-
-  .fiscal-flows,
-  .recent-calls,
-  .add-earnings-call,
-  .full-width {
-    grid-column: span 1;
-  }
-
-  .earnings-call-header {
+  .data-card-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .earnings-call-company-container {
-    margin-right: 0;
+  .data-card-header h2 {
+    font-size: clamp(1rem, 5vw, 1.25rem);
     margin-bottom: 0.5rem;
     width: 100%;
   }
 
-  .earnings-call-info {
-    width: 100%;
-    justify-content: space-between;
+  .category-tag {
+    font-size: clamp(0.6rem, 2vw, 0.7rem);
+    padding: 0.2rem 0.4rem;
   }
 
-  .earnings-call-date {
-    margin-right: 0;
+  .data-card-value h3 {
+    font-size: clamp(1.5rem, 6vw, 2rem);
   }
 
-  .earnings-call-item.expanded .earnings-call-details {
-    padding: 0.75rem;
+  .data-card-interpretation {
+    font-size: clamp(0.8rem, 3vw, 0.85rem);
   }
 
-  .earnings-call-subtitle {
-    font-size: 1rem;
+  .realtime-indicator,
+  .delayed-indicator {
+    font-size: clamp(0.5rem, 2vw, 0.6rem);
+    margin-left: 0;
+    margin-top: 0.25rem;
   }
 
-  .earnings-call-section p,
-  .earnings-call-section ul,
-  .earnings-call-section .react-markdown {
-    font-size: 0.9rem;
+  .indicator-box {
+    padding: 0.2rem 0.4rem;
   }
 
-  .calendar-toggle {
-    bottom: 1rem;
-    right: 1rem;
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
+  /* Ensure all text elements use dynamic scaling */
+  p, span, div, li {
+    font-size: clamp(0.8rem, 3vw, 1rem);
+  }
+
+  h1 {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 5vw, 1.75rem);
+  }
+
+  h3 {
+    font-size: clamp(1.1rem, 4vw, 1.5rem);
+  }
+
+  /* Adjust chart size */
+  .data-card-chart {
+    height: 50vw;
+    max-height: 300px;
+  }
+
+  /* Ensure buttons don't overflow */
+  button {
+    max-width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
   }
 }
 
 @media (max-width: 480px) {
-  h1 {
-    font-size: 1.5rem;
-  }
-
-  .data-card-value h3 {
-    font-size: 1.75rem;
-  }
-
   .app-container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .data-card {
     padding: 0.75rem;
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+    width: calc(100% + 1.5rem);
   }
 
   .calendar-popup {
-    padding: 1.5rem;
+    padding: 1rem;
   }
 
   .calendar-company {
-    font-size: 1rem;
+    font-size: clamp(0.8rem, 3vw, 1rem);
   }
 
   .calendar-date {
-    font-size: 0.9rem;
+    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
   }
 
   .mobile-menu a {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 4vw, 1.2rem);
   }
 }
 
