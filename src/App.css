@@ -107,6 +107,9 @@ a:hover, a:focus {
   color: var(--primary-text);
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: auto; /* Remove any minimum height */
 }
 
 .data-card:hover {
@@ -145,8 +148,24 @@ a:hover, a:focus {
 .data-card-content {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+/* New styles for components without charts */
+.data-card:not(:has(.data-card-chart)) {
+  min-height: auto;
+}
+
+.data-card:not(:has(.data-card-chart)) .data-card-content {
+  gap: 0.5rem;
+}
+
+.data-card:not(:has(.data-card-chart)) .data-card-value {
+  margin-bottom: 0;
+}
+
+.data-card:not(:has(.data-card-chart)) .data-card-interpretation {
+  margin-top: 0;
 }
 
 .data-card-value {
@@ -155,23 +174,80 @@ a:hover, a:focus {
 }
 
 .data-card-value h3 {
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 6vw, 2.5rem);
   font-weight: bold;
   letter-spacing: 0.1em;
   text-shadow: 0 0 10px var(--highlight);
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
 }
 
 .data-card-interpretation {
   margin-top: 0.75rem;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 3vw, 0.9rem);
   color: var(--secondary-text);
 }
 
+/* Specific styles for Fiscal Flows and Market Score components */
+.data-card.fiscal-flows,
+.data-card.market-score {
+  padding-bottom: 1rem;
+}
+
+.data-card.fiscal-flows .data-card-content,
+.data-card.market-score .data-card-content {
+  gap: 0.5rem;
+}
+
+.market-score-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.market-score-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.market-score-header h3 {
+  margin: 0;
+  font-size: clamp(1rem, 4vw, 1.1rem);
+  letter-spacing: 0.05em;
+}
+
+.market-score-header p {
+  margin: 0;
+  font-size: clamp(0.75rem, 3vw, 0.85rem);
+  color: var(--secondary-text);
+}
+
+.market-score-table {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.market-score-row {
+  background-color: var(--frosted-bg);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid var(--frosted-border);
+  padding: 0.5rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  box-shadow: 0 0 5px rgba(57, 255, 20, 0.1);
+  color: var(--primary-text);
+}
+
 .data-card-chart {
-  margin-top: 1.5rem;
+  margin-top: 1rem; /* Add some space only when the chart is present */
   width: 100%;
   height: 200px;
+  flex-grow: 1;
 }
 
 .data-card-explanation-container {
@@ -411,13 +487,13 @@ a:hover, a:focus {
 
 .market-score-header h3 {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: clamp(1.1rem, 4vw, 1.2rem);
   letter-spacing: 0.05em;
 }
 
 .market-score-header p {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 3vw, 0.9rem);
   color: var(--secondary-text);
 }
 
@@ -1218,11 +1294,6 @@ input:focus, textarea:focus, select:focus {
   background: var(--secondary-bg);
 }
 
-.calendar-popup::-webkit-scrollbar-thumb {
-  background-color: var(--primary-text);
-  border-radius: 4px;
-}
-
 .calendar-popup::-webkit-scrollbar-thumb:hover {
   background: var(--highlight);
   box-shadow: 0 0 10px var(--highlight);
@@ -1349,10 +1420,36 @@ body.calendar-open .calendar-popup {
 
   .data-card {
     padding: 1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    width: calc(100% + 2rem);
+    border-radius: 0;
+    min-height: auto;
+  }
+
+  .data-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .data-card-content {
+    gap: 0.5rem;
+  }
+
+  .data-card-value {
+    margin-bottom: 0.25rem;
+  }
+
+  .data-card-interpretation {
+    margin-top: 0;
   }
 
   .market-score-table {
     grid-template-columns: 1fr;
+  }
+
+  .market-score-row {
+    padding: 0.5rem;
   }
 
   .grid-container {
@@ -1399,6 +1496,13 @@ body.calendar-open .calendar-popup {
   .earnings-call-section .react-markdown {
     font-size: 0.9rem;
   }
+
+  /* Adjust chart size */
+  .data-card-chart {
+    height: 50vw;
+    max-height: 300px;
+    margin-top: 0.5rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1424,6 +1528,17 @@ body.calendar-open .calendar-popup {
 
   .calendar-date {
     font-size: 0.9rem;
+  }
+
+  .data-card {
+    padding: 0.75rem;
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+    width: calc(100% + 1.5rem);
+  }
+
+  .market-score-row {
+    padding: 0.4rem;
   }
 }
 

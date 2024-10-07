@@ -61,9 +61,9 @@ const DataCard = ({ title, value, chartData, category, explanation, chartConfig 
         )}
         {interpretationText && <p className="data-card-interpretation" dangerouslySetInnerHTML={{ __html: interpretationText }}></p>}
       </div>
-      <div className="data-card-chart">
-        {children ? children : (
-          chartData && chartData.length > 0 && (
+      {(children || (chartData && chartData.length > 0)) && (
+        <div className="data-card-chart">
+          {children ? children : (
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -82,9 +82,9 @@ const DataCard = ({ title, value, chartData, category, explanation, chartConfig 
                 />
               </LineChart>
             </ResponsiveContainer>
-          )
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
