@@ -28,6 +28,7 @@ function AppContent() {
   const [typedText, setTypedText] = useState('');
   const fullText = '100X';
   const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (typedText.length < fullText.length) {
@@ -37,6 +38,10 @@ function AppContent() {
       return () => clearTimeout(timeout);
     }
   }, [typedText]);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
     <>
@@ -53,13 +58,16 @@ function AppContent() {
               </div>
               <div className="alpha-pill">alpha</div>
             </div>
-            <ul>
-              <li><Link to="/">Home</Link></li>
-              <li><Link to="/portfolio">Portfolio</Link></li>
-              <li><Link to="/chat">Chat</Link></li>
-              <li><Link to="/mastermind">Mastermind</Link></li>
-              <li><Link to="/account">Account</Link></li>
-              {user.email === 'max@max.de' && <li><Link to="/admin">Admin</Link></li>}
+            <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+              ☰
+            </button>
+            <ul className={`menu-items ${isMobileMenuOpen ? 'open' : ''}`}>
+              <li><Link to="/" onClick={() => setIsMobileMenuOpen(false)}>Home</Link></li>
+              <li><Link to="/portfolio" onClick={() => setIsMobileMenuOpen(false)}>Portfolio</Link></li>
+              <li><Link to="/chat" onClick={() => setIsMobileMenuOpen(false)}>Chat</Link></li>
+              <li><Link to="/mastermind" onClick={() => setIsMobileMenuOpen(false)}>Mastermind</Link></li>
+              <li><Link to="/account" onClick={() => setIsMobileMenuOpen(false)}>Account</Link></li>
+              {user.email === 'max@max.de' && <li><Link to="/admin" onClick={() => setIsMobileMenuOpen(false)}>Admin</Link></li>}
             </ul>
           </nav>
         )}

@@ -1868,3 +1868,147 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Add these new styles and modify existing ones */
+
+/* Mobile-friendly menu */
+@media (max-width: 768px) {
+  .menu-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.5rem;
+  }
+
+  .menu-bar ul {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .menu-bar li {
+    margin: 0.5rem 0;
+  }
+
+  .app-name-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .alpha-pill {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+
+  .app-name {
+    font-size: 2rem;
+  }
+
+  .version-number {
+    padding-left: 0.5rem;
+  }
+}
+
+/* Responsive grid for components */
+.components-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .components-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Adjust data cards for mobile */
+@media (max-width: 768px) {
+  .data-card {
+    padding: 1rem;
+  }
+
+  .data-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .data-card-header h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .data-card-value h3 {
+    font-size: 2rem;
+  }
+}
+
+/* Adjust calendar toggle button for mobile */
+@media (max-width: 768px) {
+  .calendar-toggle {
+    bottom: 10px;
+    right: 10px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Adjust login overlay for mobile */
+@media (max-width: 768px) {
+  .login-form-container {
+    width: 95%;
+    padding: 1.5rem;
+  }
+}
+
+/* Adjust chat page for mobile */
+@media (max-width: 768px) {
+  .chat-page {
+    padding: 0.5rem;
+  }
+
+  .message {
+    max-width: 85%;
+  }
+
+  .message-form {
+    padding: 0.5rem;
+  }
+
+  .message-input {
+    font-size: 0.9rem;
+  }
+
+  .send-button, .emoji-button, .image-upload-button {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+/* Adjust mastermind page for mobile */
+@media (max-width: 768px) {
+  .mastermind-page {
+    padding: 1rem;
+  }
+
+  .course-grid, .resource-list, .webinar-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* General mobile adjustments */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .app-container {
+    padding: 1rem;
+  }
+}
