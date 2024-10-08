@@ -1702,7 +1702,7 @@ body {
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-  // ... other existing mobile styles ...
+  /* ... other existing mobile styles ... */
 
   .portfolio-item-main {
     flex-direction: column;
