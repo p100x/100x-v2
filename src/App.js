@@ -23,17 +23,29 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-// New MobileMenu component
-function MobileMenu({ user }) {
+// Updated MobileMenu component
+function MobileMenu({ user, typedText }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
     <div className="mobile-menu-container">
-      <button className="mobile-menu-toggle" onClick={toggleMenu}>
-        {isOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
+      <div className="mobile-menu-bar">
+        <div className="mobile-app-name-container">
+          <div className="logo-version-container">
+            <div className="app-name">
+              {typedText}
+              <span className="cursor">|</span>
+            </div>
+            <div className="version-number">v0.0.9</div>
+          </div>
+          <div className="alpha-pill">alpha</div>
+        </div>
+        <button className="mobile-menu-toggle" onClick={toggleMenu}>
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
       {isOpen && (
         <nav className="mobile-menu">
           <ul>
@@ -91,7 +103,7 @@ function AppContent() {
                 {user.email === 'max@max.de' && <li><Link to="/admin">Admin</Link></li>}
               </ul>
             </nav>
-            <MobileMenu user={user} />
+            <MobileMenu user={user} typedText={typedText} />
           </>
         )}
         <div className={`app-content ${!user ? 'blurred' : ''}`}>

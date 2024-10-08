@@ -1627,7 +1627,9 @@ body {
 /* App Name, Alpha Pill, and Version Number Styles */
 .app-name-container {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  z-index: 100;
+  position: relative; /* Add this line */
 }
 
 .logo-version-container {
@@ -1647,23 +1649,24 @@ body {
 .version-number {
   font-size: 0.7rem;
   color: var(--secondary-text);
-  margin-top: 0.2rem;
-  padding-left: 0.90rem; /* Adjust this value to align with the '1' in '100X' */
+  margin-top: 0.2rem; /* Add space between logo and version number */
+  margin-left: 20px; /* Move version number 50px to the right */
 }
 
 .alpha-pill {
+  position: absolute; /* Change to absolute positioning */
+  top: 8px; /* Adjust this value to move up/down */
+  right: -60px; /* Adjust this value to move left/right */
   background-color: var(--highlight);
   color: var(--primary-bg);
   font-size: 0.7rem;
   font-weight: bold;
   padding: 0.2rem 0.5rem;
   border-radius: 1rem;
-  margin-left: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   box-shadow: 0 0 5px var(--highlight);
-  align-self: flex-start;
-  margin-top: 0.2rem; /* Align with the version number */
+  /* Remove margin-left as it's no longer needed */
 }
 
 .data-card-warning {
@@ -2235,6 +2238,31 @@ body {
   .portfolio-item-gain {
     align-self: flex-end;
   }
+
+  .app-name-container {
+    display: flex;
+    align-items: center; /* Ensure elements align correctly */
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+  }
+
+  .app-name {
+    font-size: 1.8rem;
+    display: block; /* Ensure visibility */
+  }
+
+  .alpha-pill {
+    font-size: 0.6rem;
+    padding: 0.1rem 0.3rem;
+    top: 0; /* Adjust this value for mobile */
+    right: -50px; /* Adjust this value for mobile */
+    display: inline-block; /* Ensure visibility */
+  }
+
+  .version-number {
+    font-size: 0.6rem;
+    padding-left: 0.7rem;
+    display: inline-block; /* Ensure visibility */
+  }
 }
 
 @media (max-width: 480px) {
@@ -2265,8 +2293,23 @@ body {
   .mobile-menu a {
     font-size: clamp(1rem, 4vw, 1.2rem);
   }
-}
 
+  .app-name {
+    font-size: 1.5rem;
+  }
+
+  .version-number {
+    font-size: 0.5rem;
+    padding-left: 0.6rem;
+  }
+
+  .alpha-pill {
+    font-size: 0.5rem;
+    padding: 0.1rem 0.25rem;
+    top: 0; /* Adjust this value for smaller screens */
+    right: -40px; /* Adjust this value for smaller screens */
+  }
+}
 /* ... (other existing styles remain unchanged) ... */
 
 .portfolio-item-info {
@@ -2277,4 +2320,138 @@ body {
 
 .portfolio-item-info p {
   margin: 0;
+}
+
+/* Mobile Menu Bar Styles */
+.mobile-menu-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--frosted-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--frosted-border);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.mobile-app-name-container {
+  display: flex;
+  align-items: center;
+  position: relative; /* Add this line */
+}
+
+.mobile-app-name-container .logo-version-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.mobile-app-name-container .app-name {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.mobile-app-name-container .version-number {
+  font-size: 0.5rem;
+  padding-left: 0.1rem;
+}
+
+.mobile-app-name-container .alpha-pill {
+  font-size: 0.5rem;
+  padding: 0.1rem 0.25rem;
+  position: absolute;
+  top: -0.5rem; /* Adjust this value as needed */
+  right: -2.5rem;
+  background-color: var(--highlight);
+  color: var(--primary-bg);
+  border-radius: 1rem;
+  font-weight: bold;
+}
+
+.mobile-menu-toggle {
+  background: none;
+  border: none;
+  color: var(--primary-text);
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-left: auto; /* This pushes the toggle button to the right */
+}
+
+/* Update existing mobile styles */
+@media (max-width: 768px) {
+  .app-container {
+    padding-top: 3.5rem;
+  }
+
+  .mobile-menu-container {
+    display: block;
+  }
+
+  .mobile-menu {
+    position: fixed;
+    top: 3.5rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--frosted-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 1rem;
+  }
+
+  .mobile-menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mobile-menu li {
+    margin: 1rem 0;
+    text-align: center;
+  }
+
+  .mobile-menu a {
+    color: var(--primary-text);
+    font-size: 1.2rem;
+    text-decoration: none;
+  }
+
+  .desktop-menu {
+    display: none;
+  }
+
+  /* Ensure alpha pill is visible on mobile */
+  .mobile-app-name-container .alpha-pill {
+    display: block;
+    position: absolute;
+    top: 0.2rem;
+    right: -2.9rem;
+    font-size: 0.7rem;
+    padding: 0.1rem 0.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-app-name-container .app-name {
+    font-size: 1.2rem;
+  }
+
+  .mobile-app-name-container .version-number {
+    font-size: 0.4rem;
+  }
+
+  .mobile-app-name-container .alpha-pill {
+    font-size: 0.4rem;
+    top: -0.4rem;
+    right: -2rem;
+  }
 }
