@@ -809,7 +809,7 @@ input:focus, textarea:focus, select:focus {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--frosted-border);
-  padding: 0.75rem 0;
+  padding: 0.75rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1502,6 +1502,42 @@ body.calendar-open .calendar-popup {
     max-height: 300px;
     margin-top: 0.5rem;
   }
+
+  .desktop-menu ul {
+    display: none;
+  }
+
+  .menu-bar {
+    justify-content: flex-start;
+    padding: 0.5rem 1rem;
+  }
+
+  .app-name-container {
+    margin-right: auto;
+  }
+
+  .app-name {
+    font-size: 1.8rem;
+  }
+
+  .version-number {
+    font-size: 0.6rem;
+    padding-left: 0.7rem;
+  }
+
+  .alpha-pill {
+    font-size: 0.6rem;
+    padding: 0.1rem 0.3rem;
+    margin-left: 0.3rem;
+  }
+
+  .mobile-menu-container {
+    display: block;
+    position: fixed;
+    top: 0.5rem;
+    right: 1rem;
+    z-index: 1001;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1538,6 +1574,20 @@ body.calendar-open .calendar-popup {
 
   .market-score-row {
     padding: 0.4rem;
+  }
+
+  .app-name {
+    font-size: 1.5rem;
+  }
+
+  .version-number {
+    font-size: 0.5rem;
+    padding-left: 0.6rem;
+  }
+
+  .alpha-pill {
+    font-size: 0.5rem;
+    padding: 0.1rem 0.25rem;
   }
 }
 
