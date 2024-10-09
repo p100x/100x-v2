@@ -23,17 +23,48 @@ export const fetchLatestVIX = async () => {
 
 // Fetch historical VIX data
 export const fetchHistoricalVIX = async () => {
-  const { data, error } = await supabase
-    .from('vix_data')
-    .select('*')
-    .order('timestamp', { ascending: true });
+  try {
+    console.log('Fetching historical VIX data...');
+    const { data, error } = await supabase
+      .from('vix_data')
+      .select('*')
+      .order('timestamp', { ascending: true });
 
-  if (error) throw new Error(error.message);
+    if (error) {
+      console.error('Supabase error in fetchHistoricalVIX:', error);
+      throw new Error(error.message);
+    }
 
-  return data.map(d => ({
-    date: new Date(d.timestamp).toLocaleDateString(),
-    VIX: d.VIX,
-  }));
+    console.log(`Received ${data.length} historical VIX data points`);
+
+    const processedData = data.map((d, index) => {
+      const date = new Date(d.timestamp);
+      if (isNaN(date.getTime())) {
+        console.error(`Invalid date at index ${index}:`, d.timestamp);
+        return null;
+      }
+      const vixValue = parseFloat(d.VIX);
+      if (isNaN(vixValue)) {
+        console.error(`Invalid VIX value at index ${index}:`, d.VIX);
+        return null;
+      }
+      return {
+        date: date.toLocaleDateString(),
+        VIX: vixValue,
+      };
+    }).filter(Boolean);
+
+    console.log(`Processed ${processedData.length} valid VIX data points`);
+
+    if (processedData.length === 0) {
+      throw new Error('No valid historical VIX data after processing');
+    }
+
+    return processedData;
+  } catch (error) {
+    console.error('Error in fetchHistoricalVIX:', error);
+    throw error;
+  }
 };
 
 // Fetch market summary

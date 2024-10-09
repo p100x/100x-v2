@@ -32,8 +32,11 @@ const VixComponent = () => {
         setVixData(latestData);
 
         console.log('Starting to process historical data...');
+        console.log('Historical data length:', historicalVIX.length);
+        
+        let validDataPoints = 0;
         const processedData = historicalVIX.map((d, index) => {
-          console.log(`Processing data point ${index}:`, d);
+          console.log(`Processing data point ${index}:`, JSON.stringify(d));
           
           if (!d) {
             console.error(`Data point ${index} is null or undefined`);
@@ -41,12 +44,12 @@ const VixComponent = () => {
           }
           
           if (!d.date && !d.timestamp) {
-            console.error(`Missing date/timestamp at index ${index}:`, d);
+            console.error(`Missing date/timestamp at index ${index}:`, JSON.stringify(d));
             return null;
           }
           
           if (d.VIX === undefined) {
-            console.error(`Missing VIX value at index ${index}:`, d);
+            console.error(`Missing VIX value at index ${index}:`, JSON.stringify(d));
             return null;
           }
 
@@ -63,6 +66,7 @@ const VixComponent = () => {
             return null;
           }
 
+          validDataPoints++;
           console.log(`Successfully processed data point ${index}`);
           return {
             date: date.getTime(), // Store as timestamp
@@ -71,16 +75,17 @@ const VixComponent = () => {
           };
         }).filter(Boolean);
 
-        console.log('Processed historical data:', processedData);
+        console.log('Processed historical data:', JSON.stringify(processedData));
+        console.log(`Valid data points: ${validDataPoints} out of ${historicalVIX.length}`);
 
         if (processedData.length === 0) {
-          throw new Error('No valid historical VIX data after processing');
+          throw new Error(`No valid historical VIX data after processing. Valid: ${validDataPoints}, Total: ${historicalVIX.length}`);
         }
 
         setHistoricalData(processedData);
       } catch (err) {
         console.error('Error in loadVixData:', err);
-        setError(err.message || 'An error occurred while fetching VIX data');
+        setError(`${err.message || 'An error occurred while fetching VIX data'}. Check console for details.`);
       } finally {
         setLoading(false);
       }
