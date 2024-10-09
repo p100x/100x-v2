@@ -117,7 +117,7 @@ def generate_llm_interpretation(market_data_text, headlines):
     Aktuelle Wirtschaftsnachrichten:
     {'. '.join(headlines)}
 
-    Erstelle eine kurze, prägnante Analyse (maximal 4-5 Sätze) des globalen Marktgeschehens. Berücksichtige dabei sowohl die Marktdaten als auch die relevanten Wirtschaftsnachrichten, die sich auf Marktbewegungen und makroökonomische Faktoren beziehen. Ignoriere Nachrichten, die nicht direkt mit den Finanzmärkten oder der Wirtschaft zusammenhängen. Für den Nutzer, der einen Schnellüberblick über den Markt benötigt. Zusatzinfo für die KI zur Einordnung der Lage: US-Arbeitsmarkt schwächelt (Sahm-Regel ausgelöst), Leitzinsen fallen, Zinsstrukturkurve gerade re-inverted.
+    Erstelle eine kurze, prägnante Analyse (maximal 4-5 Sätze) des globalen Marktgeschehens. Berücksichtige dabei sowohl die Marktdaten als auch die relevanten Wirtschaftsnachrichten, die sich auf Marktbewegungen und makroökonomische Faktoren beziehen. Ignoriere Nachrichten, die nicht direkt mit den Finanzmärkten oder der Wirtschaft zusammenhängen. Für den Nutzer, der einen Schnellüberblick über den Markt benötigt. Zusatzinfo für die KI zur Einordnung der Lage: Fed hat angefangen die Zinsen zu senken, aber der zukünftige Zinspfad erscheitn unsicher. Widersprüchliche Daten über die Wirtschaftslage. Earnings Season zeigt schwächelnden Konsumenten.
     """
 
     response = client.chat.completions.create(

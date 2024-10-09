@@ -78,7 +78,7 @@ const Chat = () => {
   useEffect(() => {
     const checkUser = async () => {
       const currentUser = await getCurrentUser();
-      if (currentUser && currentUser.email === 'max@max.de') {
+      if (currentUser && currentUser.email === 'maximiliankrehl@icloud.com') {
         // Refresh the session to ensure it's current
         await supabase.auth.refreshSession();
       }
@@ -133,11 +133,14 @@ const Chat = () => {
   };
 
   const getDisplayName = (email) => {
+    if (email === 'maximiliankrehl@icloud.com') {
+      return 'Max';
+    }
     return email.split('@')[0];
   };
 
   const isAdmin = (email) => {
-    return email === 'max@max.de' && user && user.email === 'max@max.de';
+    return email === 'maximiliankrehl@icloud.com' && user && user.email === 'maximiliankrehl@icloud.com';
   };
 
   const onEmojiClick = (emojiObject) => {

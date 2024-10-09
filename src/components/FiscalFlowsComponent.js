@@ -6,12 +6,26 @@ const FiscalFlowsComponent = ({ setFiscalFlowsState }) => {
   const [fiscalFlowsState, setLocalFiscalFlowsState] = useState('stabil');
   const [error, setError] = useState(null);
 
+  // Add this translation function
+  const translateFiscalFlowState = (state) => {
+    switch (state.toLowerCase()) {
+      case 'increasing':
+        return 'steigend';
+      case 'decreasing':
+        return 'rückläufig';
+      case 'stable':
+      default:
+        return 'stabil';
+    }
+  };
+
   useEffect(() => {
     const loadFiscalFlows = async () => {
       try {
         const flows = await fetchFiscalFlows();
-        setLocalFiscalFlowsState(flows);
-        setFiscalFlowsState({ state: flows, timestamp: new Date().toISOString() });
+        const translatedFlows = translateFiscalFlowState(flows);
+        setLocalFiscalFlowsState(translatedFlows);
+        setFiscalFlowsState({ state: translatedFlows, timestamp: new Date().toISOString() });
       } catch (error) {
         console.error('Fehler beim Abrufen der Fiskalströme:', error);
         setError('Daten konnten nicht geladen werden. Bitte versuchen Sie es später erneut.');
@@ -23,12 +37,12 @@ const FiscalFlowsComponent = ({ setFiscalFlowsState }) => {
 
   const getStateDescription = (state) => {
     switch (state) {
-      case 'abnehmend':
-        return 'Die Fiskalströme nehmen ab, was auf eine potenzielle wirtschaftliche Kontraktion hindeutet.';
-      case 'zunehmend':
-        return 'Die Fiskalströme nehmen zu, was auf eine potenzielle wirtschaftliche Expansion hindeutet.';
+      case 'rückläufig':
+        return 'Die Fiskalströme sind rückläufig, was auf eine potenzielle wirtschaftliche Kontraktion hindeutet.';
+      case 'steigend':
+        return 'Die Fiskalströme sind steigend, was auf eine potenzielle wirtschaftliche Expansion hindeutet.';
       default:
-        return 'Die Fiskalströme sind stabil, was auf einen ausgeglichenen wirtschaftlichen Zustand hindeutet.';
+        return 'Die Fiskalströme sind stabil, was auf eine Unterstützung der Wirtschaft durch staatliche Kapitalflüsse hindeutet.';
     }
   };
 
@@ -37,11 +51,11 @@ const FiscalFlowsComponent = ({ setFiscalFlowsState }) => {
   const expandedExplanation = `
 Fiskalströme repräsentieren die Bewegung von Geld zwischen der Regierung und der Wirtschaft. Dies umfasst Staatsausgaben, Steuereinnahmen und andere finanzielle Aktivitäten, die die gesamtwirtschaftlichen Bedingungen beeinflussen.
 
-1. Zunehmende Fiskalströme:
+1. Steigende Fiskalströme:
    • Wirtschaftliche Expansion, positiv für Aktienmärkte
    • Strategie: Vorsicht bei zyklischen Aktien, Fokus auf inflationsgeschützte Anlagen
 
-2. Abnehmende Fiskalströme:
+2. Rückläufige Fiskalströme:
    • Wirtschaftliche Kontraktion, negativ für Aktienmärkte
    • Strategie: Suche nach unterbewerteten Wachstumsaktien, Vorbereitung auf mögliche geldpolitische Lockerung
 
