@@ -9,8 +9,22 @@ const VixComponent = () => {
   const [error, setError] = useState(null);
 
   const formatDate = (dateInput) => {
+    if (typeof dateInput === 'string') {
+      // Handle the "DD.MM.YYYY" format
+      const [day, month, year] = dateInput.split('.');
+      return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+    }
     const date = new Date(dateInput);
     return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+  };
+
+  const parseDate = (dateString) => {
+    if (typeof dateString === 'string') {
+      // Handle the "DD.MM.YYYY" format
+      const [day, month, year] = dateString.split('.');
+      return new Date(year, month - 1, day); // month is 0-indexed in JavaScript Date
+    }
+    return new Date(dateString);
   };
 
   useEffect(() => {
@@ -53,7 +67,7 @@ const VixComponent = () => {
             return null;
           }
 
-          let date = new Date(d.date || d.timestamp);
+          let date = parseDate(d.date || d.timestamp);
 
           if (isNaN(date.getTime())) {
             console.error(`Invalid date at index ${index}:`, d.date || d.timestamp);
