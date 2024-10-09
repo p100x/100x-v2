@@ -5,6 +5,7 @@ import Spinner from '../components/Spinner';
 const Portfolio = () => {
   const [portfolio, setPortfolio] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showDisclaimer, setShowDisclaimer] = useState(true);
 
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
@@ -148,10 +149,22 @@ const Portfolio = () => {
     fetchPortfolio();
   }, []);
 
+  const handleCloseDisclaimer = () => {
+    setShowDisclaimer(false);
+  };
+
   return (
     <div className="portfolio-page">
       <h1>Aktienportfolio</h1>
       <br />
+      {showDisclaimer && (
+        <div className="disclaimer-box">
+          <button className="close-disclaimer" onClick={handleCloseDisclaimer}>×</button>
+          <p>
+            <strong>Haftungsausschluss:</strong> Die hier dargestellten Informationen dienen ausschließlich zu Informationszwecken und stellen keine Anlageberatung dar. Vergangene Wertentwicklungen sind kein verlässlicher Indikator für zukünftige Ergebnisse. Investitionen in Wertpapiere bergen Risiken, einschließlich des möglichen Verlusts des eingesetzten Kapitals. Bitte konsultieren Sie einen qualifizierten Finanzberater, bevor Sie Anlageentscheidungen treffen.
+          </p>
+        </div>
+      )}
       {isLoading ? (
         <Spinner />
       ) : (
@@ -173,6 +186,14 @@ const Portfolio = () => {
               <div className="portfolio-item-info">
                 <p>{stock.info}</p>
               </div>
+              {stock.symbol === 'RBLX' && (
+                <div className="stock-warning">
+                  <p>
+                    <strong>Warnung:</strong> Es gibt einen neuen Shortseller-Bericht über Roblox mit dem Titel "Roblox: Inflated Key Metrics For Wall Street". Bitte informieren Sie sich über die möglichen Risiken. 
+                    <a href="https://hindenburgresearch.com/roblox/" target="_blank" rel="noopener noreferrer">Mehr Informationen hier</a>.
+                  </p>
+                </div>
+              )}
             </div>
           ))}
         </div>

@@ -4,6 +4,7 @@ import { fetchFiscalFlows } from '../services/marketDataService';
 
 const FiscalFlowsComponent = ({ setFiscalFlowsState }) => {
   const [fiscalFlowsState, setLocalFiscalFlowsState] = useState('stabil');
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const loadFiscalFlows = async () => {
@@ -13,6 +14,7 @@ const FiscalFlowsComponent = ({ setFiscalFlowsState }) => {
         setFiscalFlowsState({ state: flows, timestamp: new Date().toISOString() });
       } catch (error) {
         console.error('Fehler beim Abrufen der Fiskalströme:', error);
+        setError('Daten konnten nicht geladen werden. Bitte versuchen Sie es später erneut.');
       }
     };
 

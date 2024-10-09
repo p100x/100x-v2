@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { supabase } from '../supabaseClient';
-import Cookies from 'js-cookie';
+import { supabase, signIn, signOut, getCurrentUser, onAuthStateChange, verifyOtp } from '../supabaseClient';
 
 const AuthContext = createContext();
 
@@ -10,67 +9,32 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     checkUser();
+    const { data: authListener } = onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
 
   const checkUser = async () => {
-    const storedUser = Cookies.get('user');
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      const isStillActive = await checkUserActive(parsedUser.email);
-      if (isStillActive) {
-        setUser(parsedUser);
-      } else {
-        signOut();
-      }
+    const currentUser = await getCurrentUser();
+    setUser(currentUser);
+    if (currentUser) {
+      // Update the supabase client with the current session
+      const { data: { session } } = await supabase.auth.getSession();
+      supabase.auth.setSession(session);
     }
     setLoading(false);
-  };
-
-  const checkUserActive = async (email) => {
-    const { data, error } = await supabase
-      .from('user_data')
-      .select('is_active')
-      .eq('email', email)
-      .single();
-
-    if (error || !data || data.is_active !== 'yes') {
-      return false;
-    }
-    return true;
-  };
-
-  const signIn = async (email) => {
-    const { data, error } = await supabase
-      .from('user_data')
-      .select('is_active')
-      .eq('email', email)
-      .single();
-
-    if (error) {
-      console.error('Error fetching user data:', error);
-      throw new Error('An error occurred while signing in');
-    }
-
-    if (!data || data.is_active !== 'yes') {
-      throw new Error('User not found or account is not active');
-    }
-
-    const user = { email, is_active: true };
-    setUser(user);
-    Cookies.set('user', JSON.stringify(user), { expires: 7 });
-    return user;
-  };
-
-  const signOut = () => {
-    setUser(null);
-    Cookies.remove('user');
   };
 
   const value = {
     user,
     signIn,
     signOut,
-    checkUserActive,
+    verifyOtp,
   };
 
   return (

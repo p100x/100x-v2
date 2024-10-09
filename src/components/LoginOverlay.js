@@ -3,8 +3,11 @@ import { useAuth } from '../contexts/AuthContext';
 
 const LoginOverlay = () => {
   const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
   const [error, setError] = useState(null);
-  const { signIn, user } = useAuth();
+  const [message, setMessage] = useState('');
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const { signIn, verifyOtp, user } = useAuth();
   const [typedText, setTypedText] = useState('');
   const fullText = '100X';
 
@@ -17,13 +20,31 @@ const LoginOverlay = () => {
     }
   }, [typedText]);
 
-  const handleLogin = async (e) => {
+  const handleSendOtp = async (e) => {
     e.preventDefault();
     setError(null);
+    setMessage('');
     try {
-      await signIn(email);
+      const { error } = await signIn(email);
+      if (error) throw error;
+      setIsOtpSent(true);
+      setMessage('Check your email for the login link or OTP!');
     } catch (error) {
       console.error('Login error:', error);
+      setError(error.message);
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setMessage('');
+    try {
+      const { error } = await verifyOtp(email, otp);
+      if (error) throw error;
+      setMessage('Login successful!');
+    } catch (error) {
+      console.error('OTP verification error:', error);
       setError(error.message);
     }
   };
@@ -45,17 +66,31 @@ const LoginOverlay = () => {
           </div>
           <div className="alpha-pill">alpha</div>
         </div>
-        <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <button type="submit">Login</button>
-          {error && <p className="error">{error}</p>}
-        </form>
+        {!isOtpSent ? (
+          <form onSubmit={handleSendOtp}>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <button type="submit">Send OTP</button>
+          </form>
+        ) : (
+          <form onSubmit={handleVerifyOtp}>
+            <input
+              type="text"
+              placeholder="Enter OTP"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              required
+            />
+            <button type="submit">Verify OTP</button>
+          </form>
+        )}
+        {error && <p className="error">{error}</p>}
+        {message && <p className="message">{message}</p>}
       </div>
     </div>
   );

@@ -67,7 +67,10 @@ const DataCard = ({ title, value, chartData, category, explanation, chartConfig 
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey={chartConfig.xAxisDataKey} />
+                <XAxis 
+                  dataKey={chartConfig.xAxisDataKey} 
+                  tickFormatter={chartConfig.xAxisFormatter} // Apply the x-axis formatter
+                />
                 <YAxis domain={yAxisDomain} tickFormatter={formatYAxis} />
                 <Tooltip />
                 {chartConfig.referenceLine && (

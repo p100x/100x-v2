@@ -1,6 +1,14 @@
 // src/services/marketDataService.js
 import { supabase } from '../supabaseClient';
 
+// Add this at the top of the file
+const logError = (functionName, error) => {
+  console.error(`Error in ${functionName}:`, error);
+  console.error('Error details:', error.details);
+  console.error('Error hint:', error.hint);
+  console.error('User auth status:', supabase.auth.session());
+};
+
 // Fetch latest VIX value
 export const fetchLatestVIX = async () => {
   const { data, error } = await supabase
@@ -42,14 +50,19 @@ export const fetchMarketSummary = async () => {
 
 // Fetch latest AAII value
 export const fetchLatestAAII = async () => {
-  const { data, error } = await supabase
-    .from('aaii_data')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(1);
-  
-  if (error) throw new Error(error.message);
-  return data[0];
+  try {
+    const { data, error } = await supabase
+      .from('aaii_data')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(1);
+    
+    if (error) throw error;
+    return data[0];
+  } catch (error) {
+    logError('fetchLatestAAII', error);
+    throw error;
+  }
 };
 
 // Fetch historical AAII data
@@ -69,16 +82,15 @@ export const fetchHistoricalAAII = async () => {
 
 // Fetch fiscal flows
 export const fetchFiscalFlows = async () => {
-  const FISCAL_FLOWS_ID = 1; // Use the same constant ID
+  const FISCAL_FLOWS_ID = 1;
 
   const { data, error } = await supabase
     .from('fiscal_data')
     .select('flows')
-    .eq('id', FISCAL_FLOWS_ID)
-    .single();
+    .eq('id', FISCAL_FLOWS_ID);
   
   if (error) throw new Error(error.message);
-  return data ? data.flows : 'stable'; // Default to 'stable' if no data
+  return data && data.length > 0 ? data[0].flows : 'stable';
 };
 
 // Update fiscal flows
@@ -269,18 +281,5 @@ export const fetchHistoricalLiquidityData = async () => {
     console.error('Error fetching historical liquidity data:', error);
     throw error;
   }
-};
-
-// Add this new function
-export const saveMarketScore = async (score) => {
-  const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-
-  const { data, error } = await supabase
-    .from('market_score')
-    .upsert({ date: today, score: score }, { onConflict: 'date' })
-    .select();
-
-  if (error) throw new Error(error.message);
-  return data;
 };
 

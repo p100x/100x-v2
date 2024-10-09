@@ -49,7 +49,6 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      <h1>Echtzeit-Marktanalyse</h1>
       <br />
       <div className="components-grid">
         {(isFilterActive('all') || isFilterActive('summary')) && <SummaryComponent />}

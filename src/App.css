@@ -705,9 +705,39 @@ a:hover, a:focus {
 }
 
 .recharts-tooltip-wrapper {
-  background-color: rgba(26, 26, 26, 0.9);
-  border: 1px solid var(--primary-text);
+  background-color: rgba(10, 10, 10, 0.9);
+  border: 1px solid var(--highlight);
+  border-radius: 5px;
   box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.recharts-default-tooltip {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.recharts-tooltip-item {
+  color: var(--primary-text) !important;
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  padding: 4px 8px;
+}
+
+.recharts-tooltip-item-name,
+.recharts-tooltip-item-separator {
+  color: var(--highlight) !important;
+}
+
+.recharts-tooltip-label {
+  color: var(--secondary-highlight) !important;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--highlight);
+  margin-bottom: 4px;
 }
 
 .recharts-line {
@@ -1750,7 +1780,11 @@ body {
 
 .portfolio-item-details {
   font-size: 0.9rem;
-  color: var(--secondary-text);
+  color: #000000; /* Changed to black */
+  background-color: #ffffff; /* Added white background */
+  display: inline-block; /* Makes the background only cover the text */
+  padding: 0.2rem 0.5rem; /* Added some padding */
+  border-radius: 4px; /* Optional: rounds the corners */
 }
 
 /* Responsive Styles */
@@ -2454,4 +2488,57 @@ body {
     top: -0.4rem;
     right: -2rem;
   }
+}
+
+/* Disclaimer Box Styles */
+.disclaimer-box {
+  background-color: rgba(255, 255, 0, 0.1);
+  border: 1px solid var(--warning);
+  border-radius: 5px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.disclaimer-box p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--primary-text);
+}
+
+.close-disclaimer {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--primary-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.close-disclaimer:hover {
+  color: var(--highlight);
+}
+
+/* Stock Warning Styles */
+.stock-warning {
+  background-color: rgba(255, 165, 0, 0.1);
+  border: 1px solid #ffa500;
+  border-radius: 5px;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.stock-warning p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--primary-text);
+}
+
+.stock-warning a {
+  color: #ffa500;
+  text-decoration: underline;
 }

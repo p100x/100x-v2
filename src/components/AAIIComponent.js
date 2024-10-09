@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchLatestAAII, fetchHistoricalAAII } from '../services/marketDataService';
 import DataCard from './DataCard';
+import { supabase } from '../supabaseClient';  // Add this line
 
 const AAIIComponent = () => {
   const [aaiiData, setAAIIData] = useState(null);
@@ -20,6 +21,9 @@ const AAIIComponent = () => {
           spread: d.spread
         })));
       } catch (err) {
+        console.error('Error in AAIIComponent:', err);
+        const session = await supabase.auth.getSession();
+        console.error('Current auth status:', session);
         setError(err.message);
       } finally {
         setLoading(false);

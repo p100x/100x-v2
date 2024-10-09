@@ -33,7 +33,7 @@ const SummaryComponent = () => {
 
   return (
     <div className="data-card">
-      <h2>Marktzusammenfassung</h2>
+      <h2>Marktpuls</h2>
       <div className="summary-text">
         {summary}
       </div>
