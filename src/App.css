@@ -3202,3 +3202,80 @@ body {
 .custom-tooltip.place-right::after {
   border-right-color: var(--frosted-bg) !important;
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 10, 10, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content.calendar-modal {
+  background-color: var(--frosted-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid var(--frosted-border);
+  border-radius: 10px;
+  padding: 1rem;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-modal h2 {
+  font-size: clamp(1.2rem, 5vw, 1.5rem);
+  margin-bottom: 1rem;
+}
+
+.calendar-table-container {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.calendar-table {
+  width: 100%;
+  font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+}
+
+.calendar-table th,
+.calendar-table td {
+  padding: 0.3rem;
+}
+
+.modal-close {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  font-size: clamp(0.8rem, 3vw, 1rem);
+}
+
+@media (max-width: 768px) {
+  .modal-content.calendar-modal {
+    width: 95%;
+    height: 95vh;
+    max-height: none;
+    border-radius: 0;
+    padding: 0.5rem;
+  }
+
+  .calendar-modal h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .calendar-table-container {
+    max-height: calc(95vh - 6rem); /* Adjust based on header and button heights */
+  }
+
+  .modal-close {
+    margin-top: 0.5rem;
+  }
+}
