@@ -11,20 +11,41 @@ const VixComponent = () => {
   const formatDate = (dateInput) => {
     if (typeof dateInput === 'string') {
       // Handle the "DD.MM.YYYY" format
-      const [day, month, year] = dateInput.split('.');
-      return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+      const parts = dateInput.split('.');
+      if (parts.length === 3) {
+        const [day, month, year] = parts;
+        return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+      }
+      // If it's not in the expected format, return it as is
+      return dateInput;
     }
-    const date = new Date(dateInput);
-    return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+    if (dateInput instanceof Date) {
+      return `${dateInput.getDate().toString().padStart(2, '0')}/${(dateInput.getMonth() + 1).toString().padStart(2, '0')}/${dateInput.getFullYear()}`;
+    }
+    // If it's neither a string nor a Date object, return a placeholder or the original input
+    console.error('Invalid date input:', dateInput);
+    return 'Invalid Date';
   };
 
   const parseDate = (dateString) => {
     if (typeof dateString === 'string') {
       // Handle the "DD.MM.YYYY" format
-      const [day, month, year] = dateString.split('.');
-      return new Date(year, month - 1, day); // month is 0-indexed in JavaScript Date
+      const parts = dateString.split('.');
+      if (parts.length === 3) {
+        const [day, month, year] = parts;
+        return new Date(year, month - 1, day); // month is 0-indexed in JavaScript Date
+      }
+      // If it's not in the expected format, try parsing it directly
+      const date = new Date(dateString);
+      if (!isNaN(date.getTime())) {
+        return date;
+      }
     }
-    return new Date(dateString);
+    if (dateString instanceof Date) {
+      return dateString;
+    }
+    console.error('Invalid date string:', dateString);
+    return null;
   };
 
   useEffect(() => {
@@ -123,10 +144,13 @@ const VixComponent = () => {
   const chartConfig = {
     xAxisDataKey: 'formattedDate', // Use the formatted date for x-axis
     dataKey: 'VIX',
-    xAxisFormatter: formatDate,
+    xAxisFormatter: (value) => {
+      // Ensure we're passing a valid value to formatDate
+      return value ? formatDate(value) : '';
+    },
     tooltipFormatter: (value, name, props) => {
       if (name === 'VIX') {
-        return [`VIX: ${value.toFixed(2)}`, `Datum: ${props.payload.formattedDate}`];
+        return [`VIX: ${value.toFixed(2)}`, `Datum: ${props.payload.formattedDate || 'N/A'}`];
       }
       return [value, name];
     }

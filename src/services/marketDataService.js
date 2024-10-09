@@ -38,18 +38,31 @@ export const fetchHistoricalVIX = async () => {
     console.log(`Received ${data.length} historical VIX data points`);
 
     const processedData = data.map((d, index) => {
-      const date = new Date(d.timestamp);
+      let date;
+      if (typeof d.timestamp === 'string') {
+        // If timestamp is a string, try to parse it
+        date = new Date(d.timestamp);
+      } else if (d.timestamp instanceof Date) {
+        // If it's already a Date object, use it directly
+        date = d.timestamp;
+      } else {
+        console.error(`Invalid timestamp at index ${index}:`, d.timestamp);
+        return null;
+      }
+
       if (isNaN(date.getTime())) {
         console.error(`Invalid date at index ${index}:`, d.timestamp);
         return null;
       }
+
       const vixValue = parseFloat(d.VIX);
       if (isNaN(vixValue)) {
         console.error(`Invalid VIX value at index ${index}:`, d.VIX);
         return null;
       }
+
       return {
-        date: date.toLocaleDateString(),
+        date: date.toISOString().split('T')[0], // Format as YYYY-MM-DD
         VIX: vixValue,
       };
     }).filter(Boolean);
@@ -313,4 +326,3 @@ export const fetchHistoricalLiquidityData = async () => {
     throw error;
   }
 };
-
