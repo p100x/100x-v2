@@ -892,6 +892,13 @@ input:focus, textarea:focus, select:focus {
   }
 }
 
+/* Add this media query to adjust cursor size on mobile */
+@media (max-width: 768px) {
+  .cursor {
+    font-size: 1.5rem; /* Adjust this value as needed */
+  }
+}
+
 /* Market Score Scale Styles */
 .market-score-scale {
   width: 100%;
@@ -1399,26 +1406,126 @@ body.calendar-open .calendar-popup {
 }
 
 .modal-close {
-  display: block;
-  width: 100%;
-  padding: 0.5rem;
-  margin-top: 1rem;
-  background-color: var(--highlight);
-  color: var(--primary-bg);
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
   border: none;
-  border-radius: 5px;
+  color: var(--primary-text);
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
+  padding: 0.25rem;
+  line-height: 1;
+  transition: color 0.3s ease;
 }
 
 .modal-close:hover {
-  background-color: var(--primary-text);
+  color: var(--highlight);
+}
+
+.modal-close svg {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 /* Calendar Modal Specific Styles */
 .calendar-modal {
-  max-width: 500px;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 5rem; /* Adjust this value to match the button height plus some extra space */
+  position: relative;
+}
+
+.calendar-modal h2 {
+  color: var(--highlight);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.calendar-modal h3 {
+  color: var(--primary-text);
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.calendar-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.calendar-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--frosted-border);
+  transition: background-color 0.3s ease;
+}
+
+.calendar-list li:last-child {
+  border-bottom: none;
+}
+
+.calendar-list li:hover {
+  background-color: rgba(57, 255, 20, 0.05);
+}
+
+.calendar-company {
+  font-weight: bold;
+  color: var(--primary-text);
+}
+
+.calendar-date {
+  color: var(--secondary-text);
+}
+
+.calendar-table-container {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem; /* Add some padding at the bottom of the table container */
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.calendar-table th,
+.calendar-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--frosted-border);
+}
+
+.calendar-table th {
+  background-color: rgba(57, 255, 20, 0.1);
+  color: var(--highlight);
+  font-weight: bold;
+}
+
+.calendar-table tr:hover {
+  background-color: rgba(57, 255, 20, 0.05);
+}
+
+/* Ensure the scrollbar is visible and styled */
+.calendar-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.calendar-modal::-webkit-scrollbar-track {
+  background: var(--secondary-bg);
+}
+
+.calendar-modal::-webkit-scrollbar-thumb {
+  background-color: var(--highlight);
+  border-radius: 4px;
+}
+
+.calendar-modal::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-highlight);
 }
 
 /* Calendar Toggle Button */
@@ -1439,6 +1546,351 @@ body.calendar-open .calendar-popup {
 
 .calendar-toggle:hover {
   background-color: var(--primary-text);
+}
+
+/* Feedback Modal Styles */
+.modal-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.feedback-modal {
+  max-width: 500px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 90vh; /* Limit height on smaller screens */
+  overflow-y: auto; /* Allow scrolling if content is too tall */
+}
+
+.feedback-modal h2 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--highlight);
+}
+
+.feedback-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: bold;
+  color: var(--primary-text);
+}
+
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--frosted-border);
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--primary-text);
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 120px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--highlight);
+  box-shadow: 0 0 0 2px rgba(57, 255, 20, 0.2);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submit-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--highlight);
+  color: var(--primary-bg);
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: var(--secondary-highlight);
+  transform: translateY(-2px);
+}
+
+.submit-button:disabled {
+  background-color: var(--disabled-text);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.success-message {
+  text-align: center;
+  color: var(--success);
+}
+
+.success-message p {
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+}
+
+.close-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--highlight);
+  color: var(--primary-bg);
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: var(--secondary-highlight);
+}
+
+/* Responsive styles for mobile devices */
+@media (max-width: 768px) {
+  .feedback-modal {
+    width: 95%;
+    padding: 1.5rem;
+    margin: 1rem; /* Add some margin to prevent content from touching the edges */
+  }
+
+  .feedback-modal h2 {
+    font-size: 1.5rem;
+  }
+
+  .form-group textarea {
+    font-size: 0.9rem;
+    width: 100%; /* Ensure full width on mobile */
+  }
+
+  .submit-button,
+  .close-button {
+    width: 100%;
+    padding: 0.75rem;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: bold;
+  color: var(--primary-text);
+}
+
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--frosted-border);
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--primary-text);
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 120px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--highlight);
+  box-shadow: 0 0 0 2px rgba(57, 255, 20, 0.2);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submit-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--highlight);
+  color: var(--primary-bg);
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: var(--secondary-highlight);
+  transform: translateY(-2px);
+}
+
+.submit-button:disabled {
+  background-color: var(--disabled-text);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.success-message {
+  text-align: center;
+  color: var(--success);
+}
+
+.success-message p {
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+}
+
+.close-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--highlight);
+  color: var(--primary-bg);
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: var(--secondary-highlight);
+}
+
+/* Responsive styles for mobile devices */
+@media (max-width: 768px) {
+  .feedback-modal {
+    width: 95%;
+    padding: 1.5rem;
+    margin: 1rem; /* Add some margin to prevent content from touching the edges */
+  }
+
+  .feedback-modal h2 {
+    font-size: 1.5rem;
+  }
+
+  .form-group textarea {
+    font-size: 0.9rem;
+    width: 100%; /* Ensure full width on mobile */
+  }
+
+  .submit-button,
+  .close-button {
+    width: 100%;
+    padding: 0.75rem;
+  }
+}
+
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--frosted-border);
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--primary-text);
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 120px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--highlight);
+  box-shadow: 0 0 0 2px rgba(57, 255, 20, 0.2);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submit-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--highlight);
+  color: var(--primary-bg);
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: var(--secondary-highlight);
+  transform: translateY(-2px);
+}
+
+.submit-button:disabled {
+  background-color: var(--disabled-text);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.success-message {
+  text-align: center;
+  color: var(--success);
+}
+
+.success-message p {
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+}
+
+.close-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--highlight);
+  color: var(--primary-bg);
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: var(--secondary-highlight);
+}
+
+/* Responsive styles for mobile devices */
+@media (max-width: 768px) {
+  .feedback-modal {
+    width: 95%;
+    padding: 1.5rem;
+    margin: 1rem; /* Add some margin to prevent content from touching the edges */
+  }
+
+  .feedback-modal h2 {
+    font-size: 1.5rem;
+  }
+
+  .form-group textarea {
+    font-size: 0.9rem;
+    width: 100%; /* Ensure full width on mobile */
+  }
+
+  .submit-button,
+  .close-button {
+    width: 100%;
+    padding: 0.75rem;
+  }
 }
 
 /* Responsive Design */
@@ -1584,15 +2036,15 @@ body.calendar-open .calendar-popup {
   }
 
   .calendar-popup {
-    padding: 1.5rem;
+    padding: 1rem;
   }
 
   .calendar-company {
-    font-size: 1rem;
+    font-size: clamp(0.8rem, 3vw, 1rem);
   }
 
   .calendar-date {
-    font-size: 0.9rem;
+    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
   }
 
   .data-card {
@@ -2344,7 +2796,7 @@ body {
     right: -40px; /* Adjust this value for smaller screens */
   }
 }
-/* ... (other existing styles remain unchanged) ... */
+/* ... (rest of the styles remain unchanged) ... */
 
 .portfolio-item-info {
   margin-top: 0.5rem;
@@ -2541,4 +2993,140 @@ body {
 .stock-warning a {
   color: #ffa500;
   text-decoration: underline;
+}
+/* Add these styles to your existing CSS file */
+
+.ibkr-referral {
+  background-color: rgba(57, 255, 20, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid var(--highlight);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.ibkr-referral::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(57, 255, 20, 0.1) 0%, rgba(57, 255, 20, 0) 70%);
+  animation: pulse 4s linear infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.7;
+  }
+}
+
+.ibkr-referral:hover {
+  box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
+  transform: translateY(-3px);
+}
+
+.ibkr-referral p {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  color: var(--primary-text);
+  position: relative;
+  z-index: 1;
+}
+
+.referral-link {
+  color: var(--highlight);
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  background-color: rgba(57, 255, 20, 0.1);
+  display: inline-block;
+  font-size: 0.9rem;
+}
+
+.referral-link:hover {
+  color: var(--primary-bg);
+  background-color: var(--highlight);
+  text-decoration: none;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+}
+
+.bonus-text {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--secondary-text);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ibkr-referral {
+    padding: 1.25rem;
+  }
+
+  .ibkr-referral p {
+    font-size: 0.9rem;
+  }
+
+  .referral-link {
+    display: inline-block;
+    margin: 0.5rem 0;
+  }
+
+  .bonus-text {
+    font-size: 0.8rem;
+  }
+}
+
+/* Custom Tooltip Styles */
+.custom-tooltip {
+  max-width: 300px !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  padding: 10px !important;
+  line-height: 1.4 !important;
+  font-size: 14px !important;
+  z-index: 9999 !important;
+}
+
+/* Ensure the tooltip container doesn't cut off content */
+[data-tooltip-content] {
+  overflow: visible !important;
+}
+
+/* Adjust tooltip arrow position if needed */
+.custom-tooltip.place-top::after {
+  border-top-color: var(--frosted-bg) !important;
+}
+
+.custom-tooltip.place-bottom::after {
+  border-bottom-color: var(--frosted-bg) !important;
+}
+
+.custom-tooltip.place-left::after {
+  border-left-color: var(--frosted-bg) !important;
+}
+
+.custom-tooltip.place-right::after {
+  border-right-color: var(--frosted-bg) !important;
 }

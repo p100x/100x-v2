@@ -16,7 +16,7 @@ const CreditCardDelinquencyComponent = () => {
         const historicalDelinquency = await fetchHistoricalCreditCardDelinquency();
         setDelinquencyData(latestData);
         setHistoricalData(historicalDelinquency.map(d => ({
-          date: new Date(d.date).toLocaleDateString(),
+          date: formatQuarter(new Date(d.date)),
           value: d.delinquency_rate
         })));
       } catch (err) {
@@ -28,6 +28,12 @@ const CreditCardDelinquencyComponent = () => {
 
     loadDelinquencyData();
   }, []);
+
+  const formatQuarter = (date) => {
+    const quarter = Math.floor(date.getMonth() / 3) + 1;
+    const year = date.getFullYear();
+    return `Q${quarter} ${year}`;
+  };
 
   const chartConfig = useMemo(() => {
     return {
@@ -108,7 +114,7 @@ Konträres Investieren basierend auf der Kreditkarten-Säumnisquote erfordert ei
       value={currentRate !== undefined ? `${currentRate.toFixed(2)}%` : 'N/A'}
       timestamp={delinquencyData.date}
       chartData={historicalData}
-      category="Verbraucherkredit"
+      category="Konsumausblick"
       explanation={<pre className="expanded-explanation">{expandedExplanation}</pre>}
       chartConfig={chartConfig}
       interpretationText={interpretationText}

@@ -264,7 +264,7 @@ const MarketScoreComponent = ({ fiscalFlowsState }) => {
       title="Marktbewertung"
       value={`${marketScore.toFixed(2)}`}
       timestamp={Date.now()}
-      category="Marktgesundheit"
+      category=""
       explanation={
         <div className="market-score-content">
           <div className="market-score-header">

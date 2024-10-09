@@ -118,7 +118,7 @@ const EarningsCallComponent = () => {
   return (
     <DataCard 
       title="Geschäftsberichte"
-      category="Unternehmensanalyse"
+      category="Wirtschaft"
       value={customContent}
       isRealtime={false}
       interpretationText="Die neuesten Geschäftsberichte geben Einblicke in die finanzielle Leistung und zukünftige Aussichten wichtiger Unternehmen."

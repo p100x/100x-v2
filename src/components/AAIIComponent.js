@@ -103,7 +103,7 @@ Konträres Investieren birgt Risiken. Märkte können länger irrational bleiben
       value={`${spread.toFixed(2)}%`}
       timestamp={aaiiData.created_at}
       chartData={historicalData}
-      category="Anlegerstimmung"
+      category="Marktstimmung"
       explanation={<pre className="expanded-explanation">{expandedExplanation}</pre>}
       chartConfig={chartConfig}
       interpretationText={interpretationText}

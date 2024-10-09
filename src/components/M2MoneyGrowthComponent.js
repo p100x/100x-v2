@@ -101,7 +101,7 @@ Konträres Investieren basierend auf M2-Wachstum erfordert ein tiefes Verständn
       value={`${yoy.toFixed(2)}%`}
       timestamp={m2Data.date}
       chartData={historicalData}
-      category="Wirtschaftsindikatoren"
+      category="Wirtschaft"
       explanation={<pre className="expanded-explanation">{expandedExplanation}</pre>}
       chartConfig={chartConfig}
       interpretationText={interpretationText}

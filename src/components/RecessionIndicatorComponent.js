@@ -47,7 +47,7 @@ Konträres Investieren basierend auf dem Rezessionsindikator erfordert eine sorg
       value={`${latestData.value}%`}
       timestamp={latestData.date}
       chartData={recessionData}
-      category="Wirtschaftliche Gesundheit"
+      category="Wirtschaft"
       explanation={<pre className="expanded-explanation">{expandedExplanation}</pre>}
       chartConfig={chartConfig}
       interpretationText={interpretationText}

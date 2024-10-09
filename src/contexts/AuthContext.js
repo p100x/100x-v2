@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { supabase, signIn, signOut, getCurrentUser, onAuthStateChange, verifyOtp } from '../supabaseClient';
+import { supabase, signIn, signOut, getCurrentUser, onAuthStateChange } from '../supabaseClient';
 
 const AuthContext = createContext();
 
@@ -34,7 +34,14 @@ export const AuthProvider = ({ children }) => {
     user,
     signIn,
     signOut,
-    verifyOtp,
+    // Remove verifyOtp from here
+    translations: {
+      emailPlaceholder: 'E-Mail-Adresse',
+      sendLoginLink: 'Login-Link senden',
+      checkEmail: 'Überprüfen Sie Ihre E-Mail für den Login-Link!',
+      loginSuccess: 'Anmeldung erfolgreich!',
+      alpha: 'Alpha',
+    }
   };
 
   return (

@@ -86,7 +86,7 @@ Konträres Investieren basierend auf Fiskalströmen erfordert ein tiefes Verstä
       title="Fiskalströme"
       value={fiscalFlowsState.charAt(0).toUpperCase() + fiscalFlowsState.slice(1)}
       timestamp={new Date().toISOString()}
-      category="Wirtschaftsindikator"
+      category="Politik"
       explanation={<pre className="expanded-explanation">{expandedExplanation}</pre>}
       customContent={
         <div style={{ fontWeight: 'bold' }}>

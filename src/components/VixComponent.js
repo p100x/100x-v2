@@ -162,7 +162,7 @@ Der konträre Ansatz birgt Risiken und ist nicht immer erfolgreich. Märkte kön
       value={vixData.VIX.toFixed(2)}
       timestamp={vixData.timestamp}
       chartData={historicalData}
-      category="Marktvolatilität"
+      category="Marktstimmung"
       explanation={<pre className="expanded-explanation">{expandedExplanation}</pre>}
       chartConfig={chartConfig}
       isRealtime={true}

@@ -3,7 +3,7 @@ import { supabase, sendMessage, deleteMessage, updateMessage, getCurrentUser } f
 import { useAuth } from '../contexts/AuthContext';
 import Spinner from '../components/Spinner';
 import EmojiPicker from 'emoji-picker-react';
-import { FaTrash, FaEdit, FaSave, FaTimes } from 'react-icons/fa'; // Add this import
+import { FaTrash, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -191,96 +191,100 @@ const Chat = () => {
 
   console.log('Rendern mit Nachrichten:', messages);
 
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (!user) {
+    return <div>Please log in to access the chat.</div>;
+  }
+
   return (
     <div className="chat-page">
       <h1>Öffentlicher Chat</h1>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <div className="chat-container">
-          <div className="messages-container">
-            {messages.map((msg) => (
-              <div 
-                key={msg.id} 
-                className={`message ${msg.name === user.email ? 'own-message' : ''} ${isAdmin(msg.name) ? 'admin-message' : ''}`}
-              >
-                <div className="message-bubble">
-                  <div className="message-header">
-                    <span className="message-name">
-                      {getDisplayName(msg.name)}
-                      {isAdmin(msg.name) && <span className="admin-icon">X</span>}
+      <div className="chat-container">
+        <div className="messages-container">
+          {messages.map((msg) => (
+            <div 
+              key={msg.id} 
+              className={`message ${msg.name === user.email ? 'own-message' : ''} ${isAdmin(msg.name) ? 'admin-message' : ''}`}
+            >
+              <div className="message-bubble">
+                <div className="message-header">
+                  <span className="message-name">
+                    {getDisplayName(msg.name)}
+                    {isAdmin(msg.name) && <span className="admin-icon">X</span>}
+                  </span>
+                  {isAdmin(user.email) && (
+                    <span className="admin-actions">
+                      {editingMessage === msg.id ? (
+                        <>
+                          <FaSave 
+                            className="save-icon" 
+                            onClick={() => handleSaveEdit(msg.id)} 
+                          />
+                          <FaTimes 
+                            className="cancel-icon" 
+                            onClick={handleCancelEdit} 
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <FaEdit 
+                            className="edit-icon" 
+                            onClick={() => handleEditMessage(msg)} 
+                          />
+                          <FaTrash 
+                            className="delete-icon" 
+                            onClick={() => handleDeleteMessage(msg.id)} 
+                          />
+                        </>
+                      )}
                     </span>
-                    {isAdmin(user.email) && (
-                      <span className="admin-actions">
-                        {editingMessage === msg.id ? (
-                          <>
-                            <FaSave 
-                              className="save-icon" 
-                              onClick={() => handleSaveEdit(msg.id)} 
-                            />
-                            <FaTimes 
-                              className="cancel-icon" 
-                              onClick={handleCancelEdit} 
-                            />
-                          </>
-                        ) : (
-                          <>
-                            <FaEdit 
-                              className="edit-icon" 
-                              onClick={() => handleEditMessage(msg)} 
-                            />
-                            <FaTrash 
-                              className="delete-icon" 
-                              onClick={() => handleDeleteMessage(msg.id)} 
-                            />
-                          </>
-                        )}
-                      </span>
-                    )}
-                  </div>
-                  <div className="message-content">
-                    {editingMessage === msg.id ? (
-                      <input
-                        type="text"
-                        value={editedContent}
-                        onChange={(e) => setEditedContent(e.target.value)}
-                        className="edit-message-input"
-                      />
-                    ) : (
-                      renderMessageContent(msg.message)
-                    )}
-                  </div>
+                  )}
+                </div>
+                <div className="message-content">
+                  {editingMessage === msg.id ? (
+                    <input
+                      type="text"
+                      value={editedContent}
+                      onChange={(e) => setEditedContent(e.target.value)}
+                      className="edit-message-input"
+                    />
+                  ) : (
+                    renderMessageContent(msg.message)
+                  )}
                 </div>
               </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-          <form onSubmit={handleSubmit} className="message-form">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Geben Sie Ihre Nachricht ein..."
-              className="message-input"
-            />
-            <button 
-              type="button" 
-              className="emoji-button" 
-              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-            >
-              😊
-            </button>
-            <button type="submit" className="send-button">
-              <span className="send-icon">➤</span>
-            </button>
-          </form>
-          {showEmojiPicker && (
-            <div ref={emojiPickerRef} className="emoji-picker-container">
-              <EmojiPicker onEmojiClick={onEmojiClick} />
             </div>
-          )}
+          ))}
+          <div ref={messagesEndRef} />
         </div>
-      )}
+        <form onSubmit={handleSubmit} className="message-form">
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Geben Sie Ihre Nachricht ein..."
+            className="message-input"
+          />
+          <button 
+            type="button" 
+            className="emoji-button" 
+            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+          >
+            😊
+          </button>
+          <button type="submit" className="send-button">
+            <span className="send-icon">➤</span>
+          </button>
+        </form>
+        {showEmojiPicker && (
+          <div ref={emojiPickerRef} className="emoji-picker-container">
+            <EmojiPicker onEmojiClick={onEmojiClick} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

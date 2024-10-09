@@ -11,6 +11,7 @@ import EarningsCalendar from './components/EarningsCalendar';
 import './App.css';
 import Chat from './pages/Chat';
 import Mastermind from './pages/Mastermind';
+import FeedbackModal from './components/FeedbackModal';
 
 // Create a new ProtectedRoute component
 const ProtectedRoute = ({ children }) => {
@@ -24,7 +25,7 @@ const ProtectedRoute = ({ children }) => {
 };
 
 // Updated MobileMenu component
-function MobileMenu({ user, typedText }) {
+function MobileMenu({ user, typedText, onFeedbackClick }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -55,6 +56,7 @@ function MobileMenu({ user, typedText }) {
             <li><Link to="/mastermind" onClick={toggleMenu}>Mastermind</Link></li>
             <li><Link to="/account" onClick={toggleMenu}>Account</Link></li>
             {user.email === 'max@max.de' && <li><Link to="/admin" onClick={toggleMenu}>Admin</Link></li>}
+            <li><button onClick={() => { onFeedbackClick(); toggleMenu(); }}>Feedback</button></li>
           </ul>
         </nav>
       )}
@@ -68,6 +70,7 @@ function AppContent() {
   const [typedText, setTypedText] = useState('');
   const fullText = '100X';
   const location = useLocation();
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 
   useEffect(() => {
     if (typedText.length < fullText.length) {
@@ -101,9 +104,10 @@ function AppContent() {
                 <li><Link to="/mastermind">Mastermind</Link></li>
                 <li><Link to="/account">Account</Link></li>
                 {user.email === 'max@max.de' && <li><Link to="/admin">Admin</Link></li>}
+                <li><button onClick={() => setIsFeedbackModalOpen(true)}>Feedback</button></li>
               </ul>
             </nav>
-            <MobileMenu user={user} typedText={typedText} />
+            <MobileMenu user={user} typedText={typedText} onFeedbackClick={() => setIsFeedbackModalOpen(true)} />
           </>
         )}
         <div className={`app-content ${!user ? 'blurred' : ''}`}>
@@ -134,6 +138,7 @@ function AppContent() {
         </button>
       )}
       <EarningsCalendar isOpen={isCalendarOpen} setIsOpen={setIsCalendarOpen} />
+      <FeedbackModal isOpen={isFeedbackModalOpen} onClose={() => setIsFeedbackModalOpen(false)} />
     </>
   );
 }

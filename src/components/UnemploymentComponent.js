@@ -171,7 +171,7 @@ Die Arbeitslosenquote ist ein nachlaufender Indikator. Sie sollte in Kombination
       value={`${unemploymentData.unemployment.toFixed(1)}% (${state})`}
       timestamp={unemploymentData.timestamp}
       chartData={historicalData}
-      category="Arbeitsmarkt"
+      category="Wirtschaft"
       explanation={<pre className="expanded-explanation">{expandedExplanation}</pre>}
       chartConfig={chartConfig}
       isRealtime={false}

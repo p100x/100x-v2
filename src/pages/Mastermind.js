@@ -6,6 +6,17 @@ const Mastermind = () => {
       <h1>100X Mastermind</h1>
       <p>Willkommen auf unserer umfassenden Bildungsplattform für Investoren aller Ebenen.</p>
 
+      {/* Updated referral section */}
+      <section className="ibkr-referral">
+        <p>
+          Für fortgeschrittene Strategien dringend empfohlen: 
+          <a href="https://ibkr.com/referral/maximilian328" target="_blank" rel="noopener noreferrer" className="referral-link">
+            IBKR Konto kostenlos eröffnen
+          </a>
+          <span className="bonus-text">Bonus: Gratis-Aktie bis zu 1.000 USD</span>
+        </p>
+      </section>
+
       <section className="course-section">
         <h2>Hervorgehobene Kurse</h2>
         <div className="course-grid">

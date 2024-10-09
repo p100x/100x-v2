@@ -108,7 +108,7 @@ Konträres Investieren basierend auf der persönlichen Sparquote erfordert ein t
       value={currentRate !== undefined ? `${currentRate.toFixed(1)}%` : 'N/A'}
       timestamp={savingRateData.date}
       chartData={historicalData}
-      category="Verbraucherverhalten"
+      category="Konsumausblick"
       explanation={<pre className="expanded-explanation">{expandedExplanation}</pre>}
       chartConfig={chartConfig}
       interpretationText={interpretationText}
