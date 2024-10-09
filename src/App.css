@@ -860,6 +860,32 @@ input:focus, textarea:focus, select:focus {
   margin: 0 1rem;
 }
 
+/* Updated rule for menu links */
+.menu-bar a, .mobile-menu-bar a {
+  text-decoration: none;
+}
+
+/* Underline on hover for menu links */
+.menu-bar a:hover, .mobile-menu-bar a:hover {
+  text-decoration: underline;
+}
+
+/* Override rules for logo link */
+.menu-bar .logo-link:hover,
+.menu-bar .logo-link:focus,
+.menu-bar .logo-link:active,
+.mobile-menu-bar .logo-link:hover,
+.mobile-menu-bar .logo-link:focus,
+.mobile-menu-bar .logo-link:active {
+  text-decoration: none !important;
+}
+
+/* Optional hover effect for logo */
+.menu-bar .logo-link:hover,
+.mobile-menu-bar .logo-link:hover {
+  opacity: 0.8;
+}
+
 /* App Name Styles */
 .app-name {
   font-size: 2.5rem;
@@ -1430,18 +1456,19 @@ body.calendar-open .calendar-popup {
 /* Calendar Modal Specific Styles */
 .calendar-modal {
   max-width: 800px;
-  max-height: 80vh;
+  max-height: 90vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  padding-bottom: 5rem; /* Adjust this value to match the button height plus some extra space */
+  padding: 1rem;
   position: relative;
 }
 
 .calendar-modal h2 {
   color: var(--highlight);
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: clamp(1.2rem, 5vw, 1.5rem);
 }
 
 .calendar-modal h3 {
@@ -1484,18 +1511,19 @@ body.calendar-open .calendar-popup {
 
 .calendar-table-container {
   overflow-x: auto;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   padding-bottom: 1rem; /* Add some padding at the bottom of the table container */
 }
 
 .calendar-table {
   width: 100%;
   border-collapse: collapse;
+  font-size: clamp(0.7rem, 2.5vw, 0.9rem);
 }
 
 .calendar-table th,
 .calendar-table td {
-  padding: 0.75rem;
+  padding: 0.5rem;
   text-align: left;
   border-bottom: 1px solid var(--frosted-border);
 }
@@ -1526,6 +1554,49 @@ body.calendar-open .calendar-popup {
 
 .calendar-modal::-webkit-scrollbar-thumb:hover {
   background: var(--secondary-highlight);
+}
+
+/* Responsive styles for mobile devices */
+@media (max-width: 768px) {
+  .calendar-modal {
+    padding: 0.5rem;
+    max-height: 100vh;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .calendar-table {
+    font-size: 0.7rem;
+  }
+
+  .calendar-table th,
+  .calendar-table td {
+    padding: 0.3rem;
+  }
+
+  .calendar-table-container {
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-close {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--highlight);
+    color: var(--primary-bg);
+    border: none;
+    border-radius: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 1;
+  }
+
+  .modal-close:hover {
+    background-color: var(--secondary-highlight);
+  }
 }
 
 /* Calendar Toggle Button */
@@ -2933,6 +3004,7 @@ body {
 
   .mobile-app-name-container .version-number {
     font-size: 0.4rem;
+    padding-left: 0.6rem;
   }
 
   .mobile-app-name-container .alpha-pill {

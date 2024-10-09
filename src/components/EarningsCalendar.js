@@ -57,7 +57,7 @@ const EarningsCalendar = ({ isOpen, setIsOpen }) => {
             <tbody>
               {wirtschaftsdaten.map((data, index) => (
                 <tr key={`economic-${index}`}>
-                  <td>{format(data.datum, "dd.MM.yyyy 'um' HH:mm 'Uhr'", { locale: de })}</td>
+                  <td>{format(data.datum, "dd.MM.yyyy HH:mm", { locale: de })}</td>
                   <td>
                     <span data-tooltip-id={`tooltip-${index}`}>
                       {data.ereignis}

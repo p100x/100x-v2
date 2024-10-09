@@ -34,14 +34,16 @@ function MobileMenu({ user, typedText, onFeedbackClick }) {
     <div className="mobile-menu-container">
       <div className="mobile-menu-bar">
         <div className="mobile-app-name-container">
-          <div className="logo-version-container">
-            <div className="app-name">
-              {typedText}
-              <span className="cursor">|</span>
+          <Link to="/" className="logo-link">
+            <div className="logo-version-container">
+              <div className="app-name">
+                {typedText}
+                <span className="cursor">|</span>
+              </div>
+              <div className="version-number">v0.0.9</div>
             </div>
-            <div className="version-number">v0.0.9</div>
-          </div>
-          <div className="alpha-pill">alpha</div>
+            <div className="alpha-pill">alpha</div>
+          </Link>
         </div>
         <button className="mobile-menu-toggle" onClick={toggleMenu}>
           {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -88,14 +90,16 @@ function AppContent() {
           <>
             <nav className="menu-bar desktop-menu">
               <div className="app-name-container">
-                <div className="logo-version-container">
-                  <div className="app-name">
-                    {typedText}
-                    <span className="cursor">|</span>
+                <Link to="/" className="logo-link">
+                  <div className="logo-version-container">
+                    <div className="app-name">
+                      {typedText}
+                      <span className="cursor">|</span>
+                    </div>
+                    <div className="version-number">v0.0.9</div>
                   </div>
-                  <div className="version-number">v0.0.9</div>
-                </div>
-                <div className="alpha-pill">alpha</div>
+                  <div className="alpha-pill">alpha</div>
+                </Link>
               </div>
               <ul>
                 <li><Link to="/">Home</Link></li>
@@ -129,7 +133,7 @@ function AppContent() {
         </div>
         <LoginOverlay />
       </div>
-      {user && (
+      {user && location.pathname === '/' && (
         <button 
           className="calendar-toggle"
           onClick={() => setIsCalendarOpen(!isCalendarOpen)}
