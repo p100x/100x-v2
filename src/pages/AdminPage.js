@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 import { updateFiscalFlows, fetchFiscalFlows, addEarningsCall, fetchLatestEarningsCalls, deleteEarningsCall } from '../services/marketDataService';
 import ReactMarkdown from 'react-markdown';
 import { Bold, Italic, List, ListOrdered } from 'lucide-react';
 
 const AdminPage = () => {
   const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useState(false);
   const [currentState, setCurrentState] = useState('');
   const [message, setMessage] = useState('');
   const [earningsCalls, setEarningsCalls] = useState([]);
@@ -21,9 +23,23 @@ const AdminPage = () => {
   const [showContextPreview, setShowContextPreview] = useState(false);
 
   useEffect(() => {
+    checkAdminStatus();
     loadCurrentState();
     loadEarningsCalls();
   }, []);
+
+  const checkAdminStatus = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user?.email !== '100x@maximilian.business') {
+      navigate('/');
+    } else {
+      setIsAdmin(true);
+    }
+  };
+
+  if (!isAdmin) {
+    return null; // or a loading indicator
+  }
 
   const loadCurrentState = async () => {
     try {

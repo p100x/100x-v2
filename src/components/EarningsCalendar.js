@@ -6,10 +6,10 @@ import { Tooltip } from 'react-tooltip';
 const EarningsCalendar = ({ isOpen, setIsOpen }) => {
   const wirtschaftsdaten = [
     { ereignis: 'FOMC Protokoll', datum: new Date(2024, 9, 9, 20, 0), konsens: '-', vorherig: '-', aktuell: '-', erklaerung: 'Detaillierte Aufzeichnungen der Fed-Sitzungen. Gibt Einblicke in zukünftige Geldpolitik und kann Zinssätze und Währungskurse beeinflussen.' },
-    { ereignis: 'Kerninflationsrate MoM SEP', datum: new Date(2024, 9, 10, 14, 30), konsens: '0,2%', vorherig: '0,3%', aktuell: '-', erklaerung: 'Misst Preisänderungen ohne volatile Lebensmittel- und Energiepreise. Wichtiger Indikator für die zugrunde liegende Inflation und beeinflusst die Geldpolitik.' },
-    { ereignis: 'Kerninflationsrate YoY SEP', datum: new Date(2024, 9, 10, 14, 30), konsens: '3,2%', vorherig: '3,2%', aktuell: '-', erklaerung: 'Jährliche Veränderung der Kerninflation. Zeigt langfristige Inflationstrends und ist entscheidend für geldpolitische Entscheidungen.' },
-    { ereignis: 'Inflationsrate MoM SEP', datum: new Date(2024, 9, 10, 14, 30), konsens: '0,1%', vorherig: '0,2%', aktuell: '-', erklaerung: 'Monatliche Veränderung der Verbraucherpreise. Wichtiger Indikator für kurzfristige Inflationstrends und kann Märkte stark beeinflussen.' },
-    { ereignis: 'Inflationsrate YoY SEP', datum: new Date(2024, 9, 10, 14, 30), konsens: '2,3%', vorherig: '2,5%', aktuell: '-', erklaerung: 'Jährliche Inflationsrate. Zentral für geldpolitische Entscheidungen und beeinflusst Anleiherenditen und Währungskurse.' },
+    { ereignis: 'Kerninflationsrate MoM SEP', datum: new Date(2024, 9, 10, 14, 30), konsens: '0,2%', vorherig: '0,3%', aktuell: '0,3%', erklaerung: 'Misst Preisänderungen ohne volatile Lebensmittel- und Energiepreise. Wichtiger Indikator für die zugrunde liegende Inflation und beeinflusst die Geldpolitik.' },
+    { ereignis: 'Kerninflationsrate YoY SEP', datum: new Date(2024, 9, 10, 14, 30), konsens: '3,2%', vorherig: '3,2%', aktuell: '3,3%', erklaerung: 'Jährliche Veränderung der Kerninflation. Zeigt langfristige Inflationstrends und ist entscheidend für geldpolitische Entscheidungen.' },
+    { ereignis: 'Inflationsrate MoM SEP', datum: new Date(2024, 9, 10, 14, 30), konsens: '0,1%', vorherig: '0,2%', aktuell: '0,2%', erklaerung: 'Monatliche Veränderung der Verbraucherpreise. Wichtiger Indikator für kurzfristige Inflationstrends und kann Märkte stark beeinflussen.' },
+    { ereignis: 'Inflationsrate YoY SEP', datum: new Date(2024, 9, 10, 14, 30), konsens: '2,3%', vorherig: '2,5%', aktuell: '2,4%', erklaerung: 'Jährliche Inflationsrate. Zentral für geldpolitische Entscheidungen und beeinflusst Anleiherenditen und Währungskurse.' },
     { ereignis: 'Erzeugerpreisindex MoM SEP', datum: new Date(2024, 9, 11, 14, 30), konsens: '0,1%', vorherig: '0,2%', aktuell: '-', erklaerung: 'Misst Preisänderungen auf Produzentenebene. Frühindikator für Verbraucherpreisinflation und wichtig für Unternehmenserträge.' },
     { ereignis: 'Michigan Verbrauchervertrauen Vorl. OKT', datum: new Date(2024, 9, 11, 16, 0), konsens: '70,8', vorherig: '70,1', aktuell: '-', erklaerung: 'Misst die Verbraucherstimmung. Wichtiger Indikator für zukünftiges Konsumverhalten und kann Einzelhandels- und Konsumaktien beeinflussen.' },
     { ereignis: 'Einzelhandelsumsätze MoM SEP', datum: new Date(2024, 9, 17, 14, 30), konsens: '-', vorherig: '0,1%', aktuell: '-', erklaerung: 'Zeigt Veränderungen im Konsumverhalten. Wichtig für BIP-Prognosen und kann Einzelhandels- und Konsumaktien stark beeinflussen.' },
@@ -44,6 +44,23 @@ const EarningsCalendar = ({ isOpen, setIsOpen }) => {
 
   if (!isOpen) return null;
 
+  const getColorClass = (aktuell, konsens, ereignis) => {
+    if (aktuell === '-' || konsens === '-') return '';
+    const aktuelValue = parseFloat(aktuell.replace(',', '.').replace('%', ''));
+    const konsensValue = parseFloat(konsens.replace(',', '.').replace('%', ''));
+    
+    // Check if the event is related to inflation
+    const isInflationRelated = ereignis.toLowerCase().includes('inflation');
+    
+    if (isInflationRelated) {
+      // For inflation, higher than expected is bad (red), lower is good (green)
+      return aktuelValue > konsensValue ? 'red' : aktuelValue < konsensValue ? 'green' : '';
+    } else {
+      // For other metrics, higher than expected is good (green), lower is bad (red)
+      return aktuelValue > konsensValue ? 'green' : aktuelValue < konsensValue ? 'red' : '';
+    }
+  };
+
   return (
     <div className="modal-overlay">
       <div className="modal-content calendar-modal">
@@ -74,7 +91,9 @@ const EarningsCalendar = ({ isOpen, setIsOpen }) => {
                   </td>
                   <td>{data.konsens}</td>
                   <td>{data.vorherig}</td>
-                  <td>{data.aktuell}</td>
+                  <td className={getColorClass(data.aktuell, data.konsens, data.ereignis)}>
+                    {data.aktuell}
+                  </td>
                 </tr>
               ))}
             </tbody>

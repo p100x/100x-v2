@@ -15,7 +15,7 @@ import { supabase } from './supabaseClient';
 import { SubscriptionProvider } from './contexts/SubscriptionContext';
 
 // Updated MobileMenu component
-function MobileMenu({ typedText, onFeedbackClick }) {
+function MobileMenu({ typedText, onFeedbackClick, isAdmin }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -47,7 +47,7 @@ function MobileMenu({ typedText, onFeedbackClick }) {
             <li><Link to="/chat" onClick={toggleMenu}>Chat</Link></li>
             <li><Link to="/mastermind" onClick={toggleMenu}>Mastermind</Link></li>
             <li><Link to="/account" onClick={toggleMenu}>Account</Link></li>
-            <li><Link to="/admin" onClick={toggleMenu}>Admin</Link></li>
+            {isAdmin && <li><Link to="/admin" onClick={toggleMenu}>Admin</Link></li>}
             <li><button onClick={() => { onFeedbackClick(); toggleMenu(); }}>Feedback</button></li>
           </ul>
         </nav>
@@ -94,6 +94,8 @@ function AppContent() {
     }
   }, [typedText]);
 
+  const isAdmin = session?.user?.email === '100x@maximilian.business';
+
   if (!session) {
     return <OTPLogin onLogin={setSession} />;
   }
@@ -120,17 +122,17 @@ function AppContent() {
             <li><Link to="/chat">Chat</Link></li>
             <li><Link to="/mastermind">Mastermind</Link></li>
             <li><Link to="/account">Account</Link></li>
-            <li><Link to="/admin">Admin</Link></li>
+            {isAdmin && <li><Link to="/admin">Admin</Link></li>}
             <li><button onClick={() => setIsFeedbackModalOpen(true)}>Feedback</button></li>
           </ul>
         </nav>
-        <MobileMenu typedText={typedText} onFeedbackClick={() => setIsFeedbackModalOpen(true)} />
+        <MobileMenu typedText={typedText} onFeedbackClick={() => setIsFeedbackModalOpen(true)} isAdmin={isAdmin} />
         <div className="app-content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/mastermind" element={<Mastermind />} />
-            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin" element={isAdmin ? <AdminPage /> : <Navigate to="/" replace />} />
             <Route path="/account" element={<AccountPage />} />
             <Route path="/chat" element={<Chat />} />
           </Routes>
