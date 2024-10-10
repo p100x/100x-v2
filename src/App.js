@@ -14,6 +14,7 @@ import FeedbackModal from './components/FeedbackModal';
 import OTPLogin from './components/OTPLogin';
 import { supabase } from './supabaseClient';
 import { SubscriptionProvider } from './contexts/SubscriptionContext';
+import GoogleAnalytics from './components/GoogleAnalytics';
 
 // Updated MobileMenu component
 function MobileMenu({ typedText, onFeedbackClick, isAdmin }) {
@@ -169,6 +170,7 @@ function App() {
       <div className="app">
         <div className="matrix-bg"></div>
         <Router>
+          <GoogleAnalytics />
           <AppContent />
         </Router>
       </div>
