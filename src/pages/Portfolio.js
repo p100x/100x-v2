@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useMediaQuery } from 'react-responsive';
+import { Link } from 'react-router-dom';
+import { useSubscription } from '../contexts/SubscriptionContext';
 import Spinner from '../components/Spinner';
 
 const Portfolio = () => {
   const [portfolio, setPortfolio] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showDisclaimer, setShowDisclaimer] = useState(true);
-
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const { subscription } = useSubscription();
 
   useEffect(() => {
-    // Simulating data fetching
     const fetchPortfolio = async () => {
-      // Replace this with actual API call in the future
+      // Simulating data fetching
       const mockPortfolio = [
         { 
           name: 'Tesla', 
@@ -153,51 +152,64 @@ const Portfolio = () => {
     setShowDisclaimer(false);
   };
 
+  const hasActiveSubscription = subscription && subscription.subscription_status === 'active';
+
   return (
     <div className="portfolio-page">
       <h1>Aktienportfolio</h1>
       <br />
-      {showDisclaimer && (
-        <div className="disclaimer-box">
-          <button className="close-disclaimer" onClick={handleCloseDisclaimer}>×</button>
-          <p>
-            <strong>Haftungsausschluss:</strong> Die hier dargestellten Informationen dienen ausschließlich zu Informationszwecken und stellen keine Anlageberatung dar. Vergangene Wertentwicklungen sind kein verlässlicher Indikator für zukünftige Ergebnisse. Investitionen in Wertpapiere bergen Risiken, einschließlich des möglichen Verlusts des eingesetzten Kapitals. Bitte konsultieren Sie einen qualifizierten Finanzberater, bevor Sie Anlageentscheidungen treffen.
-          </p>
+      {!hasActiveSubscription && (
+        <div className="upgrade-overlay">
+          <div className="upgrade-message">
+            <h2>Upgrade erforderlich</h2>
+            <p>Um auf alle Funktionen zugreifen zu können, benötigen Sie ein aktives Abonnement.</p>
+            <Link to="/upgrade" className="upgrade-button">Jetzt upgraden</Link>
+          </div>
         </div>
       )}
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <div className="portfolio-list data-card">
-          {portfolio.map((stock, index) => (
-            <div key={index} className="portfolio-item">
-              <div className="portfolio-item-main">
-                <div className="portfolio-item-name">
-                  <h2>{stock.name}</h2>
-                  <span className="portfolio-item-symbol">{stock.symbol}</span>
+      <div className={`components-grid ${!hasActiveSubscription ? 'blurred' : ''}`}>
+        {showDisclaimer && (
+          <div className="disclaimer-box">
+            <button className="close-disclaimer" onClick={handleCloseDisclaimer}>×</button>
+            <p>
+              <strong>Haftungsausschluss:</strong> Die hier dargestellten Informationen dienen ausschließlich zu Informationszwecken und stellen keine Anlageberatung dar. Vergangene Wertentwicklungen sind kein verlässlicher Indikator für zukünftige Ergebnisse. Investitionen in Wertpapiere bergen Risiken, einschließlich des möglichen Verlusts des eingesetzten Kapitals. Bitte konsultieren Sie einen qualifizierten Finanzberater, bevor Sie Anlageentscheidungen treffen.
+            </p>
+          </div>
+        )}
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <div className="portfolio-list data-card">
+            {portfolio.map((stock, index) => (
+              <div key={index} className="portfolio-item">
+                <div className="portfolio-item-main">
+                  <div className="portfolio-item-name">
+                    <h2>{stock.name}</h2>
+                    <span className="portfolio-item-symbol">{stock.symbol}</span>
+                  </div>
+                  <div className={`portfolio-item-gain ${stock.currentGain >= 0 ? 'positive' : 'negative'}`}>
+                    {stock.currentGain.toFixed(2)}%
+                  </div>
                 </div>
-                <div className={`portfolio-item-gain ${stock.currentGain >= 0 ? 'positive' : 'negative'}`}>
-                  {stock.currentGain.toFixed(2)}%
+                <div className="portfolio-item-details">
+                  <span>Positionsgröße: {stock.positionSize.toFixed(2)}%</span>
                 </div>
-              </div>
-              <div className="portfolio-item-details">
-                <span>Positionsgröße: {stock.positionSize.toFixed(2)}%</span>
-              </div>
-              <div className="portfolio-item-info">
-                <p>{stock.info}</p>
-              </div>
-              {stock.symbol === 'RBLX' && (
-                <div className="stock-warning">
-                  <p>
-                    <strong>Warnung:</strong> Es gibt einen neuen Shortseller-Bericht über Roblox mit dem Titel "Roblox: Inflated Key Metrics For Wall Street". Bitte informieren Sie sich über die möglichen Risiken. 
-                    <a href="https://hindenburgresearch.com/roblox/" target="_blank" rel="noopener noreferrer">Mehr Informationen hier</a>.
-                  </p>
+                <div className="portfolio-item-info">
+                  <p>{stock.info}</p>
                 </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+                {stock.symbol === 'RBLX' && (
+                  <div className="stock-warning">
+                    <p>
+                      <strong>Warnung:</strong> Es gibt einen neuen Shortseller-Bericht über Roblox mit dem Titel "Roblox: Inflated Key Metrics For Wall Street". Bitte informieren Sie sich über die möglichen Risiken. 
+                      <a href="https://hindenburgresearch.com/roblox/" target="_blank" rel="noopener noreferrer">Mehr Informationen hier</a>.
+                    </p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

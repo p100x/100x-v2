@@ -26,22 +26,26 @@ const Liquiditatsindikator = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const startDate = '2021-01-01';
       const { data, error } = await supabase
         .from('liquidity_vs_qqq')
         .select('*')
-        .gte('date', startDate)
         .order('date', { ascending: true });
 
       if (error) throw error;
 
       const formattedData = data.map(item => ({
-        date: new Date(item.date).getTime(), // Store as timestamp
+        date: new Date(item.date).getTime(),
         qqq: parseFloat(item.qqq),
         liquidity: parseFloat(item.liquidity)
       }));
 
       setData(formattedData);
+      
+      // Add these logging statements
+      console.log('Fetched data count:', formattedData.length);
+      console.log('First data point:', formattedData[0]);
+      console.log('Last data point:', formattedData[formattedData.length - 1]);
+      
     } catch (error) {
       setError(error.message);
     } finally {
@@ -144,7 +148,7 @@ const Liquiditatsindikator = () => {
   };
 
   const CustomChart = () => (
-    <ResponsiveContainer width="100%" height={400}> {/* Increase height for better visibility */}
+    <ResponsiveContainer width="100%" height={200}>
       <ComposedChart data={chartData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
@@ -152,7 +156,7 @@ const Liquiditatsindikator = () => {
           domain={['dataMin', 'dataMax']}
           type="number"
           tickFormatter={(tick) => new Date(tick).toLocaleDateString()}
-          tickCount={8} // Adjust the number of ticks for better readability
+          tickCount={5}
         />
         <RechartsYAxis 
           yAxisId="left"
@@ -187,7 +191,7 @@ const Liquiditatsindikator = () => {
           stroke="#ff0000" 
           strokeWidth={2}
           dot={false}
-          name="Global Liquidity Index"
+          name="Liquidity Index"
           yAxisId="right"
           filter="url(#glow)"
         />

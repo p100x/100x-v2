@@ -1,13 +1,16 @@
 import React from 'react';
 import { useForm, ValidationError } from '@formspree/react';
-import { useAuth } from '../contexts/AuthContext';
 import { X } from 'lucide-react';
 
-function FeedbackModal({ isOpen, onClose }) {
-  const { user } = useAuth();
+function FeedbackModal({ isOpen, onClose, userEmail }) {
   const [state, handleSubmit] = useForm("xnnqarrb");
 
   if (!isOpen) return null;
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    handleSubmit(e);
+  };
 
   return (
     <div className="modal-overlay">
@@ -25,8 +28,12 @@ function FeedbackModal({ isOpen, onClose }) {
             <button onClick={onClose} className="close-button">Schließen</button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="feedback-form">
-            <input type="hidden" name="_replyto" value={user?.email || ''} />
+          <form onSubmit={handleFormSubmit} className="feedback-form">
+            <input
+              type="hidden"
+              name="email"
+              value={userEmail}
+            />
             <div className="form-group">
               <label htmlFor="message">Deine Nachricht</label>
               <textarea

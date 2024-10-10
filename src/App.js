@@ -5,27 +5,17 @@ import Home from './pages/Home';
 import AdminPage from './pages/AdminPage';
 import AccountPage from './pages/AccountPage';
 import Portfolio from './pages/Portfolio';
-import LoginOverlay from './components/LoginOverlay';
-import { useAuth } from './contexts/AuthContext';
 import EarningsCalendar from './components/EarningsCalendar';
 import './App.css';
 import Chat from './pages/Chat';
 import Mastermind from './pages/Mastermind';
 import FeedbackModal from './components/FeedbackModal';
-
-// Create a new ProtectedRoute component
-const ProtectedRoute = ({ children }) => {
-  const { user } = useAuth();
-  
-  if (!user || user.email !== 'max@max.de') {
-    return <Navigate to="/" replace />;
-  }
-
-  return children;
-};
+import OTPLogin from './components/OTPLogin';
+import { supabase } from './supabaseClient';
+import { SubscriptionProvider } from './contexts/SubscriptionContext';
 
 // Updated MobileMenu component
-function MobileMenu({ user, typedText, onFeedbackClick }) {
+function MobileMenu({ typedText, onFeedbackClick }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -57,7 +47,7 @@ function MobileMenu({ user, typedText, onFeedbackClick }) {
             <li><Link to="/chat" onClick={toggleMenu}>Chat</Link></li>
             <li><Link to="/mastermind" onClick={toggleMenu}>Mastermind</Link></li>
             <li><Link to="/account" onClick={toggleMenu}>Account</Link></li>
-            {user.email === 'max@max.de' && <li><Link to="/admin" onClick={toggleMenu}>Admin</Link></li>}
+            <li><Link to="/admin" onClick={toggleMenu}>Admin</Link></li>
             <li><button onClick={() => { onFeedbackClick(); toggleMenu(); }}>Feedback</button></li>
           </ul>
         </nav>
@@ -67,12 +57,33 @@ function MobileMenu({ user, typedText, onFeedbackClick }) {
 }
 
 function AppContent() {
-  const { user } = useAuth();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [typedText, setTypedText] = useState('');
   const fullText = '100X';
   const location = useLocation();
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [session, setSession] = useState(null);
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session?.user?.email) {
+        setUserEmail(session.user.email);
+      }
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (session?.user?.email) {
+        setUserEmail(session.user.email);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (typedText.length < fullText.length) {
@@ -83,57 +94,49 @@ function AppContent() {
     }
   }, [typedText]);
 
+  if (!session) {
+    return <OTPLogin onLogin={setSession} />;
+  }
+
   return (
     <>
       <div className="app-container">
-        {user && (
-          <>
-            <nav className="menu-bar desktop-menu">
-              <div className="app-name-container">
-                <Link to="/" className="logo-link">
-                  <div className="logo-version-container">
-                    <div className="app-name">
-                      {typedText}
-                      <span className="cursor">|</span>
-                    </div>
-                    <div className="version-number">v0.0.9</div>
-                  </div>
-                  <div className="alpha-pill">alpha</div>
-                </Link>
+        <nav className="menu-bar desktop-menu">
+          <div className="app-name-container">
+            <Link to="/" className="logo-link">
+              <div className="logo-version-container">
+                <div className="app-name">
+                  {typedText}
+                  <span className="cursor">|</span>
+                </div>
+                <div className="version-number">v0.0.9</div>
               </div>
-              <ul>
-                <li><Link to="/">Home</Link></li>
-                <li><Link to="/portfolio">Portfolio</Link></li>
-                <li><Link to="/chat">Chat</Link></li>
-                <li><Link to="/mastermind">Mastermind</Link></li>
-                <li><Link to="/account">Account</Link></li>
-                {user.email === 'max@max.de' && <li><Link to="/admin">Admin</Link></li>}
-                <li><button onClick={() => setIsFeedbackModalOpen(true)}>Feedback</button></li>
-              </ul>
-            </nav>
-            <MobileMenu user={user} typedText={typedText} onFeedbackClick={() => setIsFeedbackModalOpen(true)} />
-          </>
-        )}
-        <div className={`app-content ${!user ? 'blurred' : ''}`}>
+              <div className="alpha-pill">alpha</div>
+            </Link>
+          </div>
+          <ul>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/portfolio">Portfolio</Link></li>
+            <li><Link to="/chat">Chat</Link></li>
+            <li><Link to="/mastermind">Mastermind</Link></li>
+            <li><Link to="/account">Account</Link></li>
+            <li><Link to="/admin">Admin</Link></li>
+            <li><button onClick={() => setIsFeedbackModalOpen(true)}>Feedback</button></li>
+          </ul>
+        </nav>
+        <MobileMenu typedText={typedText} onFeedbackClick={() => setIsFeedbackModalOpen(true)} />
+        <div className="app-content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/mastermind" element={<Mastermind />} />
-            <Route 
-              path="/admin" 
-              element={
-                <ProtectedRoute>
-                  <AdminPage />
-                </ProtectedRoute>
-              } 
-            />
+            <Route path="/admin" element={<AdminPage />} />
             <Route path="/account" element={<AccountPage />} />
             <Route path="/chat" element={<Chat />} />
           </Routes>
         </div>
-        <LoginOverlay />
       </div>
-      {user && location.pathname === '/' && (
+      {location.pathname === '/' && (
         <button 
           className="calendar-toggle"
           onClick={() => setIsCalendarOpen(!isCalendarOpen)}
@@ -142,19 +145,25 @@ function AppContent() {
         </button>
       )}
       <EarningsCalendar isOpen={isCalendarOpen} setIsOpen={setIsCalendarOpen} />
-      <FeedbackModal isOpen={isFeedbackModalOpen} onClose={() => setIsFeedbackModalOpen(false)} />
+      <FeedbackModal 
+        isOpen={isFeedbackModalOpen} 
+        onClose={() => setIsFeedbackModalOpen(false)} 
+        userEmail={userEmail}
+      />
     </>
   );
 }
 
 function App() {
   return (
-    <div className="app">
-      <div className="matrix-bg"></div>
-      <Router>
-        <AppContent />
-      </Router>
-    </div>
+    <SubscriptionProvider>
+      <div className="app">
+        <div className="matrix-bg"></div>
+        <Router>
+          <AppContent />
+        </Router>
+      </div>
+    </SubscriptionProvider>
   );
 }
 

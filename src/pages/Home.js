@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useSubscription } from '../contexts/SubscriptionContext';
 import VixComponent from '../components/VixComponent';
 import AAIIComponent from '../components/AAIIComponent';
 import SummaryComponent from '../components/SummaryComponent';
@@ -11,8 +13,10 @@ import PersonalSavingRateComponent from '../components/PersonalSavingRateCompone
 import EarningsCallComponent from '../components/EarningsCallComponent';
 import RecessionIndicatorComponent from '../components/RecessionIndicatorComponent';
 import { useMediaQuery } from 'react-responsive';
+import Liquiditatsindikator from '../components/Liquiditatsindikator';
 
 const Home = () => {
+  const { subscription } = useSubscription();
   const [activeFilters, setActiveFilters] = useState(['all']);
   const [fiscalFlowsState, setFiscalFlowsState] = useState({ state: 'stable', timestamp: new Date().toISOString() });
 
@@ -28,6 +32,7 @@ const Home = () => {
     { id: 'economic', label: 'Economic Indicators' },
     { id: 'consumer', label: 'Consumer Credit' },
     { id: 'earnings', label: 'Earnings Calls' },
+    { id: 'liquidity', label: 'Liquidity' },
   ];
 
   const handleFilterClick = (filterId) => {
@@ -47,11 +52,22 @@ const Home = () => {
 
   const isFilterActive = (filterId) => activeFilters.includes(filterId);
 
+  const hasActiveSubscription = subscription && subscription.subscription_status === 'active';
+
   return (
     <div className="home-page">
-      <br />
-      <div className="components-grid">
+      {!hasActiveSubscription && (
+        <div className="upgrade-overlay">
+          <div className="upgrade-message">
+            <h2>Upgrade erforderlich</h2>
+            <p>Um auf alle Funktionen zugreifen zu können, benötigen Sie ein aktives Abonnement.</p>
+            <Link to="/upgrade" className="upgrade-button">Jetzt upgraden</Link>
+          </div>
+        </div>
+      )}
+      <div className={`components-grid ${!hasActiveSubscription ? 'blurred' : ''}`}>
         {(isFilterActive('all') || isFilterActive('summary')) && <SummaryComponent />}
+        {(isFilterActive('all') || isFilterActive('liquidity')) && <Liquiditatsindikator />}
         {(isFilterActive('all') || isFilterActive('summary')) && <RecessionIndicatorComponent />}
         {(isFilterActive('all') || isFilterActive('earnings')) && <EarningsCallComponent />}
         {(isFilterActive('all') || isFilterActive('volatility')) && <VixComponent />}
@@ -65,8 +81,8 @@ const Home = () => {
           </>
         )}
         {(isFilterActive('all') || isFilterActive('consumer')) && <CreditCardDelinquencyComponent />}
+        <MarketScoreComponent fiscalFlowsState={fiscalFlowsState.state} />
       </div>
-      <MarketScoreComponent fiscalFlowsState={fiscalFlowsState.state} />
     </div>
   );
 };

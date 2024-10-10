@@ -1,105 +1,53 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { supabase, sendMessage, deleteMessage, updateMessage, getCurrentUser } from '../supabaseClient';
-import { useAuth } from '../contexts/AuthContext';
-import Spinner from '../components/Spinner';
-import EmojiPicker from 'emoji-picker-react';
-import { FaTrash, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { supabase, sendMessage, deleteMessage, updateMessage } from '../supabaseClient';
+import { useSubscription } from '../contexts/SubscriptionContext';
+import { Link } from 'react-router-dom';
+
+const ADMIN_EMAIL = '100x@maximilian.business';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const { user } = useAuth();
-  const messagesEndRef = useRef(null);
-  const emojiPickerRef = useRef(null);
+  const [user, setUser] = useState(null);
   const [editingMessage, setEditingMessage] = useState(null);
-  const [editedContent, setEditedContent] = useState('');
+
+  const { subscription } = useSubscription();
+
+  const hasActiveSubscription = subscription && subscription.subscription_status === 'active';
+  const isAdmin = user && user.email === ADMIN_EMAIL;
 
   useEffect(() => {
+    // Get the current user
+    const getCurrentUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    getCurrentUser();
+
+    // Subscribe to real-time updates
+    const subscription = supabase
+      .channel('public_chat')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'public_chat' }, payload => {
+        setMessages(currentMessages => [...currentMessages, payload.new]);
+      })
+      .subscribe();
+
+    // Fetch initial messages
     fetchMessages();
 
-    const channel = supabase.channel('public_chat');
-
-    channel
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'public_chat'
-      }, (payload) => {
-        console.log('New message received:', payload);
-        setMessages((currentMessages) => [...currentMessages, payload.new]);
-      })
-      .on('postgres_changes', {
-        event: 'DELETE',
-        schema: 'public',
-        table: 'public_chat'
-      }, (payload) => {
-        console.log('Message deleted:', payload);
-        setMessages((currentMessages) => currentMessages.filter(msg => msg.id !== payload.old.id));
-      })
-      .on('postgres_changes', {
-        event: 'UPDATE',
-        schema: 'public',
-        table: 'public_chat'
-      }, (payload) => {
-        console.log('Message updated:', payload);
-        setMessages((currentMessages) => 
-          currentMessages.map(msg => msg.id === payload.new.id ? payload.new : msg)
-        );
-      })
-      .subscribe((status) => {
-        console.log('Subscription status:', status);
-      });
-
     return () => {
-      console.log('Unsubscribing from channel');
-      supabase.removeChannel(channel);
+      supabase.removeChannel(subscription);
     };
-  }, []);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
-        setShowEmojiPicker(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const currentUser = await getCurrentUser();
-      if (currentUser && currentUser.email === 'maximiliankrehl@icloud.com') {
-        // Refresh the session to ensure it's current
-        await supabase.auth.refreshSession();
-      }
-    };
-    checkUser();
   }, []);
 
   const fetchMessages = async () => {
-    console.log('Nachrichten abrufen');
     const { data, error } = await supabase
       .from('public_chat')
       .select('*')
       .order('date', { ascending: true });
 
-    if (error) {
-      console.error('Fehler beim Abrufen der Nachrichten:', error);
-    } else {
-      console.log('Nachrichten abgerufen:', data);
-      setMessages(data);
-      setIsLoading(false);
-    }
+    if (error) console.error('Error fetching messages:', error);
+    else setMessages(data);
   };
 
   const handleSubmit = async (e) => {
@@ -107,184 +55,114 @@ const Chat = () => {
     if (!newMessage.trim() || !user) return;
 
     try {
-      console.log('Nachricht senden:', newMessage);
-      const result = await sendMessage(user.email, newMessage.trim());
-      console.log('Ergebnis der gesendeten Nachricht:', result);
+      const messageData = {
+        name: user.email,
+        message: newMessage
+      };
+      await sendMessage(messageData);
       setNewMessage('');
     } catch (error) {
-      console.error('Fehler beim Senden der Nachricht:', error);
-      alert('Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.');
+      console.error('Error sending message:', error);
     }
   };
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const handleEdit = (msg) => {
+    setEditingMessage(msg);
+    setNewMessage(msg.message);
   };
 
-  const renderMessageContent = (content) => {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const parts = content.split(urlRegex);
-    return parts.map((part, index) => {
-      if (part.match(urlRegex)) {
-        return <a key={index} href={part} target="_blank" rel="noopener noreferrer">{part}</a>;
-      }
-      return part;
-    });
-  };
+  const handleUpdate = async () => {
+    if (!editingMessage || !newMessage.trim()) return;
 
-  const getDisplayName = (email) => {
-    if (email === 'maximiliankrehl@icloud.com') {
-      return 'Max';
+    try {
+      await updateMessage(editingMessage.id, newMessage);
+      setMessages(messages.map(msg => 
+        msg.id === editingMessage.id ? {...msg, message: newMessage} : msg
+      ));
+      setEditingMessage(null);
+      setNewMessage('');
+    } catch (error) {
+      console.error('Error updating message:', error);
     }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteMessage(id);
+      setMessages(messages.filter(msg => msg.id !== id));
+    } catch (error) {
+      console.error('Error deleting message:', error);
+    }
+  };
+
+  const formatName = (email) => {
+    if (email === ADMIN_EMAIL) return 'Max';
     return email.split('@')[0];
   };
 
-  const isAdmin = (email) => {
-    return email === 'maximiliankrehl@icloud.com' && user && user.email === 'maximiliankrehl@icloud.com';
-  };
-
-  const onEmojiClick = (emojiObject) => {
-    setNewMessage(prevMessage => prevMessage + emojiObject.emoji);
-  };
-
-  const handleDeleteMessage = async (messageId) => {
-    if (!user || !isAdmin(user.email)) {
-      alert('You do not have permission to delete this message.');
-      return;
-    }
-
-    if (window.confirm('Are you sure you want to delete this message?')) {
-      try {
-        await deleteMessage(messageId, user.email);
-      } catch (error) {
-        console.error('Error deleting message:', error);
-        alert('Failed to delete message. Please try again.');
-      }
-    }
-  };
-
-  const handleEditMessage = (message) => {
-    setEditingMessage(message.id);
-    setEditedContent(message.message);
-  };
-
-  const handleSaveEdit = async (messageId) => {
-    if (!user || !isAdmin(user.email)) {
-      alert('You do not have permission to edit this message.');
-      return;
-    }
-
-    try {
-      await updateMessage(messageId, editedContent, user.email);
-      setEditingMessage(null);
-      setEditedContent('');
-    } catch (error) {
-      console.error('Error updating message:', error);
-      alert('Failed to update message. Please try again.');
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setEditingMessage(null);
-    setEditedContent('');
-  };
-
-  console.log('Rendern mit Nachrichten:', messages);
-
-  if (isLoading) {
-    return <Spinner />;
-  }
-
   if (!user) {
-    return <div>Please log in to access the chat.</div>;
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="chat-page">
       <h1>Öffentlicher Chat</h1>
-      <div className="chat-container">
-        <div className="messages-container">
-          {messages.map((msg) => (
-            <div 
-              key={msg.id} 
-              className={`message ${msg.name === user.email ? 'own-message' : ''} ${isAdmin(msg.name) ? 'admin-message' : ''}`}
-            >
-              <div className="message-bubble">
-                <div className="message-header">
-                  <span className="message-name">
-                    {getDisplayName(msg.name)}
-                    {isAdmin(msg.name) && <span className="admin-icon">X</span>}
-                  </span>
-                  {isAdmin(user.email) && (
-                    <span className="admin-actions">
-                      {editingMessage === msg.id ? (
+      {!hasActiveSubscription ? (
+        <div className="upgrade-overlay">
+          <div className="upgrade-message">
+            <h2>Upgrade erforderlich</h2>
+            <p>Um auf den Chat zugreifen zu können, benötigen Sie ein aktives Abonnement.</p>
+            <Link to="/upgrade" className="upgrade-button">Jetzt upgraden</Link>
+          </div>
+        </div>
+      ) : (
+        <div className="chat-container">
+          <div className="messages-container">
+            {messages.map((msg) => {
+              const isOwnMessage = msg.name === user.email;
+              return (
+                <div key={msg.id} className={`message-wrapper ${isOwnMessage ? 'own-message' : 'other-message'}`}>
+                  <div className={`message ${msg.name === ADMIN_EMAIL ? 'admin-message' : ''}`}>
+                    <div className="message-bubble">
+                      <div className="message-header">
+                        <span className="message-name">{formatName(msg.name)}</span>
+                      </div>
+                      <div className="message-content">
+                        {msg.message}
+                      </div>
+                    </div>
+                    <div className="message-actions">
+                      {(isAdmin || isOwnMessage) && (
                         <>
-                          <FaSave 
-                            className="save-icon" 
-                            onClick={() => handleSaveEdit(msg.id)} 
-                          />
-                          <FaTimes 
-                            className="cancel-icon" 
-                            onClick={handleCancelEdit} 
-                          />
-                        </>
-                      ) : (
-                        <>
-                          <FaEdit 
-                            className="edit-icon" 
-                            onClick={() => handleEditMessage(msg)} 
-                          />
-                          <FaTrash 
-                            className="delete-icon" 
-                            onClick={() => handleDeleteMessage(msg.id)} 
-                          />
+                          <button onClick={() => handleEdit(msg)}>Edit</button>
+                          <button onClick={() => handleDelete(msg.id)}>Delete</button>
                         </>
                       )}
-                    </span>
-                  )}
+                    </div>
+                  </div>
                 </div>
-                <div className="message-content">
-                  {editingMessage === msg.id ? (
-                    <input
-                      type="text"
-                      value={editedContent}
-                      onChange={(e) => setEditedContent(e.target.value)}
-                      className="edit-message-input"
-                    />
-                  ) : (
-                    renderMessageContent(msg.message)
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
-        <form onSubmit={handleSubmit} className="message-form">
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Geben Sie Ihre Nachricht ein..."
-            className="message-input"
-          />
-          <button 
-            type="button" 
-            className="emoji-button" 
-            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-          >
-            😊
-          </button>
-          <button type="submit" className="send-button">
-            <span className="send-icon">➤</span>
-          </button>
-        </form>
-        {showEmojiPicker && (
-          <div ref={emojiPickerRef} className="emoji-picker-container">
-            <EmojiPicker onEmojiClick={onEmojiClick} />
+              );
+            })}
           </div>
-        )}
-      </div>
+          <form className="message-form" onSubmit={editingMessage ? handleUpdate : handleSubmit}>
+            <input
+              type="text"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              placeholder={editingMessage ? "Edit your message..." : "Nachricht eingeben..."}
+              className="message-input"
+            />
+            <button type="submit" className="send-button">
+              <span className="send-icon">{editingMessage ? '✓' : '➤'}</span>
+            </button>
+            {editingMessage && (
+              <button type="button" onClick={() => setEditingMessage(null)} className="cancel-button">
+                Cancel
+              </button>
+            )}
+          </form>
+        </div>
+      )}
     </div>
   );
 };
