@@ -3441,6 +3441,17 @@ body {
   top: 0.5rem;
   right: 4.5rem;
 }
+/* ... existing styles ... */
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .otp-login-container .alpha-pill {
+    top: 0.8rem;  /* Adjust this value as needed */
+    right: 5.5rem;  /* Adjust this value as needed */
+    font-size: 0.6rem;  /* Optionally make the font smaller on mobile */
+    padding: 0.1rem 0.3rem;  /* Optionally adjust padding for mobile */
+  }
+}
 
 .otp-login-container .cursor {
   animation: blink 1.5s infinite;
