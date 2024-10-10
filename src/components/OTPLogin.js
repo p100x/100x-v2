@@ -65,7 +65,7 @@ function OTPLogin({ onLogin }) {
               {typedText}
               <span className="cursor">|</span>
             </div>
-            <div className="version-number">v0.0.9</div>
+            <div className="version-number">v0.1.0</div>
           </div>
           <div className="alpha-pill">alpha</div>
         </div>

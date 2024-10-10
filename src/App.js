@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, useLocation, Navigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import Hotjar from '@hotjar/browser';
 import Home from './pages/Home';
 import AdminPage from './pages/AdminPage';
 import AccountPage from './pages/AccountPage';
@@ -30,7 +31,7 @@ function MobileMenu({ typedText, onFeedbackClick, isAdmin }) {
                 {typedText}
                 <span className="cursor">|</span>
               </div>
-              <div className="version-number">v0.0.9</div>
+              <div className="version-number">v0.1.0</div>
             </div>
             <div className="alpha-pill">alpha</div>
           </Link>
@@ -111,7 +112,7 @@ function AppContent() {
                   {typedText}
                   <span className="cursor">|</span>
                 </div>
-                <div className="version-number">v0.0.9</div>
+                <div className="version-number">v0.1.0</div>
               </div>
               <div className="alpha-pill">alpha</div>
             </Link>
@@ -157,6 +158,12 @@ function AppContent() {
 }
 
 function App() {
+  useEffect(() => {
+    const siteId = 5166783;
+    const hotjarVersion = 6;
+    Hotjar.init(siteId, hotjarVersion);
+  }, []);
+
   return (
     <SubscriptionProvider>
       <div className="app">
