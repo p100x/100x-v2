@@ -163,7 +163,7 @@ const Portfolio = () => {
           <div className="upgrade-message">
             <h2>Upgrade erforderlich</h2>
             <p>Um auf alle Funktionen zugreifen zu können, benötigen Sie ein aktives Abonnement.</p>
-            <Link to="/upgrade" className="upgrade-button">Jetzt upgraden</Link>
+            <a href="https://projekt100x.de/mitgliedschaft-waehlen/" className="upgrade-button">Jetzt upgraden</a>
           </div>
         </div>
       )}

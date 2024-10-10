@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSubscription } from '../contexts/SubscriptionContext';
 
 const AccountPage = () => {
@@ -37,7 +37,7 @@ const AccountPage = () => {
         )}
       </div>
       <div className="account-actions">
-        <Link to="/upgrade" className="upgrade-button">Abonnement upgraden</Link>
+        <a href="https://projekt100x.de/mitgliedschaft-waehlen/" className="upgrade-button">Abonnement upgraden</a>
         <button onClick={handleLogout} className="logout-button">Abmelden</button>
       </div>
     </div>
